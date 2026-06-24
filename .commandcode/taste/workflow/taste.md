@@ -1,0 +1,11 @@
+# workflow
+- Generate files one at a time — do not generate the entire project at once. Confidence: 0.90
+- Use Windows shell commands (type nul >, tree /F, cmd /c) for file operations in this project. Confidence: 0.70
+- Design architecture documents first, then generate implementation files from the architecture. Confidence: 0.80
+- Use deterministic parsers instead of AI/LLMs for code analysis: parse package.json for tech stack, scan directories for file tree, use AST for dependency graphs, parse Express routes for APIs, parse Mongoose schemas for DB models, and use Tree-sitter for function call graphs. No AI API calls for these tasks. Confidence: 0.85
+- Once a repository is analyzed, persist and display cached results — do not re-analyze automatically; only re-analyze when the user explicitly requests it. Confidence: 0.85
+- Only implement files the user explicitly mentions — do not preemptively implement other files even if dependencies exist. Confidence: 0.70
+- Do not rename, remove, or create duplicate files/folders — all files already exist in the project structure. Confidence: 0.65
+- Show a progress loader/indicator during long-running analysis so the user knows the current status. Confidence: 0.75
+- Repository analysis must be a single-step clone-and-analyze flow — do not save the repo first and require a separate manual analysis step. Confidence: 0.75
+- Always respond immediately from analysis endpoints — never block the HTTP response on long-running AI/analysis operations. Run long work in the background with SSE progress events so the client never hangs on a loading spinner. Confidence: 0.80

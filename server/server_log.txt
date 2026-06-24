@@ -1,0 +1,27 @@
+(node:11936) [DEP0040] DeprecationWarning: The `punycode` module is deprecated. Please use a userland alternative instead.
+(Use `node --trace-deprecation ...` to show where the warning was created)
+MongoDB connected: 127.0.0.1
+LearnSmart server running on port 5000 [development]
+[0mGET /api/health [32m200[0m 5.868 ms - 74[0m
+[0mGET /api/health [32m200[0m 1.153 ms - 74[0m
+[0mGET /api/auth/google [36m302[0m 2.611 ms - 0[0m
+[0mGET /api/auth/google/callback?iss=https%3A%2F%2Faccounts.google.com&code=4%2F0AdkVLPyE4nnI5U4LVoo5BQOvCUIEq7HfR8NtYXlOCpRjfzZGtkqM6O3xLLl2XYnH_MhCeg&scope=email+profile+https%3A%2F%2Fwww.googleapis.com%2Fauth%2Fuserinfo.profile+openid+https%3A%2F%2Fwww.googleapis.com%2Fauth%2Fuserinfo.email&authuser=0&prompt=none [36m302[0m 433.590 ms - 483[0m
+[0mGET /api/auth/me [32m200[0m 2.662 ms - 144[0m
+[0mGET /api/auth/me [36m304[0m 1.612 ms - -[0m
+[0mGET /api/auth/me [36m304[0m 1.326 ms - -[0m
+[0mGET /api/projects?page=1&limit=10 [32m200[0m 11.464 ms - 2909[0m
+[0mGET /api/projects?page=1&limit=10 [36m304[0m 6.180 ms - -[0m
+[0mGET /api/projects/github-repos?page=1 [32m200[0m 1385.055 ms - 4809[0m
+[0mGET /api/projects/github-repos?page=1 [36m304[0m 721.799 ms - -[0m
+[0mGET /api/projects?page=1&limit=10 [36m304[0m 15.504 ms - -[0m
+[0mGET /api/projects?page=1&limit=10 [36m304[0m 13.211 ms - -[0m
+[0mGET /api/analysis/6a303e0b9d90292b92f470a9 [32m200[0m 16.324 ms - 14693[0m
+[0mGET /api/analysis/6a303e0b9d90292b92f470a9 [36m304[0m 10.052 ms - -[0m
+[0mGET /api/progress/6a303e0b9d90292b92f470a9?token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiI2YTJmMTdjMjM3YzNkNDZjMDExMmM3YmYiLCJuYW1lIjoiU2hyZXlhIFNpbmdoIiwiZW1haWwiOiJjYXB0YWluc2hyZXlhMDA3QGdtYWlsLmNvbSIsInJvbGUiOiJ1c2VyIiwiaWF0IjoxNzgxOTk3MTM5LCJleHAiOjE3ODE5OTgwMzl9.wIYJjuYZ25qLzjpfyxU1XX33z7FGl9LCQXlVtCpG374 [32m200[0m 2.595 ms - -[0m
+[0mGET /api/interview/6a303e0b9d90292b92f470a9 [36m304[0m 11.611 ms - -[0m
+[0mGET /api/interview/6a303e0b9d90292b92f470a9 [36m304[0m 7.582 ms - -[0m
+[0mGET /api/projects?page=1&limit=10 [36m304[0m 16.549 ms - -[0m
+[0mGET /api/projects?page=1&limit=10 [36m304[0m 13.659 ms - -[0m
+[0mGET /api/analysis/6a303400403e8bc22a02d0ef [36m304[0m 15.082 ms - -[0m
+[0mGET /api/analysis/6a303400403e8bc22a02d0ef [36m304[0m 8.277 ms - -[0m
+[0mGET /api/progress/6a303400403e8bc22a02d0ef?token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiI2YTJmMTdjMjM3YzNkNDZjMDExMmM3YmYiLCJuYW1lIjoiU2hyZXlhIFNpbmdoIiwiZW1haWwiOiJjYXB0YWluc2hyZXlhMDA3QGdtYWlsLmNvbSIsInJvbGUiOiJ1c2VyIiwiaWF0IjoxNzgxOTk3MTM5LCJleHAiOjE3ODE5OTgwMzl9.wIYJjuYZ25qLzjpfyxU1XX33z7FGl9LCQXlVtCpG374 [32m200[0m 1.330 ms - -[0m

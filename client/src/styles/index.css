@@ -1,0 +1,18 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  body {
+    @apply bg-gradient-theme text-gray-900 antialiased;
+  }
+}
+
+@layer components {
+  .card-glass {
+    @apply bg-[#C9EDDC]/80 backdrop-blur-sm rounded-2xl shadow-sm border border-emerald-200/60;
+  }
+  .card-elevated {
+    @apply bg-[#C9EDDC] rounded-2xl shadow-md border border-emerald-200;
+  }
+}

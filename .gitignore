@@ -1,0 +1,50 @@
+# ─── Dependencies ───
+node_modules/
+client/node_modules/
+server/node_modules/
+
+# ─── Environment ───
+.env
+.env.local
+.env.production
+.env.development
+!.env.example
+client/.env
+client/.env.local
+client/.env.production
+!client/.env.example
+server/.env
+server/.env.local
+server/.env.production
+!server/.env.example
+
+# ─── Build output ───
+dist/
+client/dist/
+
+# ─── Uploads ───
+server/uploads/
+!server/uploads/.gitkeep
+
+# ─── ChromaDB local data ───
+chroma_data/
+
+# ─── OS files ───
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# ─── IDE ───
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# ─── Logs ───
+*.log
+npm-debug.log*
+
+# ─── Playwright ───
+# Chromium is installed globally; don't track project-level browser binaries
+ms-playwright/

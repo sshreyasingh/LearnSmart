@@ -1,0 +1,85 @@
+{
+  "featureOrder": [
+    "totalLOC",
+    "fileCount",
+    "avgCC",
+    "maxCC",
+    "totalFuncs",
+    "folderDepth",
+    "depChainLength",
+    "circularDepCount",
+    "routeCount",
+    "asyncCount",
+    "classCount",
+    "errorHandlerCount",
+    "maintainability",
+    "commentPercent"
+  ],
+  "featureRanges": {
+    "totalLOC": [
+      0,
+      50000
+    ],
+    "fileCount": [
+      0,
+      500
+    ],
+    "avgCC": [
+      0,
+      30
+    ],
+    "maxCC": [
+      0,
+      80
+    ],
+    "totalFuncs": [
+      0,
+      600
+    ],
+    "folderDepth": [
+      0,
+      12
+    ],
+    "depChainLength": [
+      0,
+      15
+    ],
+    "circularDepCount": [
+      0,
+      25
+    ],
+    "routeCount": [
+      0,
+      400
+    ],
+    "asyncCount": [
+      0,
+      800
+    ],
+    "classCount": [
+      0,
+      200
+    ],
+    "errorHandlerCount": [
+      0,
+      300
+    ],
+    "maintainability": [
+      0,
+      100
+    ],
+    "commentPercent": [
+      0,
+      50
+    ]
+  },
+  "labels": [
+    "Beginner",
+    "Intermediate",
+    "Advanced",
+    "Expert"
+  ],
+  "trainAccuracy": 1.0,
+  "testAccuracy": 0.9944,
+  "trainedAt": "2026-06-17T02:29:44.482014"
+}
