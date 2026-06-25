@@ -40,7 +40,7 @@ services:
         sync: false
       - key: OPENROUTER_EMBEDDING_MODEL
         sync: false
-      - key: CHROMA_URL
+      - key: ML_SERVICE_URL
         sync: false
       - key: UPLOAD_MAX_SIZE_MB
         value: 50

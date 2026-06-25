@@ -3,12 +3,7 @@
 [cmd]: https://commandcode.ai/
 
 # architecture
-- Use MVC architecture with reusable services, SOLID principles, and clean architecture for the LearnSmart project. Confidence: 0.85
-- Every request must be validated with Zod. Confidence: 0.85
-- Do not generate placeholder code — only production-ready code. Confidence: 0.85
-- Add comments to explain important logic and architectural decisions, but let straightforward code be self-documenting. Confidence: 0.80
-- When a file depends on another not-yet-implemented file, create reusable interfaces instead. Confidence: 0.80
-
+See [architecture/taste.md](architecture/taste.md)
 # tech-stack
 - LearnSmart uses React 18, React Router v6, Tailwind CSS, React Flow, D3.js, and Mermaid on the frontend. Confidence: 0.85
 - Use D3.js for interactive visualizations (dependency graphs, knowledge graphs, module relationships, call graphs) with zoom, pan, drag, and node highlighting, rendering parser-generated JSON. Confidence: 0.70

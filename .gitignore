@@ -45,6 +45,13 @@ desktop.ini
 *.log
 npm-debug.log*
 
+# ─── Python / ML service ───
+ml-service/venv/
+ml-service/__pycache__/
+ml-service/app/__pycache__/
+ml-service/.env
+!ml-service/.env.example
+
 # ─── Playwright ───
 # Chromium is installed globally; don't track project-level browser binaries
 ms-playwright/

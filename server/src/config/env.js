@@ -32,7 +32,7 @@ const envSchema = z.object({
   OPENROUTER_MODEL: z.string().default('nvidia/nemotron-3-super-120b-a12b:free'),
   OPENROUTER_EMBEDDING_MODEL: z.string().default('nvidia/llama-nemotron-embed-vl-1b-v2:free'),
 
-  CHROMA_URL: z.string().url().default('http://localhost:8000'),
+  ML_SERVICE_URL: z.string().url().default('http://localhost:8000'),
 
   UPLOAD_MAX_SIZE_MB: z.coerce.number().int().positive().default(50),
 });
