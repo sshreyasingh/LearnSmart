@@ -1,6 +1,7 @@
 from fastapi import APIRouter, HTTPException
 from pydantic import BaseModel
 from typing import Optional
+from app.predict import predict
 from app.chroma_client import (
     is_ready,
     index_chunks,
@@ -116,5 +117,33 @@ def delete(project_id: str):
     try:
         delete_collection(project_id)
         return DeleteResponse(deleted=True)
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))
+
+
+# ─── Difficulty prediction ───
+
+
+class Metrics(BaseModel):
+    totalLOC: float = 0
+    fileCount: float = 0
+    avgCC: float = 0
+    maxCC: float = 0
+    totalFuncs: float = 0
+    folderDepth: float = 0
+    depChainLength: float = 0
+    circularDepCount: float = 0
+    routeCount: float = 0
+    asyncCount: float = 0
+    classCount: float = 0
+    errorHandlerCount: float = 0
+    maintainability: float = 100
+    commentPercent: float = 0
+
+
+@router.post("/predict")
+def predict_route(metrics: Metrics):
+    try:
+        return predict(metrics.model_dump())
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))

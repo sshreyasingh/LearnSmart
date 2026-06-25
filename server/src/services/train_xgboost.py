@@ -6,7 +6,7 @@ import pickle
 from sklearn.model_selection import train_test_split
 from datetime import datetime
 
-MODEL_DIR = os.path.join(os.path.dirname(__file__), '..', '..', 'models')
+MODEL_DIR = os.path.join(os.path.dirname(__file__), '..', '..', '..', 'ml-service', 'models')
 MODEL_PATH = os.path.join(MODEL_DIR, 'difficulty_model.pkl')
 FEATURES_PATH = os.path.join(MODEL_DIR, 'difficulty_features.json')
 
