@@ -1,0 +1,7 @@
+.env
+.env.local
+.env.production
+logs/
+*.log
+uploads/*
+!uploads/.gitkeep

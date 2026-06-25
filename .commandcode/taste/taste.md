@@ -48,5 +48,8 @@ See [workflow/taste.md](workflow/taste.md)
 # timeout
 - Increase backend analysis timeout to prevent premature "analysis failed" errors — the analysis pipeline needs enough time to complete static analysis, AI explanations, and interview generation. Confidence: 0.65
 
+# deployment
+- Deploy without Docker — use platform-native configs (render.yaml, vercel.json, Procfile) or manual setup on DigitalOcean instead. Do not create Dockerfiles or docker-compose unless explicitly requested. Confidence: 0.65
+
 # analysis-display
 - Refine all analysis output into clear, human-readable language — do not display raw technical results. The output should be understandable to a non-technical reader. Confidence: 0.65
