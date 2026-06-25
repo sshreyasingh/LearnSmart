@@ -12,7 +12,7 @@ from fastapi.middleware.cors import CORSMiddleware
 from app.config import PORT
 from app.routes import router
 
-app = FastAPI(title="LearnSmart ML Service", version="1.0.0")
+app = FastAPI(title="LearnSmart ML Service", version="1.0.0", root_path="/ai")
 
 app.add_middleware(
     CORSMiddleware,
