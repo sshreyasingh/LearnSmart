@@ -198,7 +198,7 @@ using static analysis.
 
 ### AI
 
-- DeepSeek (OpenRouter API)
+- Nvidia (OpenRouter API)
 - Retrieval-Augmented Generation (RAG)
 
 ### Machine Learning
