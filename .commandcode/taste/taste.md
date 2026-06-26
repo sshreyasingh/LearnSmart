@@ -50,6 +50,7 @@ See [workflow/taste.md](workflow/taste.md)
 
 # deployment
 - Deploy without Docker — use platform-native configs (render.yaml, vercel.json, Procfile) or manual setup on DigitalOcean instead. Do not create Dockerfiles or docker-compose unless explicitly requested. Confidence: 0.65
+- Do not hardcode deployment URLs or configuration values — always reference environment variables that are already defined for the deployment environment. Confidence: 0.70
 
 # analysis-display
 - Refine all analysis output into clear, human-readable language — do not display raw technical results. The output should be understandable to a non-technical reader. Confidence: 0.65

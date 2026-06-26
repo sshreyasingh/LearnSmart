@@ -1,6 +1,8 @@
 import { useAuth } from '../../context/AuthContext';
 import { Link } from 'react-router-dom';
 
+const API_URL = import.meta.env.VITE_API_URL || '';
+
 export default function GitHubRepoPicker({ onSelect, selected, loadingList }) {
   const { user } = useAuth();
   const hasGitHub = user?.authProviders?.some((p) => p.provider === 'github');
@@ -10,7 +12,7 @@ export default function GitHubRepoPicker({ onSelect, selected, loadingList }) {
       <div className="text-center py-8 text-gray-500">
         <p className="mb-3">Link your GitHub account to see your repositories</p>
         <a
-          href="/api/auth/github"
+          href={`${API_URL}/api/auth/github`}
           className="inline-block bg-gray-800 text-white px-6 py-2.5 rounded-lg hover:bg-gray-900 font-medium"
         >
           Connect GitHub

@@ -1,8 +1,11 @@
 import axios from 'axios';
 import { getAccessToken, setAccessToken, getRefreshToken, setRefreshToken, clearTokens } from '../utils/storage';
 
+const API_URL = import.meta.env.VITE_API_URL || '';
+const API_BASE = API_URL ? `${API_URL}/api` : '/api';
+
 const api = axios.create({
-  baseURL: '/api',
+  baseURL: API_BASE,
   headers: { 'Content-Type': 'application/json' },
   timeout: 300000, // 5 min — matches server timeout
 });
@@ -63,7 +66,7 @@ api.interceptors.response.use(
       }
 
       try {
-        const { data } = await axios.post('/api/auth/refresh', { refreshToken }, { timeout: 10000 });
+        const { data } = await axios.post(`${API_URL}/api/auth/refresh`, { refreshToken }, { timeout: 10000 });
         const { accessToken, refreshToken: newRefreshToken } = data.data;
         setAccessToken(accessToken);
         setRefreshToken(newRefreshToken);

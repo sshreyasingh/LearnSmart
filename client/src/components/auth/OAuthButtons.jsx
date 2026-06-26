@@ -1,10 +1,12 @@
 export default function OAuthButtons() {
+  const API_URL = import.meta.env.VITE_API_URL || '';
+
   const handleGoogle = () => {
-    window.location.href = '/api/auth/google';
+    window.location.href = `${API_URL}/api/auth/google`;
   };
 
   const handleGithub = () => {
-    window.location.href = '/api/auth/github';
+    window.location.href = `${API_URL}/api/auth/github`;
   };
 
   return (
