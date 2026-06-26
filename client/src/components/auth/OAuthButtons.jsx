@@ -1,5 +1,6 @@
 export default function OAuthButtons() {
-  const API_URL = import.meta.env.VITE_API_URL || '';
+  const RAW_URL = import.meta.env.VITE_API_URL || '';
+  const API_URL = RAW_URL.replace(/\/api\/?$/, '');
 
   const handleGoogle = () => {
     window.location.href = `${API_URL}/api/auth/google`;

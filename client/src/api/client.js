@@ -1,7 +1,8 @@
 import axios from 'axios';
 import { getAccessToken, setAccessToken, getRefreshToken, setRefreshToken, clearTokens } from '../utils/storage';
 
-const API_URL = import.meta.env.VITE_API_URL || '';
+const RAW_URL = import.meta.env.VITE_API_URL || '';
+const API_URL = RAW_URL.replace(/\/api\/?$/, ''); // strip /api if user included it
 const API_BASE = API_URL ? `${API_URL}/api` : '/api';
 
 const api = axios.create({

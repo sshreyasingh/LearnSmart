@@ -1,7 +1,8 @@
 import { useAuth } from '../../context/AuthContext';
 import { Link } from 'react-router-dom';
 
-const API_URL = import.meta.env.VITE_API_URL || '';
+const RAW_URL = import.meta.env.VITE_API_URL || '';
+const API_URL = RAW_URL.replace(/\/api\/?$/, '');
 
 export default function GitHubRepoPicker({ onSelect, selected, loadingList }) {
   const { user } = useAuth();
