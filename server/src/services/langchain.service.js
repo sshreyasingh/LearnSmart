@@ -120,14 +120,14 @@ const embeddingModel = new OpenAIEmbeddings({
 
 // ===== Prompt Templates =====
 
-const RAG_SYSTEM_PROMPT = `You are an AI assistant for codebase analysis. Answer the user's question about their code using ONLY the provided code context.
+const RAG_SYSTEM_PROMPT = `You are an AI assistant for codebase analysis. Help the user understand their code and answer questions about programming, software architecture, and technology.
 
 ## Rules
-- Reference specific files and code symbols when answering.
-- If the context doesn't contain enough information to answer, say so honestly.
-- Explain concepts clearly — the user is learning from this codebase.
+- When code chunks are available, reference specific files and code symbols.
+- If no specific code chunks were retrieved, answer based on your general programming knowledge — the user is learning and needs help.
+- Explain concepts clearly.
 - Use code blocks with proper language annotations when showing code.
-- Keep answers focused on the codebase.`;
+- If the user asks about the uploaded project's specific implementation and no code context is available, tell them you don't have that specific file's code but offer general guidance.`;
 
 const RAG_PROMPT_TEMPLATE = ChatPromptTemplate.fromMessages([
   SystemMessagePromptTemplate.fromTemplate(`{system_prompt}
@@ -139,7 +139,7 @@ const RAG_PROMPT_TEMPLATE = ChatPromptTemplate.fromMessages([
 {code_context}
 
 ## Instructions
-Answer the user's question using ONLY the code chunks above. Reference files by path. If the answer isn't in the provided chunks, say so.`),
+Answer using the code chunks above if they're relevant. If no code chunks are available or they don't answer the question, use your general programming knowledge to help. Always be helpful.`),
   new MessagesPlaceholder('chat_history'),
   HumanMessagePromptTemplate.fromTemplate('{question}'),
 ]);
@@ -195,7 +195,7 @@ const formatProjectContext = (projectInfo = {}) => {
 };
 
 const formatCodeContext = (chunks = []) => {
-  if (!chunks.length) return 'No relevant code chunks found.';
+  if (!chunks.length) return 'No specific code chunks were retrieved for this query. Answer based on general programming knowledge.';
   return chunks
     .map((chunk) => {
       const relevance = chunk.score !== undefined ? ` (relevance: ${Math.round(chunk.score * 100)}%)` : '';
