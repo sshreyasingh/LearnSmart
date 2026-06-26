@@ -4,7 +4,7 @@ const path = require('path');
 const { getEmbeddingModel } = require('../config/openrouter');
 const AppError = require('../utils/AppError');
 
-const EMBEDDING_DIMENSION = 1024;
+const EMBEDDING_DIMENSION = 2048;
 const CONCURRENCY = 5;
 const MAX_RETRIES = 3;
 const BASE_DELAY_MS = 1000;

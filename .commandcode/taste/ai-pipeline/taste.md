@@ -1,6 +1,7 @@
 # ai-pipeline
 - AI is only permitted for: project purpose analysis, database explanation, authentication explanation, and AI chatbot. Everything else (code metrics, security scanning, performance analysis, dependency graphs, tech stack detection, folder structure, API detection, executive summary, recommendations, architecture review, learning roadmap, gap analysis) must use deterministic parsers. Even AI features should only run on explicit user request — never automatically. Confidence: 0.80
 - Use OpenRouter API with DeepSeek models (not Gemini or NVIDIA) for all AI analysis. Confidence: 0.80
+- Keep the currently configured embedding model — do not switch to alternative embedding models without explicit user approval. Confidence: 0.72
 - The code analysis pipeline must be RAG-based: clone repository → chunk source files intelligently by functions/classes/modules → generate embeddings → store in ChromaDB with metadata (file path, language, function name, class name, dependencies, project ID) → use semantic search to retrieve relevant chunks for AI context. Confidence: 0.80
 - Use hierarchical summarization: function summary → file summary → folder summary → project summary. Feed summaries (not raw code) into the LLM to reduce token usage by 80-90%. Confidence: 0.75
 - Cache AI responses and store embeddings in ChromaDB for reuse to reduce token usage. Confidence: 0.70

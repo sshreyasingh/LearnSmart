@@ -34,6 +34,7 @@ See [difficulty-analysis/taste.md](difficulty-analysis/taste.md)
 
 # workflow
 See [workflow/taste.md](workflow/taste.md)
+
 - Prefer git push/pull workflow over direct SSH server edits — commit local changes and pull on the server instead. Confidence: 0.60
 - When asked to fix a specific bug or issue, do NOT make large-scale architectural changes (deleting files, removing features, restructuring pipelines, removing dependencies) without explicit user approval. Fix only the specific issue. Confidence: 0.85
 

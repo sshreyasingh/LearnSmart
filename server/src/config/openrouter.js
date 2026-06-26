@@ -68,6 +68,7 @@ const getEmbeddingModel = () => {
       const resp = await openai.embeddings.create({
         model: env.OPENROUTER_EMBEDDING_MODEL,
         input: text,
+        encoding_format: 'float',
       });
       return resp;
     },

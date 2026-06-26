@@ -9,3 +9,4 @@
 - Show a progress loader/indicator during long-running analysis so the user knows the current status. Confidence: 0.75
 - Repository analysis must be a single-step clone-and-analyze flow — do not save the repo first and require a separate manual analysis step. Confidence: 0.75
 - Always respond immediately from analysis endpoints — never block the HTTP response on long-running AI/analysis operations. Run long work in the background with SSE progress events so the client never hangs on a loading spinner. Confidence: 0.80
+- Use nano for writing/editing files on the server instead of heredoc/cat commands or inline eval. Confidence: 0.93
