@@ -21,6 +21,7 @@ const fs = require('fs');
 const connectDB = require('./config/db');
 const { env } = require('./config/env');
 
+const { passport } = require('./config/passport');
 const errorHandler = require('./middleware/errorHandler');
 const { generalLimiter } = require('./middleware/rateLimiter');
 const chromaStore = require('./services/chromaStore.service');
@@ -41,6 +42,7 @@ app.use(cors({ origin: env.CLIENT_URL, credentials: true }));
 app.use(morgan(env.NODE_ENV === 'production' ? 'combined' : 'dev'));
 app.use(express.json({ limit: '1mb' }));
 app.use(express.urlencoded({ extended: true, limit: '1mb' }));
+app.use(passport.initialize());
 
 const uploadsDir = path.join(__dirname, '..', 'uploads');
 if (!fs.existsSync(uploadsDir)) {
