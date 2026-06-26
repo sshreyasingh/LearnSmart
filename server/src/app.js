@@ -38,7 +38,10 @@ const staticAnalysisRoutes = require('./routes/staticAnalysis.routes');
 const app = express();
 
 app.use(helmet());
-app.use(cors({ origin: env.CLIENT_URL, credentials: true }));
+const corsOrigins = env.CORS_ORIGINS
+  ? env.CORS_ORIGINS.split(',').map((s) => s.trim()).filter(Boolean)
+  : [env.CLIENT_URL];
+app.use(cors({ origin: corsOrigins, credentials: true }));
 app.use(morgan(env.NODE_ENV === 'production' ? 'combined' : 'dev'));
 app.use(express.json({ limit: '1mb' }));
 app.use(express.urlencoded({ extended: true, limit: '1mb' }));

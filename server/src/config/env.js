@@ -26,6 +26,7 @@ const envSchema = z.object({
   GITHUB_CALLBACK_URL: z.string().url().optional(),
 
   CLIENT_URL: z.string().url().default('http://localhost:5173'),
+  CORS_ORIGINS: z.string().optional(),
 
   OPENROUTER_API_KEY: z.string().optional(),
   OPENROUTER_BASE_URL: z.string().url().default('https://openrouter.ai/api/v1'),
