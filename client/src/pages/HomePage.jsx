@@ -3,6 +3,7 @@ import { useAnimatedValue } from '../hooks/useAnimatedValue';
 import { useParallax } from '../hooks/useParallax';
 import { useScrollReveal } from '../hooks/useScrollReveal';
 import { ScrollReveal, StaggerChildren } from '../components/common/Animations';
+import ParticleNetwork from '../components/common/ParticleNetwork';
 
 function AnimatedStat({ end, suffix = '', label, decimals = 0 }) {
   const { ref, isVisible } = useScrollReveal({ threshold: 0.3 });
@@ -102,13 +103,13 @@ export default function HomePage() {
   return (
     <div className="min-h-[calc(100vh-4rem)] overflow-hidden">
       {/* ──── Hero Section ──── */}
-      <section className="relative max-w-7xl mx-auto px-4 pt-12 sm:pt-16 pb-12 sm:pb-16 text-center">
-        <div className="absolute inset-0 bg-gradient-hero rounded-full opacity-60 animate-pulse-soft" />
-        <div className="absolute inset-0 bg-gradient-grid bg-grid opacity-40" />
+      <section className="relative max-w-7xl mx-auto px-4 pt-12 sm:pt-16 pb-12 sm:pb-16 text-center overflow-hidden">
+        <div className="absolute inset-0 bg-gradient-hero rounded-full opacity-50" />
+        <ParticleNetwork />
 
-        <ParallaxBlob className="hidden lg:block w-24 h-24 bg-indigo-100/40 top-10 right-[15%] rotate-12" />
-        <ParallaxBlob className="hidden lg:block w-20 h-20 bg-amber-100/30 bottom-20 left-[8%] -rotate-12" />
-        <ParallaxBlob className="hidden lg:block w-28 h-28 bg-emerald-100/30 top-40 right-[8%] rounded-full" />
+        <ParallaxBlob className="hidden lg:block w-32 h-32 bg-indigo-400/15 top-0 right-[10%] rotate-12" />
+        <ParallaxBlob className="hidden lg:block w-24 h-24 bg-violet-400/10 bottom-16 left-[5%] -rotate-12" />
+        <ParallaxBlob className="hidden lg:block w-36 h-36 bg-purple-400/10 top-32 right-[5%] rounded-full" />
 
         <div style={{ transform: `translateY(${heroOffset}px)` }}>
           <div className="relative">

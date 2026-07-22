@@ -3,6 +3,7 @@ import { BrowserRouter, Routes, Route, useLocation } from 'react-router-dom';
 import { AuthProvider } from './context/AuthContext';
 import { ToastProvider } from './context/ToastContext';
 import Navbar from './components/common/Navbar';
+import Footer from './components/common/Footer';
 import ProtectedRoute from './components/common/ProtectedRoute';
 import { PageTransition } from './components/common/PageTransition';
 import HomePage from './pages/HomePage';
@@ -47,9 +48,12 @@ export default function App() {
       <ScrollToTop />
       <AuthProvider>
         <ToastProvider>
-          <div className="min-h-screen bg-gradient-theme">
+          <div className="min-h-screen bg-gradient-theme flex flex-col">
             <Navbar />
-            <AppRoutes />
+            <div className="flex-1">
+              <AppRoutes />
+            </div>
+            <Footer />
           </div>
         </ToastProvider>
       </AuthProvider>
