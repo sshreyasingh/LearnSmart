@@ -17,12 +17,12 @@ import { ErrorState } from '../components/common/Feedback';
 
 function ProcessingBanner() {
   return (
-    <div className="flex items-center gap-3 bg-blue-50 border border-blue-200 px-4 py-3 rounded-xl mb-6 text-sm animate-fade-in">
-      <svg className="animate-spin h-4 w-4 text-blue-600 shrink-0" viewBox="0 0 24 24">
+    <div className="alert-info mb-6">
+      <svg className="animate-spin h-5 w-5 text-blue-600 shrink-0" viewBox="0 0 24 24">
         <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" fill="none" />
         <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z" />
       </svg>
-      <span className="text-blue-700 font-medium">Analysis is running in the background. Results will appear here once complete.</span>
+      <span>Analysis is running in the background. Results will appear here once complete.</span>
     </div>
   );
 }
@@ -47,7 +47,7 @@ export default function AnalysisPage() {
     <div className="page-container">
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-8">
         <div>
-          <h1 className="text-3xl font-bold text-surface-900">{project?.projectName || 'Project Analysis'}</h1>
+          <h1 className="text-3xl sm:text-4xl font-extrabold text-surface-900 tracking-tight">{project?.projectName || 'Project Analysis'}</h1>
           <div className="flex flex-wrap items-center gap-3 mt-2 text-sm text-surface-500">
             <span>{project?.fileCount} files</span>
             <span className="text-surface-300">·</span>
@@ -90,25 +90,25 @@ export default function AnalysisPage() {
       </div>
 
       {partial && (
-        <div className="flex items-center gap-2 bg-amber-50 border border-amber-200 text-amber-700 px-4 py-3 rounded-xl mb-6 text-sm">
-          <svg className="w-5 h-5 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+        <div className="alert-warning mb-6">
+          <svg className="w-5 h-5 shrink-0 mt-px" fill="none" viewBox="0 0 24 24" stroke="currentColor">
             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-2.5L13.732 4.5c-.77-.833-2.694-.833-3.464 0L4.08 16.5c-.77.833.192 2.5 1.732 2.5z" />
           </svg>
-          Some analysis sections could not be generated. Results shown are partial.
+          <span>Some analysis sections could not be generated. Results shown are partial.</span>
         </div>
       )}
 
       {(reanalyzing || data?.processing) && <ProcessingBanner />}
 
       {reanalyzeError && (
-        <div className="flex items-center justify-between bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded-xl mb-6 text-sm">
+        <div className="alert-error mb-6 justify-between">
           <div className="flex items-center gap-2">
-            <svg className="w-5 h-5 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <svg className="w-5 h-5 shrink-0 mt-px" fill="none" viewBox="0 0 24 24" stroke="currentColor">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
             </svg>
-            Re-analysis failed: {reanalyzeError}
+            <span>Re-analysis failed: {reanalyzeError}</span>
           </div>
-          <button onClick={clearReanalyzeError} className="ml-3 text-red-500 hover:text-red-700 font-medium">
+          <button onClick={clearReanalyzeError} className="ml-3 text-red-500 hover:text-red-700 font-medium shrink-0">
             Dismiss
           </button>
         </div>

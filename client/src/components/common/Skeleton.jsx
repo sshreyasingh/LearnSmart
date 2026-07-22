@@ -3,10 +3,10 @@ export function Skeleton({ className = '', variant = 'text' }) {
 
   if (variant === 'card') {
     return (
-      <div className={`${baseClasses} rounded-2xl p-6 ${className}`}>
-        <div className="h-5 w-1/3 bg-surface-200/50 rounded mb-3" />
-        <div className="h-4 w-2/3 bg-surface-200/50 rounded mb-2" />
-        <div className="h-4 w-1/2 bg-surface-200/50 rounded" />
+      <div className={`${baseClasses} rounded-3xl p-6 ${className}`}>
+        <div className="h-5 w-1/3 bg-surface-200/50 rounded-lg mb-3" />
+        <div className="h-4 w-2/3 bg-surface-200/50 rounded-lg mb-2" />
+        <div className="h-4 w-1/2 bg-surface-200/50 rounded-lg" />
       </div>
     );
   }
@@ -15,7 +15,7 @@ export function Skeleton({ className = '', variant = 'text' }) {
     return <div className={`${baseClasses} rounded-full ${className}`} />;
   }
 
-  return <div className={`${baseClasses} rounded-lg ${className}`} />;
+  return <div className={`${baseClasses} rounded-xl ${className}`} />;
 }
 
 export function SkeletonLine({ width = 'full' }) {
@@ -25,7 +25,7 @@ export function SkeletonLine({ width = 'full' }) {
 
 export function CardSkeleton() {
   return (
-    <Skeleton variant="card">
+    <Skeleton variant="card" className="h-[140px]">
       <Skeleton className="h-5 w-2/5 mb-3" />
       <Skeleton className="h-4 w-3/4 mb-2" />
       <Skeleton className="h-4 w-1/2" />
@@ -41,9 +41,9 @@ export function AnalysisSkeleton() {
           <Skeleton className="h-8 w-64 mb-2" />
           <Skeleton className="h-4 w-96" />
         </div>
-        <Skeleton className="h-10 w-32 rounded-xl" />
+        <Skeleton className="h-10 w-32 rounded-2xl" />
       </div>
-      <Skeleton variant="card" className="h-64" />
+      <Skeleton variant="card" className="h-72" />
       <Skeleton variant="card" className="h-48" />
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
         <Skeleton variant="card" className="h-56" />
@@ -62,7 +62,13 @@ export function DashboardSkeleton() {
           <Skeleton className="h-8 w-48 mb-2" />
           <Skeleton className="h-4 w-64" />
         </div>
-        <Skeleton className="h-12 w-40 rounded-xl" />
+        <Skeleton className="h-12 w-40 rounded-2xl" />
+      </div>
+      <div className="grid grid-cols-2 sm:grid-cols-4 gap-4">
+        <Skeleton variant="card" className="h-[92px]" />
+        <Skeleton variant="card" className="h-[92px]" />
+        <Skeleton variant="card" className="h-[92px]" />
+        <Skeleton variant="card" className="h-[92px]" />
       </div>
       <Skeleton variant="card" className="h-72" />
       <Skeleton variant="card" className="h-32" />

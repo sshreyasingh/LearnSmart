@@ -4,12 +4,10 @@ export default function OAuthButtons() {
 
   return (
     <div className="space-y-3">
-      <div className="relative my-6">
-        <div className="absolute inset-0 flex items-center">
-          <div className="w-full border-t border-surface-200" />
-        </div>
-        <div className="relative flex justify-center text-sm">
-          <span className="px-4 bg-[#C9EDDC] text-surface-400 font-medium">or continue with</span>
+      <div className="divider">
+        <div className="divider-line" />
+        <div className="divider-label">
+          <span>or continue with</span>
         </div>
       </div>
 
