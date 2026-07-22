@@ -104,7 +104,8 @@ export default function HomePage() {
     <div className="min-h-[calc(100vh-4rem)] overflow-hidden">
       {/* ──── Hero Section ──── */}
       <section className="relative max-w-7xl mx-auto px-4 pt-12 sm:pt-16 pb-12 sm:pb-16 text-center overflow-hidden">
-        <div className="absolute inset-0 bg-gradient-hero rounded-full opacity-50" />
+        <div className="absolute inset-0 bg-gradient-to-b from-indigo-500/5 via-purple-500/3 to-emerald-500/5 rounded-full opacity-70" />
+        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[80%] h-[60%] bg-gradient-to-r from-indigo-500/6 via-fuchsia-500/4 to-cyan-500/4 blur-3xl rounded-full" />
         <ParticleNetwork />
 
         <ParallaxBlob className="hidden lg:block w-32 h-32 bg-indigo-400/15 top-0 right-[10%] rotate-12" />
@@ -159,8 +160,9 @@ export default function HomePage() {
       </section>
 
       {/* ──── Metrics Bar ──── */}
-      <section className="max-w-5xl mx-auto px-4 pb-12 sm:pb-16">
-        <div className="glass-panel grid grid-cols-2 md:grid-cols-4 divide-x divide-surface-200/50 overflow-hidden px-2 py-2">
+      <section className="relative max-w-5xl mx-auto px-4 pb-12 sm:pb-16">
+        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[120%] h-48 bg-gradient-to-r from-indigo-500/10 via-purple-500/10 to-pink-500/10 blur-3xl rounded-full" />
+        <div className="glass-panel grid grid-cols-2 md:grid-cols-4 divide-x divide-surface-200/50 overflow-hidden px-2 py-2 relative">
           {metrics.map((m) => (
             <AnimatedStat key={m.label} end={m.value} suffix={m.suffix} label={m.label} decimals={m.decimals} />
           ))}
@@ -168,9 +170,11 @@ export default function HomePage() {
       </section>
 
       {/* ──── Features (staggered reveal) ──── */}
-      <section className="max-w-7xl mx-auto px-4 pb-20 sm:pb-28">
+      <section className="relative max-w-7xl mx-auto px-4 pb-20 sm:pb-28">
+        <div className="absolute top-0 left-1/2 -translate-x-1/2 w-96 h-96 bg-gradient-to-br from-indigo-500/8 via-purple-500/6 to-emerald-500/5 blur-3xl rounded-full pointer-events-none" />
         <ScrollReveal animation="fadeUp" transition="smooth">
-          <div className="text-center mb-16 sm:mb-20">
+          <div className="text-center mb-16 sm:mb-20 relative">
+            <div className="mx-auto w-20 h-1 bg-gradient-to-r from-indigo-500 via-purple-500 to-pink-500 rounded-full mb-6" />
             <span className="text-xs font-bold text-primary-600 uppercase tracking-[0.2em] mb-3 block">Features</span>
             <h2 className="text-3xl sm:text-4xl font-extrabold text-surface-900 mb-4 text-balance">
               Everything you need to master any codebase
@@ -190,7 +194,8 @@ export default function HomePage() {
       </section>
 
       {/* ──── Trust Bar ──── */}
-      <section className="max-w-5xl mx-auto px-4 pb-20 sm:pb-28">
+      <section className="relative max-w-5xl mx-auto px-4 pb-20 sm:pb-28">
+        <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[140%] h-40 bg-gradient-to-r from-emerald-500/8 via-cyan-500/6 to-blue-500/8 blur-3xl rounded-full pointer-events-none" />
         <ScrollReveal animation="fadeUp" transition="smooth">
           <p className="text-center text-xs font-bold text-surface-400 uppercase tracking-[0.2em] mb-6">
             Works with any stack
@@ -210,7 +215,8 @@ export default function HomePage() {
 
       {/* ──── Bottom CTA ──── */}
       <section className="relative max-w-4xl mx-auto px-4 pb-24 sm:pb-32">
-        <div className="absolute inset-0 bg-gradient-hero-bottom rounded-full opacity-40" />
+        <div className="absolute inset-0 bg-gradient-hero-bottom rounded-full opacity-50" />
+        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[150%] h-[120%] bg-gradient-to-br from-indigo-500/8 via-fuchsia-500/6 to-emerald-500/6 blur-3xl rounded-full" />
         <ScrollReveal animation="scaleUp" transition="spring">
           <div className="relative glass-panel p-10 sm:p-14 text-center">
             <h2 className="text-2xl sm:text-3xl font-extrabold text-surface-900 mb-4 text-balance">
