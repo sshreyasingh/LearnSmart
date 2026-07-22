@@ -2,27 +2,25 @@ import { Navigate } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
 import RegisterForm from '../components/auth/RegisterForm';
 import OAuthButtons from '../components/auth/OAuthButtons';
+import { Spinner } from '../components/common/Feedback';
 
 export default function RegisterPage() {
   const { user, loading } = useAuth();
 
-  if (loading) {
-    return (
-      <div className="flex items-center justify-center min-h-[60vh]">
-        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary-600"></div>
-      </div>
-    );
-  }
-
+  if (loading) return <Spinner size="lg" className="min-h-[60vh]" />;
   if (user) return <Navigate to="/dashboard" replace />;
 
   return (
-    <div className="max-w-md mx-auto px-4 py-16">
-      <h1 className="text-3xl font-extrabold text-gray-900 text-center mb-2">Create Account</h1>
-      <p className="text-gray-500 text-center mb-8">Start understanding any codebase in seconds</p>
-      <div className="bg-[#C9EDDC] rounded-2xl shadow-sm border border-emerald-200 p-8">
-        <RegisterForm />
-        <OAuthButtons />
+    <div className="min-h-[calc(100vh-8rem)] flex items-center justify-center px-4 py-12">
+      <div className="w-full max-w-md animate-fade-in-up">
+        <div className="text-center mb-8">
+          <h1 className="text-3xl font-extrabold text-surface-900 mb-2">Create Account</h1>
+          <p className="text-surface-500">Start understanding any codebase in seconds</p>
+        </div>
+        <div className="card-elevated p-8">
+          <RegisterForm />
+          <OAuthButtons />
+        </div>
       </div>
     </div>
   );

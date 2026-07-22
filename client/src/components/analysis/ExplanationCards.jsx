@@ -582,9 +582,9 @@ export function ExplanationCards({ explanations, learningResources }) {
 
   if (!explanations) {
     return (
-      <div className="bg-[#C9EDDC] rounded-2xl shadow-sm border border-emerald-200 p-6">
-        <h2 className="text-xl font-bold text-gray-900 mb-4">Detailed Analysis</h2>
-        <p className="text-gray-500 text-sm">Analysis is still being generated. If this persists, try re-analyzing the project.</p>
+      <div className="section-card">
+        <h2 className="text-xl font-bold text-surface-900 mb-4">Detailed Analysis</h2>
+        <p className="text-surface-500 text-sm">Analysis is still being generated. If this persists, try re-analyzing the project.</p>
       </div>
     );
   }
@@ -608,11 +608,14 @@ export function ExplanationCards({ explanations, learningResources }) {
   const Renderer = CARD_RENDERERS[displayTab];
 
   return (
-    <div className="bg-[#C9EDDC] rounded-2xl shadow-sm border border-emerald-200 p-6">
-      <h2 className="text-xl font-bold text-gray-900 mb-4">Detailed Analysis</h2>
+    <div className="section-card">
+      <h2 className="text-xl font-bold text-surface-900 mb-4">Detailed Analysis</h2>
 
-      {errorCategories.length > 0 && !hasSkills && !hasKnowledgeGraph && categories.length === 0 && (
-        <div className="bg-amber-50 border border-amber-200 text-amber-700 px-4 py-3 rounded-lg mb-4 text-sm">
+      {errorCategories.length > 0 && !hasSkills && categories.length === 0 && (
+        <div className="flex items-center gap-2 bg-amber-50 border border-amber-200 text-amber-700 px-4 py-3 rounded-xl mb-4 text-sm">
+          <svg className="w-5 h-5 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-2.5L13.732 4.5c-.77-.833-2.694-.833-3.464 0L4.08 16.5c-.77.833.192 2.5 1.732 2.5z" />
+          </svg>
           All analysis categories encountered issues: {errorCategories.map(k => CATEGORY_LABELS[k] || k).join(', ')}
         </div>
       )}
@@ -623,10 +626,10 @@ export function ExplanationCards({ explanations, learningResources }) {
             <button
               key={cat}
               onClick={() => setActiveTab(cat)}
-              className={`flex items-center gap-1.5 px-4 py-2 rounded-lg text-sm font-medium transition-colors ${
+              className={`flex items-center gap-2 px-4 py-2.5 rounded-xl text-sm font-semibold transition-all duration-200 ${
                 displayTab === cat
-                  ? 'bg-primary-600 text-white'
-                  : 'bg-white/60 text-gray-600 hover:bg-white'
+                  ? 'bg-surface-800 text-white shadow-soft'
+                  : 'bg-white/60 text-surface-600 hover:bg-white hover:shadow-sm'
               }`}
             >
               <span>{CATEGORY_ICONS[cat] || '📋'}</span>
@@ -637,9 +640,9 @@ export function ExplanationCards({ explanations, learningResources }) {
             <button
               key={cat}
               onClick={() => setActiveTab(cat)}
-              className={`flex items-center gap-1.5 px-4 py-2 rounded-lg text-sm font-medium transition-colors ${
+              className={`flex items-center gap-2 px-4 py-2.5 rounded-xl text-sm font-semibold transition-all duration-200 ${
                 displayTab === cat
-                  ? 'bg-amber-600 text-white'
+                  ? 'bg-amber-600 text-white shadow-soft'
                   : 'bg-amber-50 text-amber-600 border border-amber-200 hover:bg-amber-100'
               }`}
             >
@@ -655,7 +658,7 @@ export function ExplanationCards({ explanations, learningResources }) {
           {errorCategories.map((cat) => {
             const err = explanations[cat];
             return (
-              <div key={cat} className="bg-red-50 border border-red-200 rounded-lg p-4">
+              <div key={cat} className="bg-red-50 border border-red-200 rounded-xl p-4">
                 <h4 className="text-sm font-semibold text-red-800">{CATEGORY_LABELS[cat] || cat}</h4>
                 <p className="text-sm text-red-600 mt-1">{err?.error || 'Unknown error'}</p>
                 <p className="text-xs text-red-400 mt-2">
@@ -668,7 +671,7 @@ export function ExplanationCards({ explanations, learningResources }) {
       )}
 
       {isErrorTab && activeData?.error && (
-        <div className="bg-red-50 border border-red-200 rounded-lg p-4">
+        <div className="bg-red-50 border border-red-200 rounded-xl p-4">
           <h4 className="text-sm font-semibold text-red-800">{CATEGORY_LABELS[displayTab] || displayTab}</h4>
           <p className="text-sm text-red-600 mt-1">{activeData.error}</p>
         </div>

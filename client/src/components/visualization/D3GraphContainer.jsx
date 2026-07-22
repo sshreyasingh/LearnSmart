@@ -1,29 +1,18 @@
-import { useState, useMemo } from 'react';
+import { useState } from 'react';
 import { useD3ForceSimulation } from '../../hooks/useD3ForceSimulation';
-
-function LoadingState({ message }) {
-  return (
-    <div className="flex items-center justify-center py-16">
-      <div className="text-center">
-        <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary-600 mx-auto" />
-        <p className="text-gray-500 text-sm mt-3">{message || 'Loading graph...'}</p>
-      </div>
-    </div>
-  );
-}
+import { Spinner } from '../common/Feedback';
 
 function EmptyState({ message }) {
   return (
-    <div className="flex items-center justify-center py-16">
-      <p className="text-gray-400 text-sm">{message || 'No data available.'}</p>
-    </div>
-  );
-}
-
-function ErrorState({ message }) {
-  return (
-    <div className="p-4 bg-red-50 border border-red-200 rounded-lg">
-      <p className="text-red-600 text-sm">Failed to render: {message}</p>
+    <div className="flex items-center justify-center py-20">
+      <div className="text-center">
+        <div className="w-12 h-12 bg-surface-100 rounded-xl flex items-center justify-center mx-auto mb-3">
+          <svg className="w-6 h-6 text-surface-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 5a1 1 0 011-1h14a1 1 0 011 1v2a1 1 0 01-1 1H5a1 1 0 01-1-1V5zM4 13a1 1 0 011-1h6a1 1 0 011 1v6a1 1 0 01-1 1H5a1 1 0 01-1-1v-6zM16 13a1 1 0 011-1h2a1 1 0 011 1v6a1 1 0 01-1 1h-2a1 1 0 01-1-1v-6z" />
+          </svg>
+        </div>
+        <p className="text-surface-400 text-sm">{message || 'No data available.'}</p>
+      </div>
     </div>
   );
 }
@@ -33,21 +22,14 @@ export default function D3GraphContainer({
   links = [],
   width,
   height = 500,
-  nodeConfig,
-  linkConfig,
   loading = false,
   error = null,
   emptyMessage = 'No graph data available.',
   loadingMessage = 'Loading graph...',
   onNodeClick,
   className = '',
-  children,
 }) {
-  const containerHeight = height;
-  const { svgRef } = useD3ForceSimulation(nodes, links, width || 800, containerHeight, {
-    onNodeClick,
-  });
-
+  const { svgRef } = useD3ForceSimulation(nodes, links, width || 800, height, { onNodeClick });
   const [selectedNode, setSelectedNode] = useState(null);
 
   const handleNodeClick = (node) => {
@@ -55,50 +37,41 @@ export default function D3GraphContainer({
     if (onNodeClick) onNodeClick(node);
   };
 
-  if (loading) return <LoadingState message={loadingMessage} />;
-  if (error) return <ErrorState message={error} />;
+  if (loading) return <Spinner size="md" className="py-20" />;
+  if (error) return <EmptyState message={error} />;
   if (!nodes.length) return <EmptyState message={emptyMessage} />;
 
   return (
     <div className={`space-y-3 ${className}`}>
-      <div className="flex items-center justify-between text-xs text-gray-400">
-        <span>{nodes.length} nodes &middot; {links.length} edges</span>
-        <span className="text-gray-400">Scroll to zoom &middot; Drag to pan &middot; Click nodes for details</span>
+      <div className="flex items-center justify-between text-xs text-surface-400 font-medium">
+        <span>{nodes.length} nodes · {links.length} edges</span>
+        <span>Scroll to zoom · Drag to pan · Click nodes for details</span>
       </div>
 
       <div
-        className="border border-emerald-200 rounded-lg overflow-hidden bg-white/50 relative"
-        style={{ height: containerHeight }}
+        className="border border-emerald-200 rounded-xl overflow-hidden bg-white/50 relative"
+        style={{ height }}
       >
-        <svg ref={svgRef} width="100%" height={containerHeight} style={{ display: 'block' }} />
+        <svg ref={svgRef} width="100%" height={height} style={{ display: 'block' }} />
       </div>
 
-      {children && <div className="mt-2">{children}</div>}
-
       {selectedNode && (
-        <div className="p-3 bg-white rounded-lg border border-gray-200 text-sm">
+        <div className="p-4 bg-white rounded-xl border border-surface-200 shadow-soft text-sm animate-fade-in">
           <div className="flex items-center justify-between">
-            <div className="font-semibold text-gray-900">{selectedNode.label || selectedNode.id}</div>
+            <div className="font-semibold text-surface-900">{selectedNode.label || selectedNode.id}</div>
             <button
               onClick={() => setSelectedNode(null)}
-              className="text-gray-400 hover:text-gray-600 text-lg leading-none"
+              className="text-surface-400 hover:text-surface-600 text-lg leading-none"
             >
-              &times;
+              ×
             </button>
           </div>
           {selectedNode.metadata && (
-            <div className="text-xs text-gray-500 mt-1 space-y-0.5">
-              {selectedNode.metadata.path && (
-                <div className="font-mono">{selectedNode.metadata.path}</div>
-              )}
+            <div className="text-xs text-surface-500 mt-2 space-y-0.5">
+              {selectedNode.metadata.path && <div className="font-mono">{selectedNode.metadata.path}</div>}
               {selectedNode.metadata.language && <div>Language: {selectedNode.metadata.language}</div>}
               {selectedNode.metadata.loc && <div>LOC: {selectedNode.metadata.loc}</div>}
-              {selectedNode.metadata.fileCount && (
-                <div>Files: {selectedNode.metadata.fileCount}</div>
-              )}
-              {selectedNode.metadata.directory && (
-                <div>Directory: {selectedNode.metadata.directory}</div>
-              )}
+              {selectedNode.metadata.fileCount && <div>Files: {selectedNode.metadata.fileCount}</div>}
               {selectedNode.type && <div>Type: {selectedNode.type}</div>}
               {selectedNode.group && <div>Group: {selectedNode.group}</div>}
             </div>

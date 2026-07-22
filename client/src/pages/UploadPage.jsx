@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import { uploadProjectZip, uploadProjectFromGitHub, uploadProjectFromUrl, getGitHubRepos } from '../api/project.api';
 import GitHubRepoPicker from '../components/dashboard/GitHubRepoPicker';
 import RepoLinkInput from '../components/dashboard/RepoLinkInput';
+import { Spinner } from '../components/common/Feedback';
 
 const TABS = [
   { id: 'github', label: 'GitHub Repo', icon: '🔗' },
@@ -19,7 +20,6 @@ export default function UploadPage() {
   const [repos, setRepos] = useState([]);
   const [loadingRepos, setLoadingRepos] = useState(false);
   const [repoError, setRepoError] = useState('');
-  const [selectedRepo, setSelectedRepo] = useState(null);
   const navigate = useNavigate();
 
   const fetchRepos = useCallback(async () => {
@@ -40,7 +40,6 @@ export default function UploadPage() {
   }, [tab, fetchRepos]);
 
   const handleGitHubSelect = async (repo) => {
-    setSelectedRepo(repo);
     setError('');
     setLoading(true);
     try {
@@ -109,10 +108,10 @@ export default function UploadPage() {
 
   if (loading) {
     return (
-      <div className="max-w-xl mx-auto px-4 py-16 text-center">
-        <div className="animate-spin rounded-full h-10 w-10 border-b-2 border-primary-600 mx-auto mb-4"></div>
-        <p className="text-gray-700 font-medium">Cloning repository...</p>
-        <p className="text-sm text-gray-500 mt-1">
+      <div className="page-container max-w-xl mx-auto text-center">
+        <Spinner size="lg" />
+        <p className="text-surface-700 font-medium mt-4">Cloning repository...</p>
+        <p className="text-sm text-surface-500 mt-1">
           Once ready, it will appear on your dashboard and analysis will begin automatically.
         </p>
       </div>
@@ -120,45 +119,54 @@ export default function UploadPage() {
   }
 
   return (
-    <div className="max-w-3xl mx-auto px-4 py-12">
-      <h1 className="text-3xl font-extrabold text-gray-900 mb-2">Upload Source Code</h1>
-      <p className="text-gray-500 mb-8">Choose how you want to provide your project for analysis</p>
+    <div className="page-container max-w-3xl">
+      <div className="mb-8">
+        <h1 className="text-3xl font-extrabold text-surface-900 mb-2">Upload Source Code</h1>
+        <p className="text-surface-500">Choose how you want to provide your project for analysis</p>
+      </div>
 
-      <div className="flex border-b border-gray-200 mb-8">
+      <div className="flex border-b border-surface-200 mb-8">
         {TABS.map((t) => (
           <button
             key={t.id}
-            onClick={() => setTab(t.id)}
-            className={`flex items-center gap-2 px-6 py-3 font-medium border-b-2 transition-colors ${
+            onClick={() => { setTab(t.id); setError(''); }}
+            className={`flex items-center gap-2 px-6 py-3.5 font-semibold text-sm border-b-2 transition-all duration-200 ${
               tab === t.id
                 ? 'border-primary-600 text-primary-600'
-                : 'border-transparent text-gray-400 hover:text-gray-600'
+                : 'border-transparent text-surface-400 hover:text-surface-600 hover:border-surface-300'
             }`}
           >
-            <span>{t.icon}</span>
+            <span className="text-lg">{t.icon}</span>
             {t.label}
           </button>
         ))}
       </div>
 
       {error && (
-        <div className="bg-red-50 text-red-700 px-4 py-3 rounded-lg mb-6 text-sm">{error}</div>
+        <div className="flex items-center gap-2 bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded-xl mb-6 text-sm animate-fade-in">
+          <svg className="w-5 h-5 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+          </svg>
+          {error}
+        </div>
       )}
 
       {tab === 'github' && (
-        <div className="bg-[#C9EDDC] rounded-2xl shadow-sm border border-emerald-200 p-6">
-          <div className="flex items-center justify-between mb-4">
-            <h2 className="text-lg font-bold text-gray-900">Select a GitHub Repository</h2>
+        <div className="section-card">
+          <div className="flex items-center justify-between mb-5">
+            <h2 className="text-lg font-bold text-surface-900">Select a GitHub Repository</h2>
             <button
               onClick={fetchRepos}
               disabled={loadingRepos}
-              className="text-sm text-primary-600 hover:text-primary-700 font-medium"
+              className="btn-ghost px-3 py-1.5 text-sm"
             >
               {loadingRepos ? 'Loading...' : '↻ Refresh'}
             </button>
           </div>
           {repoError && (
-            <div className="bg-red-50 text-red-700 px-4 py-3 rounded-lg mb-4 text-sm">{repoError}</div>
+            <div className="flex items-center gap-2 bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded-xl mb-4 text-sm">
+              {repoError}
+            </div>
           )}
           <GitHubRepoPicker
             selected={repos}
@@ -169,50 +177,62 @@ export default function UploadPage() {
       )}
 
       {tab === 'zip' && (
-        <div className="bg-[#C9EDDC] rounded-2xl shadow-sm border border-emerald-200 p-6">
+        <div className="section-card">
           <form onSubmit={handleZipUpload}>
             <div
               onDragOver={(e) => { e.preventDefault(); setDragOver(true); }}
               onDragLeave={() => setDragOver(false)}
               onDrop={handleDrop}
-              className={`border-2 border-dashed rounded-2xl p-12 text-center transition-all ${
-                dragOver ? 'border-primary-500 bg-primary-50/60' : 'border-gray-200'
-              } ${zipFile ? 'bg-green-50 border-green-400' : ''}`}
+              className={`relative border-2 border-dashed rounded-2xl p-12 text-center transition-all duration-200 ${
+                dragOver
+                  ? 'border-primary-400 bg-primary-50/60 scale-[1.01]'
+                  : zipFile
+                    ? 'border-emerald-400 bg-emerald-50/50'
+                    : 'border-surface-200 hover:border-surface-300'
+              }`}
             >
               {zipFile ? (
-                <div>
-                  <span className="text-4xl">📦</span>
-                  <p className="text-lg font-semibold text-gray-900 mt-3">{zipFile.name}</p>
-                  <p className="text-sm text-gray-500 mt-1">
-                    {(zipFile.size / 1024).toFixed(1)} KB
+                <div className="animate-fade-in">
+                  <div className="w-16 h-16 bg-emerald-100 rounded-2xl flex items-center justify-center mx-auto mb-4">
+                    <svg className="w-8 h-8 text-emerald-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+                    </svg>
+                  </div>
+                  <p className="text-lg font-semibold text-surface-900">{zipFile.name}</p>
+                  <p className="text-sm text-surface-500 mt-1">
+                    {(zipFile.size / 1024 / 1024).toFixed(2)} MB
                   </p>
                   <button
                     type="button"
                     onClick={() => setZipFile(null)}
-                    className="text-sm text-red-500 hover:text-red-600 mt-2"
+                    className="btn-danger px-3 py-1.5 text-sm mt-3"
                   >
                     Remove
                   </button>
                 </div>
               ) : (
                 <div>
-                  <span className="text-5xl">📂</span>
-                  <p className="text-lg font-semibold text-gray-700 mt-4">
+                  <div className="w-16 h-16 bg-surface-100 rounded-2xl flex items-center justify-center mx-auto mb-4">
+                    <svg className="w-8 h-8 text-surface-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12" />
+                    </svg>
+                  </div>
+                  <p className="text-lg font-semibold text-surface-700">
                     Drag & drop your ZIP file here
                   </p>
-                  <p className="text-sm text-gray-500 mt-1">or</p>
-                  <label className="inline-block mt-3 cursor-pointer bg-white border border-gray-300 px-5 py-2.5 rounded-lg hover:bg-gray-50 font-medium text-gray-700">
+                  <p className="text-sm text-surface-500 mt-1">or</p>
+                  <label className="inline-block mt-4 cursor-pointer btn-secondary px-5 py-2.5">
                     Browse Files
                     <input type="file" accept=".zip" onChange={handleFileChange} className="hidden" />
                   </label>
-                  <p className="text-xs text-gray-400 mt-3">Max 50MB</p>
+                  <p className="text-xs text-surface-400 mt-3">Max 50MB</p>
                 </div>
               )}
             </div>
             <button
               type="submit"
               disabled={loading || !zipFile}
-              className="w-full mt-6 bg-gradient-to-r from-primary-600 to-primary-700 text-white py-3 rounded-xl hover:from-primary-700 hover:to-primary-800 font-semibold shadow-lg shadow-primary-500/20 disabled:opacity-50 disabled:shadow-none transition-all"
+              className="btn-primary w-full mt-6 py-3"
             >
               Upload & Analyze
             </button>
@@ -221,8 +241,8 @@ export default function UploadPage() {
       )}
 
       {tab === 'url' && (
-        <div className="bg-[#C9EDDC] rounded-2xl shadow-sm border border-emerald-200 p-6">
-          <h2 className="text-lg font-bold text-gray-900 mb-4">Clone from URL</h2>
+        <div className="section-card">
+          <h2 className="text-lg font-bold text-surface-900 mb-5">Clone from URL</h2>
           <RepoLinkInput onSubmit={handleUrlSubmit} loading={loading} />
         </div>
       )}

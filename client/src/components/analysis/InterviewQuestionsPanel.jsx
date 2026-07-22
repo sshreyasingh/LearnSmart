@@ -2,9 +2,9 @@ import { useState, useEffect, useCallback } from 'react';
 import { getInterviewQuestions, regenerateInterviewQuestions } from '../../api/interview.api';
 
 const DIFFICULTY_COLORS = {
-  beginner: 'bg-green-100 text-green-700',
-  intermediate: 'bg-blue-100 text-blue-700',
-  advanced: 'bg-purple-100 text-purple-700',
+  beginner: 'badge-success',
+  intermediate: 'badge-info',
+  advanced: 'badge-warning',
 };
 
 const CATEGORY_COLORS = {
@@ -26,51 +26,44 @@ const CATEGORY_LABELS = {
 };
 
 function QuestionCard({ question, expanded, onToggle }) {
-  const catColor = CATEGORY_COLORS[question.category] || 'border-l-gray-400';
-  const diffColor = DIFFICULTY_COLORS[question.difficulty] || 'bg-gray-100 text-gray-600';
+  const catColor = CATEGORY_COLORS[question.category] || 'border-l-surface-400';
+  const diffColor = DIFFICULTY_COLORS[question.difficulty] || 'badge-info';
 
   return (
-    <div className={`bg-white border border-gray-200 rounded-lg border-l-4 ${catColor} overflow-hidden transition-shadow hover:shadow-sm`}>
-      <button
-        onClick={onToggle}
-        className="w-full text-left px-4 py-3 flex items-start gap-3"
-      >
-        <span className={`text-lg mt-0.5 shrink-0 transition-transform ${expanded ? 'rotate-90' : ''}`}>
-          ▶
-        </span>
+    <div className={`bg-white border border-surface-200 rounded-xl border-l-4 ${catColor} overflow-hidden shadow-sm hover:shadow-soft transition-shadow`}>
+      <button onClick={onToggle} className="w-full text-left px-4 py-3.5 flex items-start gap-3">
+        <svg className={`w-5 h-5 text-surface-400 shrink-0 mt-0.5 transition-transform duration-200 ${expanded ? 'rotate-90' : ''}`} fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+        </svg>
         <div className="flex-1 min-w-0">
-          <div className="flex items-center gap-2 flex-wrap mb-1">
-            <span className={`px-2 py-0.5 rounded-full text-[10px] font-bold uppercase ${diffColor}`}>
+          <div className="flex items-center gap-2 flex-wrap mb-1.5">
+            <span className={`${diffColor} px-2 py-0.5 text-[10px] font-bold uppercase`}>
               {question.difficulty}
             </span>
-            <span className="text-[10px] text-gray-400 uppercase font-medium">
+            <span className="text-[10px] text-surface-400 uppercase font-semibold tracking-wide">
               {CATEGORY_LABELS[question.category] || question.category}
             </span>
           </div>
-          <p className="text-sm font-medium text-gray-800 leading-snug">{question.question}</p>
+          <p className="text-sm font-semibold text-surface-800 leading-snug">{question.question}</p>
         </div>
       </button>
       {expanded && (
-        <div className="px-4 pb-4 pl-11">
-          <div className="bg-white/60 rounded-lg p-3 border border-emerald-100">
-            <p className="text-xs font-semibold text-gray-500 uppercase mb-1">Suggested Answer</p>
-            <p className="text-sm text-gray-700 leading-relaxed">{question.suggestedAnswer}</p>
+        <div className="px-4 pb-4 pl-12 animate-fade-in">
+          <div className="bg-surface-50 rounded-xl p-4 border border-surface-200">
+            <p className="text-xs font-bold text-surface-500 uppercase tracking-widest mb-2">Suggested Answer</p>
+            <p className="text-sm text-surface-700 leading-relaxed">{question.suggestedAnswer}</p>
           </div>
           {question.keyConcepts?.length > 0 && (
             <div className="flex flex-wrap gap-1.5 mt-3">
               {question.keyConcepts.map((c, i) => (
-                <span key={i} className="px-2 py-0.5 bg-gray-100 text-gray-600 rounded text-xs">
-                  {c}
-                </span>
+                <span key={i} className="px-2 py-0.5 bg-surface-100 text-surface-600 rounded-lg text-xs font-medium">{c}</span>
               ))}
             </div>
           )}
           {question.relatedFiles?.length > 0 && (
-            <div className="mt-2 flex flex-wrap gap-1">
+            <div className="mt-3 flex flex-wrap gap-1.5">
               {question.relatedFiles.map((f, i) => (
-                <span key={i} className="text-[10px] font-mono text-gray-400 bg-gray-50 px-1.5 py-0.5 rounded">
-                  {f}
-                </span>
+                <span key={i} className="text-[10px] font-mono text-surface-400 bg-surface-50 px-2 py-0.5 rounded-md border border-surface-200">{f}</span>
               ))}
             </div>
           )}
@@ -133,53 +126,46 @@ export function InterviewQuestionsPanel({ projectId }) {
 
   if (loading) {
     return (
-      <div className="bg-[#C9EDDC] rounded-2xl shadow-sm border border-emerald-200 p-6">
-        <h2 className="text-xl font-bold text-gray-900 mb-4">Interview Questions</h2>
+      <div className="section-card">
+        <h2 className="text-xl font-bold text-surface-900 mb-4">Interview Questions</h2>
         <div className="space-y-3">
-          {[1, 2, 3].map((i) => (
-            <div key={i} className="animate-pulse bg-white/60 rounded-lg h-20" />
+          {[1, 2, 3, 4].map((i) => (
+            <div key={i} className="animate-pulse bg-white/60 rounded-xl h-20" />
           ))}
         </div>
       </div>
     );
   }
 
-  if (error) {
-    return (
-      <div className="bg-[#C9EDDC] rounded-2xl shadow-sm border border-emerald-200 p-6">
-        <h2 className="text-xl font-bold text-gray-900 mb-2">Interview Questions</h2>
-        <p className="text-sm text-red-500">{error}</p>
-      </div>
-    );
-  }
-
   return (
-    <div className="bg-[#C9EDDC] rounded-2xl shadow-sm border border-emerald-200 overflow-hidden">
-      <div className="px-6 pt-6 pb-3 flex items-center justify-between flex-wrap gap-3">
+    <div className="section-card overflow-hidden">
+      <div className="flex items-center justify-between flex-wrap gap-3 mb-1">
         <div>
-          <h2 className="text-xl font-bold text-gray-900">Interview Questions</h2>
-          <p className="text-sm text-gray-500">Practice questions based on the source code</p>
+          <h2 className="text-xl font-bold text-surface-900">Interview Questions</h2>
+          <p className="text-sm text-surface-500">Practice questions based on the source code</p>
         </div>
-        <div className="flex items-center gap-2">
-          <button
-            onClick={handleRefresh}
-            disabled={refreshing}
-            className="px-3 py-1.5 text-xs font-medium bg-gray-100 text-gray-600 rounded-lg hover:bg-gray-200 transition-colors disabled:opacity-50 flex items-center gap-1.5"
-          >
-            <span className={`inline-block ${refreshing ? 'animate-spin' : ''}`}>🔄</span>
-            {refreshing ? 'Refreshing...' : 'Refresh'}
-          </button>
-        </div>
+        <button
+          onClick={handleRefresh}
+          disabled={refreshing}
+          className="btn-ghost px-3 py-1.5 text-xs"
+        >
+          <span className={`inline-block mr-1 ${refreshing ? 'animate-spin' : ''}`}>🔄</span>
+          {refreshing ? 'Refreshing...' : 'Refresh'}
+        </button>
       </div>
+
+      {error && (
+        <div className="flex items-center gap-2 bg-red-50 text-red-600 px-3 py-2 rounded-xl text-xs mt-2 mb-2">
+          {error}
+        </div>
+      )}
 
       {categories.length > 0 && (
-        <div className="px-6 pb-3 flex flex-wrap gap-1.5">
+        <div className="flex flex-wrap gap-1.5 mt-4 mb-4">
           <button
             onClick={() => { setFilter('all'); setShowAll(false); }}
-            className={`px-3 py-1 rounded-full text-xs font-medium transition-colors ${
-              filter === 'all'
-                ? 'bg-gray-800 text-white'
-                : 'bg-gray-100 text-gray-600 hover:bg-gray-200'
+            className={`px-3 py-1.5 rounded-full text-xs font-semibold transition-all ${
+              filter === 'all' ? 'bg-surface-800 text-white shadow-soft' : 'bg-surface-100 text-surface-600 hover:bg-surface-200'
             }`}
           >
             All ({questions.length})
@@ -190,10 +176,8 @@ export function InterviewQuestionsPanel({ projectId }) {
               <button
                 key={cat}
                 onClick={() => { setFilter(cat); setShowAll(false); }}
-                className={`px-3 py-1 rounded-full text-xs font-medium transition-colors ${
-                  filter === cat
-                    ? 'bg-gray-800 text-white'
-                    : 'bg-gray-100 text-gray-600 hover:bg-gray-200'
+                className={`px-3 py-1.5 rounded-full text-xs font-semibold transition-all ${
+                  filter === cat ? 'bg-surface-800 text-white shadow-soft' : 'bg-surface-100 text-surface-600 hover:bg-surface-200'
                 }`}
               >
                 {CATEGORY_LABELS[cat] || cat} ({count})
@@ -203,9 +187,9 @@ export function InterviewQuestionsPanel({ projectId }) {
         </div>
       )}
 
-      <div className="px-6 pb-6">
+      <div>
         {filtered.length === 0 ? (
-          <p className="text-sm text-gray-400 text-center py-8">No questions in this category.</p>
+          <p className="text-sm text-surface-400 text-center py-8">No questions in this category.</p>
         ) : (
           <div className="space-y-3">
             {(showAll ? filtered : filtered.slice(0, INITIAL_SHOW)).map((q) => (
@@ -221,11 +205,9 @@ export function InterviewQuestionsPanel({ projectId }) {
         {filtered.length > INITIAL_SHOW && (
           <button
             onClick={() => { setShowAll(!showAll); setExpandedId(null); }}
-            className="mt-3 w-full py-2 text-sm font-medium text-gray-500 bg-white/50 rounded-lg hover:bg-white hover:text-gray-700 transition-colors border border-gray-200/50"
+            className="mt-4 w-full py-3 text-sm font-semibold text-surface-500 bg-white/50 rounded-xl hover:bg-white hover:text-surface-700 transition-colors border border-surface-200/50"
           >
-            {showAll
-              ? `Show less (${INITIAL_SHOW})`
-              : `Show all ${filtered.length} questions`}
+            {showAll ? `Show less (${INITIAL_SHOW})` : `Show all ${filtered.length} questions`}
           </button>
         )}
       </div>

@@ -3,7 +3,7 @@ import { useState } from 'react';
 const SEVERITY_COLORS = {
   critical: { bg: 'bg-red-100', text: 'text-red-800', border: 'border-red-300', badge: 'bg-red-600' },
   high: { bg: 'bg-orange-100', text: 'text-orange-800', border: 'border-orange-300', badge: 'bg-orange-500' },
-  medium: { bg: 'bg-yellow-100', text: 'text-yellow-800', border: 'border-yellow-300', badge: 'bg-yellow-500' },
+  medium: { bg: 'bg-amber-100', text: 'text-amber-800', border: 'border-amber-300', badge: 'bg-amber-500' },
   low: { bg: 'bg-blue-100', text: 'text-blue-800', border: 'border-blue-300', badge: 'bg-blue-400' },
 };
 
@@ -11,8 +11,10 @@ function SeverityBar({ summary }) {
   const total = (summary.critical || 0) + (summary.high || 0) + (summary.medium || 0) + (summary.low || 0);
   if (total === 0) {
     return (
-      <div className="flex items-center gap-2 text-green-700 bg-green-50 px-4 py-3 rounded-lg">
-        <span className="text-xl">✅</span>
+      <div className="flex items-center gap-2 text-emerald-700 bg-emerald-50 px-4 py-3 rounded-xl border border-emerald-200">
+        <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+        </svg>
         <span className="font-medium">No security issues detected</span>
       </div>
     );
@@ -20,19 +22,11 @@ function SeverityBar({ summary }) {
 
   return (
     <div className="flex items-center gap-3 flex-wrap">
-      {summary.critical > 0 && (
-        <span className="px-3 py-1.5 bg-red-600 text-white rounded-full text-sm font-bold">{summary.critical} Critical</span>
-      )}
-      {summary.high > 0 && (
-        <span className="px-3 py-1.5 bg-orange-500 text-white rounded-full text-sm font-bold">{summary.high} High</span>
-      )}
-      {summary.medium > 0 && (
-        <span className="px-3 py-1.5 bg-yellow-500 text-white rounded-full text-sm font-bold">{summary.medium} Medium</span>
-      )}
-      {summary.low > 0 && (
-        <span className="px-3 py-1.5 bg-blue-400 text-white rounded-full text-sm font-bold">{summary.low} Low</span>
-      )}
-      <span className="text-sm text-gray-500">{total} total</span>
+      {summary.critical > 0 && <span className="badge-error">{summary.critical} Critical</span>}
+      {summary.high > 0 && <span className="px-3 py-1.5 bg-orange-500 text-white rounded-full text-sm font-bold">{summary.high} High</span>}
+      {summary.medium > 0 && <span className="px-3 py-1.5 bg-amber-500 text-white rounded-full text-sm font-bold">{summary.medium} Medium</span>}
+      {summary.low > 0 && <span className="px-3 py-1.5 bg-blue-400 text-white rounded-full text-sm font-bold">{summary.low} Low</span>}
+      <span className="text-sm text-surface-500 font-medium">{total} total</span>
     </div>
   );
 }
@@ -42,32 +36,34 @@ function VulnerabilityItem({ vuln }) {
   const [expanded, setExpanded] = useState(false);
 
   return (
-    <div className={`border rounded-lg overflow-hidden ${colors.border}`}>
+    <div className={`border rounded-xl overflow-hidden ${colors.border} shadow-sm`}>
       <button
         onClick={() => setExpanded(!expanded)}
-        className="w-full text-left px-4 py-3 flex items-start gap-3 hover:bg-gray-50 transition-colors"
+        className="w-full text-left px-4 py-3.5 flex items-start gap-3 hover:bg-white/50 transition-colors"
       >
-        <span className={`${colors.badge} text-white text-xs font-bold px-2 py-0.5 rounded uppercase mt-0.5 shrink-0`}>
+        <span className={`${colors.badge} text-white text-xs font-bold px-2.5 py-1 rounded-lg uppercase mt-0.5 shrink-0`}>
           {vuln.severity}
         </span>
         <div className="min-w-0 flex-1">
-          <div className="font-medium text-gray-900 text-sm">{vuln.type.replace(/_/g, ' ')}</div>
-          <div className="text-xs text-gray-500 mt-0.5">
+          <div className="font-semibold text-surface-900 text-sm capitalize">{vuln.type.replace(/_/g, ' ')}</div>
+          <div className="text-xs text-surface-500 mt-1 font-mono">
             {vuln.file}:{vuln.line}
           </div>
         </div>
-        <span className="text-gray-400 text-sm">{expanded ? '▴' : '▾'}</span>
+        <svg className={`w-5 h-5 text-surface-400 transition-transform duration-200 ${expanded ? 'rotate-180' : ''}`} fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
+        </svg>
       </button>
       {expanded && (
-        <div className="px-4 pb-4 pt-0 space-y-2">
+        <div className="px-4 pb-4 pt-0 space-y-3 animate-fade-in">
           {vuln.snippet && (
-            <div className="bg-gray-900 text-gray-300 rounded p-2 text-xs font-mono overflow-x-auto whitespace-pre-wrap">
+            <div className="bg-surface-900 text-surface-300 rounded-lg p-3 text-xs font-mono overflow-x-auto whitespace-pre-wrap">
               {vuln.snippet}
             </div>
           )}
           {vuln.recommendation && (
-            <div className="text-xs text-gray-600 bg-gray-50 rounded p-2">
-              <span className="font-semibold">Fix: </span>{vuln.recommendation}
+            <div className="text-xs text-surface-600 bg-surface-50 rounded-lg p-3 border border-surface-200">
+              <span className="font-semibold text-surface-800">Fix: </span>{vuln.recommendation}
             </div>
           )}
         </div>
@@ -85,18 +81,19 @@ export function SecurityReport({ security }) {
     if (!grouped[v.severity]) grouped[v.severity] = [];
     grouped[v.severity].push(v);
   }
-
   const order = ['critical', 'high', 'medium', 'low'];
 
   return (
-    <div className="bg-[#C9EDDC] rounded-2xl shadow-sm border border-emerald-200 p-6 mt-6">
-      <h2 className="text-xl font-bold text-gray-900 mb-4">Security Report</h2>
+    <div className="section-card">
+      <div className="flex items-center gap-2 mb-4">
+        <h2 className="text-xl font-bold text-surface-900">Security Report</h2>
+      </div>
       <SeverityBar summary={summary} />
       {vulnerabilities.length > 0 && (
-        <div className="mt-4 space-y-2">
+        <div className="mt-5 space-y-2.5">
           {order.map(sev => {
             const items = grouped[sev];
-            if (!items || items.length === 0) return null;
+            if (!items?.length) return null;
             return items.map((v, i) => <VulnerabilityItem key={`${sev}-${i}`} vuln={v} />);
           })}
         </div>

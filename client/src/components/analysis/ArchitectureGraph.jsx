@@ -41,10 +41,7 @@ const LAYER_COLORS = {
 export function ArchitectureGraph({ dependencyGraph, simplifiedGraph }) {
   const graph = simplifiedGraph || dependencyGraph;
 
-  const mermaidCode = useMemo(
-    () => buildArchitectureMermaid(graph),
-    [graph]
-  );
+  const mermaidCode = useMemo(() => buildArchitectureMermaid(graph), [graph]);
 
   const layers = graph?.nodes || graph?.groups || [];
   const edges = graph?.edges || [];
@@ -52,28 +49,27 @@ export function ArchitectureGraph({ dependencyGraph, simplifiedGraph }) {
 
   if (!graph) {
     return (
-      <div className="bg-[#C9EDDC] rounded-2xl shadow-sm border border-emerald-200 p-6">
-        <h2 className="text-xl font-bold text-gray-900 mb-4">Architecture</h2>
-        <p className="text-gray-500 text-sm">No dependency graph available for this project.</p>
+      <div className="section-card">
+        <h2 className="text-xl font-bold text-surface-900 mb-4">Architecture</h2>
+        <p className="text-surface-500 text-sm">No dependency graph available for this project.</p>
       </div>
     );
   }
 
   return (
-    <div className="bg-[#C9EDDC] rounded-2xl shadow-sm border border-emerald-200 p-6">
-      <h2 className="text-xl font-bold text-gray-900 mb-1">Project Structure</h2>
-      <p className="text-sm text-gray-500 mb-4">
-        Files grouped by architectural layer with inter-layer dependency flows. Each layer represents a distinct
-        concern in the codebase — from entry points through to models and utilities.
+    <div className="section-card">
+      <h2 className="text-xl font-bold text-surface-900 mb-1">Project Structure</h2>
+      <p className="text-sm text-surface-500 mb-5">
+        Files grouped by architectural layer with inter-layer dependency flows.
       </p>
 
-      <div className="bg-white/60 border border-emerald-200 rounded-lg p-3 mb-4">
-        <h4 className="text-xs font-semibold text-gray-500 uppercase tracking-wide mb-2">Layer Legend</h4>
+      <div className="bg-white/60 border border-emerald-200 rounded-xl p-4 mb-5">
+        <h4 className="text-xs font-bold text-surface-500 uppercase tracking-widest mb-3">Layer Legend</h4>
         <div className="flex flex-wrap gap-1.5">
           {Object.entries(LAYER_COLORS).slice(0, 12).map(([id, color]) => (
             <span
               key={id}
-              className="text-[10px] px-2 py-0.5 rounded font-medium text-white"
+              className="text-[10px] px-2.5 py-1 rounded-md font-semibold text-white shadow-sm"
               style={{ backgroundColor: color }}
               title={LAYER_DESCRIPTIONS[id]}
             >
@@ -84,16 +80,16 @@ export function ArchitectureGraph({ dependencyGraph, simplifiedGraph }) {
       </div>
 
       {metadata.totalNodes && (
-        <div className="flex items-center gap-4 mb-4 text-xs text-gray-500">
-          <span className="font-medium">{metadata.totalNodes} layers</span>
-          <span className="font-medium">{edges?.length || 0} dependencies</span>
+        <div className="flex items-center gap-4 mb-5 text-xs text-surface-500 font-medium">
+          <span>{metadata.totalNodes} layers</span>
+          <span>{edges?.length || 0} dependencies</span>
           {metadata.disconnectedCount > 0 && (
             <span>{metadata.disconnectedCount} isolated</span>
           )}
         </div>
       )}
 
-      <div className="bg-white/40 border border-emerald-200 rounded-lg overflow-x-auto">
+      <div className="bg-white/40 border border-emerald-200 rounded-xl overflow-x-auto mb-6">
         <MermaidDiagram
           code={mermaidCode}
           id="arch-diagram"
@@ -102,8 +98,7 @@ export function ArchitectureGraph({ dependencyGraph, simplifiedGraph }) {
         />
       </div>
 
-      {/* Summary cards */}
-      <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-3 mt-6">
+      <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-3">
         {[...layers]
           .sort((a, b) => (b.totalLOC || b.fileCount || 0) - (a.totalLOC || a.fileCount || 0))
           .map((layer) => {
@@ -111,18 +106,18 @@ export function ArchitectureGraph({ dependencyGraph, simplifiedGraph }) {
             return (
               <div
                 key={layer.id}
-                className="bg-white/80 border rounded-lg p-3"
+                className="bg-white/80 border rounded-xl p-4 hover:shadow-soft transition-shadow"
                 style={{ borderColor: color }}
               >
                 <div
-                  className="text-xs font-bold uppercase tracking-wide mb-2"
+                  className="text-xs font-bold uppercase tracking-wider mb-2"
                   style={{ color }}
                 >
                   {layer.label || layer.id}
                 </div>
-                <div className="text-xs text-gray-600 space-y-0.5">
+                <div className="text-xs text-surface-500 space-y-0.5">
                   <div>{layer.fileCount} files</div>
-                  {layer.totalLOC > 0 && <div>{layer.totalLOC} LOC</div>}
+                  {layer.totalLOC > 0 && <div>{layer.totalLOC.toLocaleString()} LOC</div>}
                 </div>
               </div>
             );

@@ -20,15 +20,11 @@ function Legend() {
     { label: 'Route', color: NODE_TYPE_COLORS.route },
     { label: 'Package', color: NODE_TYPE_COLORS.package },
   ];
-
   return (
     <div className="flex flex-wrap gap-3 text-xs">
       {types.map((t) => (
         <span key={t.label} className="flex items-center gap-1.5">
-          <span
-            className="w-3 h-3 rounded-sm inline-block"
-            style={{ backgroundColor: t.color }}
-          />
+          <span className="w-3 h-3 rounded-sm" style={{ backgroundColor: t.color }} />
           {t.label}
         </span>
       ))}
@@ -67,32 +63,37 @@ export function KnowledgeGraph({ knowledgeGraph }) {
   }, [links, filteredNodes, searchTerm]);
 
   return (
-    <div className="bg-[#C9EDDC] rounded-2xl shadow-sm border border-emerald-200 p-6 mt-6">
-      <div className="flex items-center justify-between mb-4">
-        <h2 className="text-xl font-bold text-gray-900">Knowledge Graph</h2>
+    <div className="section-card">
+      <div className="flex items-center justify-between mb-5">
+        <h2 className="text-xl font-bold text-surface-900">Knowledge Graph</h2>
         {allNodes.length > 0 && <Legend />}
       </div>
 
       {allNodes.length > 0 && (
         <div className="flex items-center gap-3 mb-4">
           <div className="relative flex-1 max-w-sm">
+            <svg className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-surface-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+            </svg>
             <input
               type="text"
               value={searchTerm}
               onChange={(e) => setSearchTerm(e.target.value)}
               placeholder="Search nodes..."
-              className="w-full px-3 py-1.5 text-sm border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-primary-500 bg-white/80"
+              className="input-field pl-10 text-sm"
             />
             {searchTerm && (
               <button
                 onClick={() => setSearchTerm('')}
-                className="absolute right-2 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600"
+                className="absolute right-2 top-1/2 -translate-y-1/2 text-surface-400 hover:text-surface-600"
               >
-                &times;
+                <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+                </svg>
               </button>
             )}
           </div>
-          <span className="text-xs text-gray-400">
+          <span className="text-xs text-surface-400 font-medium">
             {filteredNodes.length} of {allNodes.length} nodes
           </span>
         </div>
@@ -102,7 +103,7 @@ export function KnowledgeGraph({ knowledgeGraph }) {
         nodes={filteredNodes}
         links={relatedLinks}
         height={500}
-        emptyMessage="Knowledge graph is being generated. It will appear here once analysis completes, showing how files, functions, classes, and components are connected."
+        emptyMessage="Knowledge graph is being generated and will appear here once analysis completes."
       />
     </div>
   );

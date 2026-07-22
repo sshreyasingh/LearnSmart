@@ -1,7 +1,7 @@
 import { useEffect } from 'react';
 import { BrowserRouter, Routes, Route, useLocation } from 'react-router-dom';
 import { AuthProvider } from './context/AuthContext';
-import { initMermaid } from './utils/mermaidConfig';
+import { ToastProvider } from './context/ToastContext';
 import Navbar from './components/common/Navbar';
 import ProtectedRoute from './components/common/ProtectedRoute';
 import HomePage from './pages/HomePage';
@@ -29,6 +29,7 @@ export default function App() {
     >
       <ScrollToTop />
       <AuthProvider>
+        <ToastProvider>
         <div className="min-h-screen bg-gradient-theme">
           <Navbar />
           <Routes>
@@ -70,6 +71,7 @@ export default function App() {
             />
           </Routes>
         </div>
+        </ToastProvider>
       </AuthProvider>
     </BrowserRouter>
   );
