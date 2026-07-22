@@ -132,7 +132,7 @@ export default function UploadPage() {
             onClick={() => { setTab(t.id); setError(''); }}
             className={`flex items-center gap-2 px-6 py-3.5 font-semibold text-sm border-b-2 transition-all duration-200 ${
               tab === t.id
-                ? 'border-primary-600 text-primary-600'
+                ? 'border-primary-600 text-primary-400'
                 : 'border-transparent text-surface-400 hover:text-surface-600 hover:border-surface-300'
             }`}
           >
@@ -143,7 +143,7 @@ export default function UploadPage() {
       </div>
 
       {error && (
-        <div className="flex items-center gap-2 bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded-xl mb-6 text-sm animate-fade-in">
+        <div className="flex items-center gap-2 bg-red-900/15 border border-red-500/20 text-red-400 px-4 py-3 rounded-xl mb-6 text-sm animate-fade-in">
           <svg className="w-5 h-5 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
           </svg>
@@ -164,7 +164,7 @@ export default function UploadPage() {
             </button>
           </div>
           {repoError && (
-            <div className="flex items-center gap-2 bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded-xl mb-4 text-sm">
+            <div className="flex items-center gap-2 bg-red-900/15 border border-red-500/20 text-red-400 px-4 py-3 rounded-xl mb-4 text-sm">
               {repoError}
             </div>
           )}
@@ -185,16 +185,16 @@ export default function UploadPage() {
               onDrop={handleDrop}
               className={`relative border-2 border-dashed rounded-2xl p-12 text-center transition-all duration-200 ${
                 dragOver
-                  ? 'border-primary-400 bg-primary-50/60 scale-[1.01]'
+                  ? 'border-primary-400 bg-primary-500/10/60 scale-[1.01]'
                   : zipFile
-                    ? 'border-emerald-400 bg-emerald-50/50'
+                    ? 'border-emerald-400 bg-primary-500/10/50'
                     : 'border-surface-200 hover:border-surface-300'
               }`}
             >
               {zipFile ? (
                 <div className="animate-fade-in">
-                  <div className="w-16 h-16 bg-emerald-100 rounded-2xl flex items-center justify-center mx-auto mb-4">
-                    <svg className="w-8 h-8 text-emerald-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <div className="w-16 h-16 bg-primary-500/15 rounded-2xl flex items-center justify-center mx-auto mb-4">
+                    <svg className="w-8 h-8 text-primary-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
                     </svg>
                   </div>

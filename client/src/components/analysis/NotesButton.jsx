@@ -100,7 +100,7 @@ export function NotesButton({ projectId }) {
       >
         <div className="flex items-center gap-3 mb-4">
           {status && (
-            <span className={`text-xs font-semibold ${status === 'Saved' ? 'text-emerald-600' : 'text-red-500'}`}>
+            <span className={`text-xs font-semibold ${status === 'Saved' ? 'text-primary-500' : 'text-red-400'}`}>
               {status}
             </span>
           )}

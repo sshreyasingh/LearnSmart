@@ -80,11 +80,11 @@ export default function VisualizationPage() {
         <div className="section-card">
           <div className="flex items-center justify-between mb-5">
             <h2 className="text-lg font-bold text-surface-900">Folder Structure</h2>
-            <span className="text-xs text-surface-400 bg-white/50 px-3 py-1 rounded-full font-medium border border-emerald-200">
+            <span className="text-xs text-surface-400 bg-surface-100/50 px-3 py-1 rounded-full font-medium border border-surface-300">
               {metrics?.folderCount || '?'} directories · {metrics?.totalFiles || '?'} files
             </span>
           </div>
-          <pre className="bg-white/70 rounded-xl p-6 text-sm text-surface-700 font-mono leading-relaxed overflow-x-auto whitespace-pre max-h-[600px] overflow-y-auto scrollbar-thin border border-emerald-200">
+          <pre className="bg-surface-100/70 rounded-xl p-6 text-sm text-surface-700 font-mono leading-relaxed overflow-x-auto whitespace-pre max-h-[600px] overflow-y-auto scrollbar-thin border border-surface-300">
             {folderStructure.text}
           </pre>
         </div>

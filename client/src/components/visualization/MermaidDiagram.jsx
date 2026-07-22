@@ -26,8 +26,8 @@ function EmptyState({ message }) {
 
 function ErrorState({ message }) {
   return (
-    <div className="p-4 bg-red-50 border border-red-200 rounded-xl">
-      <p className="text-red-600 text-sm">Diagram error: {message}</p>
+    <div className="p-4 bg-red-900/15 border border-red-500/20 rounded-xl">
+      <p className="text-red-400 text-sm">Diagram error: {message}</p>
     </div>
   );
 }

@@ -9,7 +9,7 @@ export default function SequenceDiagram({ apiFlow }) {
 
   if (!routes.length && !flowSteps.length) {
     return (
-      <div className="text-center py-8 text-gray-400 text-sm">
+      <div className="text-center py-8 text-surface-500 text-sm">
         No sequence diagram data available.
       </div>
     );
@@ -19,14 +19,14 @@ export default function SequenceDiagram({ apiFlow }) {
     <div className="space-y-4">
       <div className="flex items-center justify-between">
         <div>
-          <h3 className="text-lg font-bold text-gray-900">Sequence Diagram</h3>
-          <p className="text-xs text-gray-400">
+          <h3 className="text-lg font-bold text-surface-800">Sequence Diagram</h3>
+          <p className="text-xs text-surface-500">
             {routes.length} API calls &middot; {flowSteps.length} lifecycle steps
           </p>
         </div>
       </div>
 
-      <div className="bg-white/40 border border-emerald-200 rounded-lg overflow-x-auto">
+      <div className="bg-surface-100/40 border border-surface-300 rounded-lg overflow-x-auto">
         <MermaidDiagram
           code={mermaidCode}
           id="sequence-diagram"
@@ -35,7 +35,7 @@ export default function SequenceDiagram({ apiFlow }) {
         />
       </div>
 
-      <p className="text-xs text-gray-400">
+      <p className="text-xs text-surface-500">
         This diagram shows the request lifecycle: Client &rarr; Server &rarr; Database interactions for each API
         endpoint.
       </p>

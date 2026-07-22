@@ -12,11 +12,11 @@ function PasswordStrengthMeter({ password }) {
   if (/[^A-Za-z0-9]/.test(password)) score++;
 
   const levels = [
-    { label: 'Very Weak', color: 'bg-red-500', width: 'w-1/5', text: 'text-red-600' },
+    { label: 'Very Weak', color: 'bg-red-900/150', width: 'w-1/5', text: 'text-red-400' },
     { label: 'Weak', color: 'bg-orange-500', width: 'w-2/5', text: 'text-orange-600' },
-    { label: 'Fair', color: 'bg-amber-500', width: 'w-3/5', text: 'text-amber-600' },
-    { label: 'Good', color: 'bg-emerald-400', width: 'w-4/5', text: 'text-emerald-600' },
-    { label: 'Strong', color: 'bg-emerald-500', width: 'w-full', text: 'text-emerald-600' },
+    { label: 'Fair', color: 'bg-amber-900/150', width: 'w-3/5', text: 'text-amber-600' },
+    { label: 'Good', color: 'bg-emerald-400', width: 'w-4/5', text: 'text-primary-500' },
+    { label: 'Strong', color: 'bg-primary-500/100', width: 'w-full', text: 'text-primary-500' },
   ];
 
   const level = levels[Math.min(score, 4)];
@@ -63,7 +63,7 @@ function InputField({ id, label, type, value, onChange, placeholder, required, a
         htmlFor={id}
         className={`absolute left-4 transition-all duration-200 pointer-events-none select-none
           ${hasValue || focused
-            ? 'top-1.5 text-[10px] font-bold text-primary-600'
+            ? 'top-1.5 text-[10px] font-bold text-primary-400'
             : 'top-3 text-sm text-surface-400'
           }`}
       >
@@ -168,7 +168,7 @@ export default function AuthForm({ mode, onSubmit, loading, error, clearError })
             autoComplete="name"
             error={fieldErrors.name}
           />
-          {fieldErrors.name && <p className="text-xs text-red-500 font-medium mt-1 ml-1">{fieldErrors.name}</p>}
+          {fieldErrors.name && <p className="text-xs text-red-400 font-medium mt-1 ml-1">{fieldErrors.name}</p>}
         </div>
       )}
 
@@ -183,7 +183,7 @@ export default function AuthForm({ mode, onSubmit, loading, error, clearError })
           autoComplete="email"
           error={fieldErrors.email}
         />
-        {fieldErrors.email && <p className="text-xs text-red-500 font-medium mt-1 ml-1">{fieldErrors.email}</p>}
+        {fieldErrors.email && <p className="text-xs text-red-400 font-medium mt-1 ml-1">{fieldErrors.email}</p>}
       </div>
 
       <div>
@@ -197,7 +197,7 @@ export default function AuthForm({ mode, onSubmit, loading, error, clearError })
           autoComplete={isRegister ? 'new-password' : 'current-password'}
           error={fieldErrors.password}
         />
-        {fieldErrors.password && <p className="text-xs text-red-500 font-medium mt-1 ml-1">{fieldErrors.password}</p>}
+        {fieldErrors.password && <p className="text-xs text-red-400 font-medium mt-1 ml-1">{fieldErrors.password}</p>}
         {isRegister && !fieldErrors.password && <PasswordStrengthMeter password={password} />}
       </div>
 
@@ -223,7 +223,7 @@ export default function AuthForm({ mode, onSubmit, loading, error, clearError })
         {isRegister ? "Already have an account?" : "Don't have an account?"}{' '}
         <Link
           to={isRegister ? '/login' : '/register'}
-          className="text-primary-600 hover:text-primary-700 font-semibold transition-colors underline-offset-2 hover:underline"
+          className="text-primary-400 hover:text-primary-400 font-semibold transition-colors underline-offset-2 hover:underline"
         >
           {isRegister ? 'Sign in' : 'Create one'}
         </Link>

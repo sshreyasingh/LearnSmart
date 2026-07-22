@@ -7,7 +7,7 @@ export default function ModuleRelationshipGraph({ simplifiedGraph }) {
 
   if (!simplifiedGraph || !nodes.length) {
     return (
-      <div className="text-center py-8 text-gray-400 text-sm">
+      <div className="text-center py-8 text-surface-500 text-sm">
         No module relationship data available.
       </div>
     );
@@ -28,8 +28,8 @@ export default function ModuleRelationshipGraph({ simplifiedGraph }) {
     <div className="space-y-4">
       <div className="flex items-center justify-between">
         <div>
-          <h3 className="text-lg font-bold text-gray-900">Module Relationships</h3>
-          <p className="text-xs text-gray-400">
+          <h3 className="text-lg font-bold text-surface-800">Module Relationships</h3>
+          <p className="text-xs text-surface-500">
             {nodes.length} layers &middot; {links.length} dependencies
           </p>
         </div>
@@ -40,7 +40,7 @@ export default function ModuleRelationshipGraph({ simplifiedGraph }) {
                 className="w-2 h-2 rounded-sm inline-block"
                 style={{ backgroundColor: item.color }}
               />
-              <span className="text-gray-500">{item.label}</span>
+              <span className="text-surface-500">{item.label}</span>
             </span>
           ))}
         </div>

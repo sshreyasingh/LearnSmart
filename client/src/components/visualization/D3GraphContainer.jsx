@@ -49,14 +49,14 @@ export default function D3GraphContainer({
       </div>
 
       <div
-        className="border border-emerald-200 rounded-xl overflow-hidden bg-white/50 relative"
+        className="border border-surface-300 rounded-xl overflow-hidden bg-surface-100/50 relative"
         style={{ height }}
       >
         <svg ref={svgRef} width="100%" height={height} style={{ display: 'block' }} />
       </div>
 
       {selectedNode && (
-        <div className="p-4 bg-white rounded-xl border border-surface-200 shadow-soft text-sm animate-fade-in">
+        <div className="p-4 bg-surface-100 rounded-xl border border-surface-200 shadow-soft text-sm animate-fade-in">
           <div className="flex items-center justify-between">
             <div className="font-semibold text-surface-900">{selectedNode.label || selectedNode.id}</div>
             <button

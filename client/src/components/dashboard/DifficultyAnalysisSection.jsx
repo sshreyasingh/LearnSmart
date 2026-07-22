@@ -2,10 +2,10 @@ import { useState, useEffect } from 'react';
 import { getDifficultyAnalysis } from '../../api/staticAnalysis.api';
 
 const LEVEL_STYLES = {
-  Beginner: { bg: 'bg-emerald-50 border-emerald-200', badge: 'badge-success', bar: 'bg-emerald-500', icon: '🟢' },
-  Intermediate: { bg: 'bg-blue-50 border-blue-200', badge: 'badge-info', bar: 'bg-blue-500', icon: '🔵' },
-  Advanced: { bg: 'bg-amber-50 border-amber-200', badge: 'badge-warning', bar: 'bg-amber-500', icon: '🟠' },
-  Expert: { bg: 'bg-red-50 border-red-200', badge: 'badge-error', bar: 'bg-red-500', icon: '🔴' },
+  Beginner: { bg: 'bg-primary-500/10 border-surface-300', badge: 'badge-success', bar: 'bg-primary-500/100', icon: '🟢' },
+  Intermediate: { bg: 'bg-blue-900/15 border-blue-500/20', badge: 'badge-info', bar: 'bg-blue-900/150', icon: '🔵' },
+  Advanced: { bg: 'bg-amber-900/15 border-amber-500/20', badge: 'badge-warning', bar: 'bg-amber-900/150', icon: '🟠' },
+  Expert: { bg: 'bg-red-900/15 border-red-500/20', badge: 'badge-error', bar: 'bg-red-900/150', icon: '🔴' },
 };
 
 function ScoreBar({ label, value, max = 10, color }) {
@@ -108,23 +108,23 @@ export default function DifficultyAnalysisSection({ projects }) {
       </div>
 
       <div className="grid grid-cols-2 md:grid-cols-4 gap-px bg-surface-100">
-        <div className="bg-white px-6 py-4">
+        <div className="bg-surface-100 px-6 py-4">
           <p className="text-xs text-surface-500 font-semibold uppercase tracking-wider">Avg Difficulty</p>
           <p className="text-2xl font-extrabold text-surface-900 mt-1">
             {avgScore} <span className="text-sm font-normal text-surface-400">/ 10</span>
           </p>
         </div>
-        <div className="bg-white px-6 py-4">
+        <div className="bg-surface-100 px-6 py-4">
           <p className="text-xs text-surface-500 font-semibold uppercase tracking-wider">Avg Learning Time</p>
           <p className="text-2xl font-extrabold text-surface-900 mt-1">
             {avgLearningHours} <span className="text-sm font-normal text-surface-400">hours</span>
           </p>
         </div>
-        <div className="bg-white px-6 py-4">
+        <div className="bg-surface-100 px-6 py-4">
           <p className="text-xs text-surface-500 font-semibold uppercase tracking-wider">Projects</p>
           <p className="text-2xl font-extrabold text-surface-900 mt-1">{Object.keys(difficulties).length}</p>
         </div>
-        <div className="bg-white px-6 py-4">
+        <div className="bg-surface-100 px-6 py-4">
           <p className="text-xs text-surface-500 font-semibold uppercase tracking-wider">Levels</p>
           <div className="flex items-center gap-1.5 mt-1.5">
             {Object.entries(LEVEL_STYLES).map(([level, style]) => {
@@ -195,19 +195,19 @@ export default function DifficultyAnalysisSection({ projects }) {
                   </div>
 
                   <div className="space-y-3">
-                    <div className="bg-white/70 rounded-xl p-4 border border-surface-100">
+                    <div className="bg-surface-100/70 rounded-xl p-4 border border-surface-100">
                       <p className="text-xs font-semibold text-surface-500 uppercase tracking-wider mb-1">Learning Time</p>
                       <p className="text-xl font-extrabold text-surface-900">
                         {diff.estimatedLearningTime?.hours || '—'} <span className="text-sm font-normal text-surface-500">hours</span>
                       </p>
                       <p className="text-xs text-surface-400">{diff.estimatedLearningTime?.range}</p>
                     </div>
-                    <div className="bg-white/70 rounded-xl p-4 border border-surface-100">
+                    <div className="bg-surface-100/70 rounded-xl p-4 border border-surface-100">
                       <p className="text-xs font-semibold text-surface-500 uppercase tracking-wider mb-1">Skill Level</p>
                       <p className="text-xl font-extrabold text-surface-900">{diff.recommendedSkillLevel?.level || '—'}</p>
                       <p className="text-xs text-surface-400">{diff.recommendedSkillLevel?.years}</p>
                     </div>
-                    <div className="bg-white/70 rounded-xl p-4 border border-surface-100">
+                    <div className="bg-surface-100/70 rounded-xl p-4 border border-surface-100">
                       <p className="text-xs font-semibold text-surface-500 uppercase tracking-wider mb-1">Confidence</p>
                       <div className="flex items-center gap-2 mt-1">
                         <div className="flex-1 bg-surface-100 rounded-full h-2.5 overflow-hidden">

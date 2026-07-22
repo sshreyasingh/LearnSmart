@@ -12,7 +12,7 @@ function AnimatedStat({ end, suffix = '', label, decimals = 0 }) {
   const display = decimals > 0 ? value.toFixed(decimals) : Math.floor(value).toLocaleString();
   return (
     <div ref={ref} className="px-6 py-6 text-center">
-      <div className="text-3xl sm:text-4xl font-black text-surface-900 tracking-tight tabular-nums">
+      <div className="text-3xl sm:text-4xl font-black text-surface-800 tracking-tight tabular-nums">
         {display}{suffix}
       </div>
       <div className="text-sm text-surface-500 font-medium mt-1">{label}</div>
@@ -24,7 +24,7 @@ function ParallaxBlob({ className }) {
   const { offset } = useParallax(0.15, { maxOffset: 30 });
   return (
     <div
-      className={`absolute rounded-3xl blur-sm ${className}`}
+      className={`absolute rounded-3xl blur-xl ${className}`}
       style={{ transform: `translateY(${offset}px)` }}
     />
   );
@@ -32,7 +32,7 @@ function ParallaxBlob({ className }) {
 
 const features = [
   {
-    gradient: 'from-indigo-500 via-purple-500 to-indigo-600',
+    gradient: 'from-primary-400 via-accent-400 to-primary-500',
     icon: (
       <svg className="w-8 h-8" fill="none" viewBox="0 0 24 24" stroke="currentColor">
         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z" />
@@ -43,7 +43,7 @@ const features = [
     highlights: ['Architecture breakdowns', 'Execution flows', 'Plain-English summaries'],
   },
   {
-    gradient: 'from-emerald-500 via-teal-500 to-emerald-600',
+    gradient: 'from-primary-400 via-teal-400 to-primary-500',
     icon: (
       <svg className="w-8 h-8" fill="none" viewBox="0 0 24 24" stroke="currentColor">
         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M4 5a1 1 0 011-1h14a1 1 0 011 1v2a1 1 0 01-1 1H5a1 1 0 01-1-1V5zM4 13a1 1 0 011-1h6a1 1 0 011 1v6a1 1 0 01-1 1H5a1 1 0 01-1-1v-6zM16 13a1 1 0 011-1h2a1 1 0 011 1v6a1 1 0 01-1 1h-2a1 1 0 01-1-1v-6z" />
@@ -54,7 +54,7 @@ const features = [
     highlights: ['Dependency & call graphs', 'API flow diagrams', 'Database ER diagrams'],
   },
   {
-    gradient: 'from-amber-500 via-orange-500 to-amber-600',
+    gradient: 'from-amber-400 via-orange-400 to-amber-500',
     icon: (
       <svg className="w-8 h-8" fill="none" viewBox="0 0 24 24" stroke="currentColor">
         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
@@ -81,12 +81,12 @@ function FeatureCard({ feature }) {
       <div className={`inline-flex items-center justify-center w-14 h-14 rounded-2xl bg-gradient-to-br ${feature.gradient} text-white shadow-lg group-hover:scale-110 group-hover:shadow-xl transition-all duration-400`}>
         {feature.icon}
       </div>
-      <h3 className="text-xl font-bold text-surface-900 mt-6 mb-3">{feature.title}</h3>
+      <h3 className="text-xl font-bold text-surface-800 mt-6 mb-3">{feature.title}</h3>
       <p className="text-surface-500 leading-relaxed text-sm mb-5">{feature.description}</p>
       <ul className="space-y-2">
         {feature.highlights.map((h) => (
-          <li key={h} className="flex items-center gap-2 text-xs font-semibold text-surface-600">
-            <svg className="w-4 h-4 text-emerald-500 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <li key={h} className="flex items-center gap-2 text-xs font-semibold text-surface-500">
+            <svg className="w-4 h-4 text-primary-400 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M5 13l4 4L19 7" />
             </svg>
             {h}
@@ -104,21 +104,21 @@ export default function HomePage() {
     <div className="min-h-[calc(100vh-4rem)] overflow-hidden">
       {/* ──── Hero Section ──── */}
       <section className="relative max-w-7xl mx-auto px-4 pt-12 sm:pt-16 pb-12 sm:pb-16 text-center overflow-hidden">
-        <div className="absolute inset-0 bg-gradient-to-b from-indigo-500/5 via-purple-500/3 to-emerald-500/5 rounded-full opacity-70" />
-        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[80%] h-[60%] bg-gradient-to-r from-indigo-500/6 via-fuchsia-500/4 to-cyan-500/4 blur-3xl rounded-full" />
+        <div className="absolute inset-0 bg-gradient-hero rounded-full opacity-60" />
+        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[80%] h-[60%] bg-gradient-to-r from-primary-500/8 via-accent-500/5 to-cyan-500/5 blur-3xl rounded-full" />
         <ParticleNetwork />
 
-        <ParallaxBlob className="hidden lg:block w-32 h-32 bg-indigo-400/15 top-0 right-[10%] rotate-12" />
-        <ParallaxBlob className="hidden lg:block w-24 h-24 bg-violet-400/10 bottom-16 left-[5%] -rotate-12" />
-        <ParallaxBlob className="hidden lg:block w-36 h-36 bg-purple-400/10 top-32 right-[5%] rounded-full" />
+        <ParallaxBlob className="hidden lg:block w-32 h-32 bg-primary-500/10 top-0 right-[10%] rotate-12" />
+        <ParallaxBlob className="hidden lg:block w-24 h-24 bg-accent-500/8 bottom-16 left-[5%] -rotate-12" />
+        <ParallaxBlob className="hidden lg:block w-36 h-36 bg-cyan-900/200/8 top-32 right-[5%] rounded-full" />
 
         <div style={{ transform: `translateY(${heroOffset}px)` }}>
           <div className="relative">
             <ScrollReveal animation="fadeIn" transition="fast">
-              <div className="inline-flex items-center gap-2.5 px-4 py-2 bg-white/70 backdrop-blur-sm border border-emerald-200/60 rounded-full text-sm font-semibold text-primary-700 mb-6 shadow-sm">
+              <div className="inline-flex items-center gap-2.5 px-4 py-2 bg-surface-100/70 backdrop-blur-sm border border-surface-300/40 rounded-full text-sm font-semibold text-primary-400 mb-6 shadow-sm">
                 <span className="relative flex h-2.5 w-2.5">
-                  <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75" />
-                  <span className="relative inline-flex rounded-full h-2.5 w-2.5 bg-emerald-500" />
+                  <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-primary-400 opacity-75" />
+                  <span className="relative inline-flex rounded-full h-2.5 w-2.5 bg-primary-400" />
                 </span>
                 AI-Powered Code Understanding · Now with DeepSeek
               </div>
@@ -161,8 +161,8 @@ export default function HomePage() {
 
       {/* ──── Metrics Bar ──── */}
       <section className="relative max-w-5xl mx-auto px-4 pb-12 sm:pb-16">
-        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[120%] h-48 bg-gradient-to-r from-indigo-500/10 via-purple-500/10 to-pink-500/10 blur-3xl rounded-full" />
-        <div className="glass-panel grid grid-cols-2 md:grid-cols-4 divide-x divide-surface-200/50 overflow-hidden px-2 py-2 relative">
+        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[120%] h-48 bg-gradient-to-r from-primary-500/10 via-accent-500/8 to-cyan-500/8 blur-3xl rounded-full" />
+        <div className="glass-panel grid grid-cols-2 md:grid-cols-4 divide-x divide-surface-300/50 overflow-hidden px-2 py-2 relative">
           {metrics.map((m) => (
             <AnimatedStat key={m.label} end={m.value} suffix={m.suffix} label={m.label} decimals={m.decimals} />
           ))}
@@ -171,12 +171,12 @@ export default function HomePage() {
 
       {/* ──── Features (staggered reveal) ──── */}
       <section className="relative max-w-7xl mx-auto px-4 pb-20 sm:pb-28">
-        <div className="absolute top-0 left-1/2 -translate-x-1/2 w-96 h-96 bg-gradient-to-br from-indigo-500/8 via-purple-500/6 to-emerald-500/5 blur-3xl rounded-full pointer-events-none" />
+        <div className="absolute top-0 left-1/2 -translate-x-1/2 w-96 h-96 bg-gradient-to-br from-primary-500/8 via-accent-500/6 to-cyan-500/5 blur-3xl rounded-full pointer-events-none" />
         <ScrollReveal animation="fadeUp" transition="smooth">
           <div className="text-center mb-16 sm:mb-20 relative">
-            <div className="mx-auto w-20 h-1 bg-gradient-to-r from-indigo-500 via-purple-500 to-pink-500 rounded-full mb-6" />
-            <span className="text-xs font-bold text-primary-600 uppercase tracking-[0.2em] mb-3 block">Features</span>
-            <h2 className="text-3xl sm:text-4xl font-extrabold text-surface-900 mb-4 text-balance">
+            <div className="mx-auto w-20 h-1 bg-gradient-to-r from-primary-400 via-accent-400 to-cyan-400 rounded-full mb-6" />
+            <span className="text-xs font-bold text-primary-400 uppercase tracking-[0.2em] mb-3 block">Features</span>
+            <h2 className="text-3xl sm:text-4xl font-extrabold text-surface-800 mb-4 text-balance">
               Everything you need to master any codebase
             </h2>
             <p className="text-surface-500 max-w-xl mx-auto text-balance">
@@ -195,9 +195,9 @@ export default function HomePage() {
 
       {/* ──── Trust Bar ──── */}
       <section className="relative max-w-5xl mx-auto px-4 pb-20 sm:pb-28">
-        <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[140%] h-40 bg-gradient-to-r from-emerald-500/8 via-cyan-500/6 to-blue-500/8 blur-3xl rounded-full pointer-events-none" />
+        <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[140%] h-40 bg-gradient-to-r from-primary-500/8 via-cyan-500/6 to-accent-500/8 blur-3xl rounded-full pointer-events-none" />
         <ScrollReveal animation="fadeUp" transition="smooth">
-          <p className="text-center text-xs font-bold text-surface-400 uppercase tracking-[0.2em] mb-6">
+          <p className="text-center text-xs font-bold text-surface-500 uppercase tracking-[0.2em] mb-6">
             Works with any stack
           </p>
         </ScrollReveal>
@@ -205,7 +205,7 @@ export default function HomePage() {
           {trusts.map((tech) => (
             <span
               key={tech}
-              className="px-5 py-2.5 bg-white/60 backdrop-blur-sm border border-surface-200/60 rounded-2xl text-sm font-semibold text-surface-600 shadow-sm hover:shadow-soft hover:text-surface-800 hover:border-surface-300"
+              className="px-5 py-2.5 bg-surface-100/60 backdrop-blur-sm border border-surface-300/40 rounded-2xl text-sm font-semibold text-surface-600 shadow-sm hover:shadow-soft hover:text-surface-800 hover:border-surface-400 transition-all duration-300"
             >
               {tech}
             </span>
@@ -216,10 +216,10 @@ export default function HomePage() {
       {/* ──── Bottom CTA ──── */}
       <section className="relative max-w-4xl mx-auto px-4 pb-24 sm:pb-32">
         <div className="absolute inset-0 bg-gradient-hero-bottom rounded-full opacity-50" />
-        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[150%] h-[120%] bg-gradient-to-br from-indigo-500/8 via-fuchsia-500/6 to-emerald-500/6 blur-3xl rounded-full" />
+        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[150%] h-[120%] bg-gradient-to-br from-primary-500/8 via-accent-500/6 to-cyan-500/6 blur-3xl rounded-full" />
         <ScrollReveal animation="scaleUp" transition="spring">
           <div className="relative glass-panel p-10 sm:p-14 text-center">
-            <h2 className="text-2xl sm:text-3xl font-extrabold text-surface-900 mb-4 text-balance">
+            <h2 className="text-2xl sm:text-3xl font-extrabold text-surface-800 mb-4 text-balance">
               Ready to understand your codebase?
             </h2>
             <p className="text-surface-500 mb-8 text-balance max-w-md mx-auto">

@@ -10,7 +10,7 @@ export default function CallGraph({ symbols = [], imports = [] }) {
 
   if (!nodes.length) {
     return (
-      <div className="text-center py-8 text-gray-400 text-sm">
+      <div className="text-center py-8 text-surface-500 text-sm">
         No call graph data available.
       </div>
     );
@@ -20,23 +20,23 @@ export default function CallGraph({ symbols = [], imports = [] }) {
     <div className="space-y-4">
       <div className="flex items-center justify-between">
         <div>
-          <h3 className="text-lg font-bold text-gray-900">Call Graph</h3>
-          <p className="text-xs text-gray-400">
+          <h3 className="text-lg font-bold text-surface-800">Call Graph</h3>
+          <p className="text-xs text-surface-500">
             {nodes.length} symbols &middot; {links.length} calls
           </p>
         </div>
         <div className="flex items-center gap-2 text-xs">
           <span className="flex items-center gap-1">
             <span className="w-2.5 h-2.5 rounded-full inline-block bg-[#10b981]" />
-            <span className="text-gray-500">Functions</span>
+            <span className="text-surface-500">Functions</span>
           </span>
           <span className="flex items-center gap-1">
             <span className="w-2.5 h-2.5 rounded-full inline-block bg-[#6366f1]" />
-            <span className="text-gray-500">Files</span>
+            <span className="text-surface-500">Files</span>
           </span>
           <span className="flex items-center gap-1">
             <span className="w-2.5 h-2.5 rounded-full inline-block bg-[#8b5cf6]" />
-            <span className="text-gray-500">Classes</span>
+            <span className="text-surface-500">Classes</span>
           </span>
         </div>
       </div>

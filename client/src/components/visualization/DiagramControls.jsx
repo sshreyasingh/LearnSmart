@@ -33,7 +33,7 @@ export default function DiagramControls({ activeDiagram, onDiagramChange, diagra
               className={`flex items-center gap-1.5 px-3.5 py-2 rounded-xl text-xs font-semibold transition-all duration-200 ${
                 activeDiagram === d.key
                   ? 'bg-surface-800 text-white shadow-soft'
-                  : 'bg-white/60 text-surface-600 hover:bg-white hover:shadow-sm border border-surface-200'
+                  : 'bg-surface-100/60 text-surface-600 hover:bg-surface-100 hover:shadow-sm border border-surface-200'
               }`}
             >
               <span>{d.icon}</span>
@@ -52,7 +52,7 @@ export default function DiagramControls({ activeDiagram, onDiagramChange, diagra
               className={`flex items-center gap-1.5 px-3.5 py-2 rounded-xl text-xs font-semibold transition-all duration-200 ${
                 activeDiagram === d.key
                   ? 'bg-surface-800 text-white shadow-soft'
-                  : 'bg-white/60 text-surface-600 hover:bg-white hover:shadow-sm border border-surface-200'
+                  : 'bg-surface-100/60 text-surface-600 hover:bg-surface-100 hover:shadow-sm border border-surface-200'
               }`}
             >
               <span>{d.icon}</span>

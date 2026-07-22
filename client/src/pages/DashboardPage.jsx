@@ -71,7 +71,7 @@ function ProjectCard({ project, onDelete }) {
         {project.detectedTechStack?.length > 0 && (
           <div className="flex flex-wrap gap-1.5 mt-3 ml-[46px]">
             {project.detectedTechStack.map((tech) => (
-              <span key={tech} className="px-2.5 py-1 bg-primary-50 text-primary-700 rounded-xl text-[11px] font-semibold border border-primary-100/60">
+              <span key={tech} className="px-2.5 py-1 bg-primary-500/10 text-primary-400 rounded-xl text-[11px] font-semibold border border-primary-500/20/60">
                 {tech}
               </span>
             ))}
@@ -82,7 +82,7 @@ function ProjectCard({ project, onDelete }) {
         <Link to={`/projects/${project._id}`} className="btn-primary px-4 py-2 text-sm">
           View analysis
         </Link>
-        <button onClick={() => onDelete(project._id)} className="btn-ghost px-3 py-2 text-sm text-red-500 hover:bg-red-50 hover:text-red-600">
+        <button onClick={() => onDelete(project._id)} className="btn-ghost px-3 py-2 text-sm text-red-400 hover:bg-red-900/15 hover:text-red-400">
           Delete
         </button>
       </div>

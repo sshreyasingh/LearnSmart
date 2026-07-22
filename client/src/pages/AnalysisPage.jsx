@@ -109,7 +109,7 @@ export default function AnalysisPage() {
             </svg>
             <span>Re-analysis failed: {reanalyzeError}</span>
           </div>
-          <button onClick={clearReanalyzeError} className="ml-3 text-red-500 hover:text-red-700 font-medium shrink-0">
+          <button onClick={clearReanalyzeError} className="ml-3 text-red-400 hover:text-red-400 font-medium shrink-0">
             Dismiss
           </button>
         </div>

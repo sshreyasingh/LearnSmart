@@ -10,11 +10,11 @@ function MessageBubble({ msg }) {
         className={`max-w-[80%] rounded-2xl px-4 py-3 text-sm leading-relaxed ${
           isUser
             ? 'bg-primary-600 text-white rounded-br-lg shadow-md'
-            : 'bg-white border border-surface-200 text-surface-800 rounded-bl-lg shadow-sm'
+            : 'bg-surface-100 border border-surface-200 text-surface-800 rounded-bl-lg shadow-sm'
         }`}
       >
         {msg.fromCache && (
-          <span className="inline-block text-[10px] bg-amber-100 text-amber-700 px-2 py-0.5 rounded-full font-semibold mb-1.5">
+          <span className="inline-block text-[10px] bg-amber-100 text-amber-400 px-2 py-0.5 rounded-full font-semibold mb-1.5">
             Cached
           </span>
         )}
@@ -41,7 +41,7 @@ function SuggestedQuestions({ questions, onSelect }) {
         <button
           key={i}
           onClick={() => onSelect(q)}
-          className="text-xs px-3 py-1.5 bg-indigo-50 text-indigo-600 rounded-full hover:bg-indigo-100 border border-indigo-100 font-medium transition-colors"
+          className="text-xs px-3 py-1.5 bg-indigo-900/20 text-indigo-600 rounded-full hover:bg-indigo-100 border border-indigo-500/20 font-medium transition-colors"
         >
           {q}
         </button>
@@ -162,7 +162,7 @@ export default function AIChat({ projectId }) {
 
         {streaming && streamingContent && (
           <div className="flex justify-start mb-4">
-            <div className="max-w-[80%] rounded-2xl rounded-bl-lg px-4 py-3 bg-white border border-surface-200 shadow-sm text-sm">
+            <div className="max-w-[80%] rounded-2xl rounded-bl-lg px-4 py-3 bg-surface-100 border border-surface-200 shadow-sm text-sm">
               <div className="whitespace-pre-wrap break-words">{streamingContent}</div>
               <span className="inline-block w-2 h-5 bg-primary-400 animate-pulse ml-0.5 align-middle rounded-sm" />
             </div>
@@ -171,7 +171,7 @@ export default function AIChat({ projectId }) {
 
         {streaming && !streamingContent && (
           <div className="flex justify-start mb-4">
-            <div className="bg-white border border-surface-200 rounded-2xl rounded-bl-lg px-5 py-3 shadow-sm">
+            <div className="bg-surface-100 border border-surface-200 rounded-2xl rounded-bl-lg px-5 py-3 shadow-sm">
               <div className="flex gap-1.5">
                 <span className="w-2.5 h-2.5 bg-surface-300 rounded-full animate-bounce" style={{ animationDelay: '0ms' }} />
                 <span className="w-2.5 h-2.5 bg-surface-300 rounded-full animate-bounce" style={{ animationDelay: '150ms' }} />
@@ -185,7 +185,7 @@ export default function AIChat({ projectId }) {
       </div>
 
       {error && (
-        <div className="flex items-center gap-2 bg-red-50 text-red-600 px-3 py-2 rounded-xl text-xs mb-3">
+        <div className="flex items-center gap-2 bg-red-900/15 text-red-400 px-3 py-2 rounded-xl text-xs mb-3">
           <svg className="w-4 h-4 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
           </svg>

@@ -18,7 +18,7 @@ export default function APIFlowDiagram({ apiFlow }) {
 
   if (!routes || routes.length === 0) {
     return (
-      <div className="text-center py-8 text-gray-400 text-sm">
+      <div className="text-center py-8 text-surface-500 text-sm">
         No API endpoints detected.
       </div>
     );
@@ -35,13 +35,13 @@ export default function APIFlowDiagram({ apiFlow }) {
     <div className="space-y-6">
       <div className="flex items-center justify-between">
         <div>
-          <h3 className="text-lg font-bold text-gray-900">API Flow Diagram</h3>
-          <p className="text-xs text-gray-400">{routes.length} endpoints</p>
+          <h3 className="text-lg font-bold text-surface-800">API Flow Diagram</h3>
+          <p className="text-xs text-surface-500">{routes.length} endpoints</p>
         </div>
       </div>
 
       {/* Mermaid Sequence Diagram */}
-      <div className="bg-white/40 border border-emerald-200 rounded-lg overflow-x-auto">
+      <div className="bg-surface-100/40 border border-surface-300 rounded-lg overflow-x-auto">
         <MermaidDiagram
           code={mermaidCode}
           id="api-flow-diagram"
@@ -56,7 +56,7 @@ export default function APIFlowDiagram({ apiFlow }) {
           .sort(([a], [b]) => a.localeCompare(b))
           .map(([prefix, prefixRoutes]) => (
             <div key={prefix}>
-              <p className="text-xs font-semibold text-gray-500 uppercase tracking-wider mb-2">{prefix}</p>
+              <p className="text-xs font-semibold text-surface-500 uppercase tracking-wider mb-2">{prefix}</p>
               <div className="space-y-1">
                 {prefixRoutes
                   .sort((a, b) => a.path.localeCompare(b.path))
@@ -65,7 +65,7 @@ export default function APIFlowDiagram({ apiFlow }) {
                     return (
                       <div
                         key={i}
-                        className="flex items-center gap-3 px-3 py-2 rounded-lg bg-white border border-gray-100 hover:border-gray-200 transition-colors"
+                        className="flex items-center gap-3 px-3 py-2 rounded-lg bg-surface-100 border border-surface-300 hover:border-surface-300 transition-colors"
                       >
                         <span
                           className="px-2 py-0.5 rounded text-xs font-mono font-bold text-white min-w-[60px] text-center"
@@ -73,8 +73,8 @@ export default function APIFlowDiagram({ apiFlow }) {
                         >
                           {route.method}
                         </span>
-                        <span className="font-mono text-sm text-gray-700">{route.path}</span>
-                        <span className="text-xs text-gray-400 ml-auto">
+                        <span className="font-mono text-sm text-surface-500">{route.path}</span>
+                        <span className="text-xs text-surface-500 ml-auto">
                           {route.file?.split('/').pop()}
                         </span>
                       </div>
@@ -88,11 +88,11 @@ export default function APIFlowDiagram({ apiFlow }) {
       {/* Request Flow Steps */}
       {flowSteps && flowSteps.length > 0 && (
         <div>
-          <p className="text-xs font-semibold text-gray-500 uppercase tracking-wider mb-3">
+          <p className="text-xs font-semibold text-surface-500 uppercase tracking-wider mb-3">
             Request Lifecycle
           </p>
           <div className="relative">
-            <div className="absolute left-4 top-2 bottom-2 w-0.5 bg-gray-200" />
+            <div className="absolute left-4 top-2 bottom-2 w-0.5 bg-surface-300" />
             <div className="space-y-0">
               {flowSteps.map((step, i) => (
                 <div key={i} className="flex items-start gap-4 relative">
@@ -103,8 +103,8 @@ export default function APIFlowDiagram({ apiFlow }) {
                     {step.step || i + 1}
                   </div>
                   <div className="py-1.5 min-w-0">
-                    <p className="text-sm font-medium text-gray-700">{step.description}</p>
-                    <p className="text-xs text-gray-400 truncate">{step.file?.split('/').pop()}</p>
+                    <p className="text-sm font-medium text-surface-500">{step.description}</p>
+                    <p className="text-xs text-surface-500 truncate">{step.file?.split('/').pop()}</p>
                   </div>
                 </div>
               ))}

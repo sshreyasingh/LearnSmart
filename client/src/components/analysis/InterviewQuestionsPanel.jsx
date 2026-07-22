@@ -30,7 +30,7 @@ function QuestionCard({ question, expanded, onToggle }) {
   const diffColor = DIFFICULTY_COLORS[question.difficulty] || 'badge-info';
 
   return (
-    <div className={`bg-white border border-surface-200 rounded-xl border-l-4 ${catColor} overflow-hidden shadow-sm hover:shadow-soft transition-shadow`}>
+    <div className={`bg-surface-100 border border-surface-200 rounded-xl border-l-4 ${catColor} overflow-hidden shadow-sm hover:shadow-soft transition-shadow`}>
       <button onClick={onToggle} className="w-full text-left px-4 py-3.5 flex items-start gap-3">
         <svg className={`w-5 h-5 text-surface-400 shrink-0 mt-0.5 transition-transform duration-200 ${expanded ? 'rotate-90' : ''}`} fill="none" viewBox="0 0 24 24" stroke="currentColor">
           <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
@@ -130,7 +130,7 @@ export function InterviewQuestionsPanel({ projectId }) {
         <h2 className="text-xl font-bold text-surface-900 mb-4">Interview Questions</h2>
         <div className="space-y-3">
           {[1, 2, 3, 4].map((i) => (
-            <div key={i} className="animate-pulse bg-white/60 rounded-xl h-20" />
+            <div key={i} className="animate-pulse bg-surface-100/60 rounded-xl h-20" />
           ))}
         </div>
       </div>
@@ -155,7 +155,7 @@ export function InterviewQuestionsPanel({ projectId }) {
       </div>
 
       {error && (
-        <div className="flex items-center gap-2 bg-red-50 text-red-600 px-3 py-2 rounded-xl text-xs mt-2 mb-2">
+        <div className="flex items-center gap-2 bg-red-900/15 text-red-400 px-3 py-2 rounded-xl text-xs mt-2 mb-2">
           {error}
         </div>
       )}
@@ -205,7 +205,7 @@ export function InterviewQuestionsPanel({ projectId }) {
         {filtered.length > INITIAL_SHOW && (
           <button
             onClick={() => { setShowAll(!showAll); setExpandedId(null); }}
-            className="mt-4 w-full py-3 text-sm font-semibold text-surface-500 bg-white/50 rounded-xl hover:bg-white hover:text-surface-700 transition-colors border border-surface-200/50"
+            className="mt-4 w-full py-3 text-sm font-semibold text-surface-500 bg-surface-100/50 rounded-xl hover:bg-surface-100 hover:text-surface-700 transition-colors border border-surface-200/50"
           >
             {showAll ? `Show less (${INITIAL_SHOW})` : `Show all ${filtered.length} questions`}
           </button>
