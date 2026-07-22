@@ -4,6 +4,14 @@ LearnSmart is an AI-powered platform that helps developers understand unfamiliar
 
 Instead of manually reading hundreds of files, users can upload a project and instantly receive an executive summary, architecture insights, authentication flow, database explanation, project difficulty analysis, interactive AI assistance, and technology-specific interview questions.
 
+Live link: learn-smart-five.vercel.app
+
+Hosted on:
+
+Frontend: Vercel
+
+Backend: DigitalOcean VPS
+
 ---
 
 ## ✨ Features
