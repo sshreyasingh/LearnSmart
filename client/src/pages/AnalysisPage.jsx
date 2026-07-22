@@ -14,6 +14,7 @@ import { LearningResources } from '../components/analysis/LearningResources';
 import { DifficultyPanel } from '../components/analysis/DifficultyPanel';
 import { AnalysisSkeleton } from '../components/common/Skeleton';
 import { ErrorState } from '../components/common/Feedback';
+import { ScrollReveal } from '../components/common/Animations';
 
 function ProcessingBanner() {
   return (
@@ -115,15 +116,39 @@ export default function AnalysisPage() {
       )}
 
       <div className="space-y-6">
-        <ProjectOverview project={project} purpose={explanations?.purpose} />
-        {data.difficulty && <DifficultyPanel difficulty={data.difficulty} />}
-        <ArchitectureGraph dependencyGraph={dependencyGraph} simplifiedGraph={simplifiedGraph} />
-        <ExplanationCards explanations={explanations} learningResources={data.learningResources} />
-        <KnowledgeGraph knowledgeGraph={data.knowledgeGraph} />
-        {data.security && <SecurityReport security={data.security} />}
-        {data.learningResources && <LearningResources learningResources={data.learningResources} />}
-        <InterviewQuestionsPanel projectId={id} />
-        <AIChat projectId={id} />
+        <ScrollReveal animation="fadeUp" transition="smooth">
+          <ProjectOverview project={project} purpose={explanations?.purpose} />
+        </ScrollReveal>
+        {data.difficulty && (
+          <ScrollReveal animation="fadeUp" transition="smooth" delay={80}>
+            <DifficultyPanel difficulty={data.difficulty} />
+          </ScrollReveal>
+        )}
+        <ScrollReveal animation="fadeUp" transition="smooth" delay={160}>
+          <ArchitectureGraph dependencyGraph={dependencyGraph} simplifiedGraph={simplifiedGraph} />
+        </ScrollReveal>
+        <ScrollReveal animation="fadeUp" transition="smooth" delay={240}>
+          <ExplanationCards explanations={explanations} learningResources={data.learningResources} />
+        </ScrollReveal>
+        <ScrollReveal animation="fadeUp" transition="smooth" delay={320}>
+          <KnowledgeGraph knowledgeGraph={data.knowledgeGraph} />
+        </ScrollReveal>
+        {data.security && (
+          <ScrollReveal animation="fadeUp" transition="smooth" delay={400}>
+            <SecurityReport security={data.security} />
+          </ScrollReveal>
+        )}
+        {data.learningResources && (
+          <ScrollReveal animation="fadeUp" transition="smooth" delay={480}>
+            <LearningResources learningResources={data.learningResources} />
+          </ScrollReveal>
+        )}
+        <ScrollReveal animation="fadeUp" transition="smooth" delay={560}>
+          <InterviewQuestionsPanel projectId={id} />
+        </ScrollReveal>
+        <ScrollReveal animation="fadeUp" transition="smooth" delay={640}>
+          <AIChat projectId={id} />
+        </ScrollReveal>
       </div>
 
       <div className="fixed bottom-6 right-6 z-40">

@@ -135,8 +135,7 @@
 
   /* ── Section Cards ── */
   .section-card {
-    @apply bg-[#C9EDDC] rounded-3xl shadow-soft border border-emerald-200 p-6 sm:p-8
-           animate-fade-in;
+    @apply bg-[#C9EDDC] rounded-3xl shadow-soft border border-emerald-200 p-6 sm:p-8;
   }
 
   .page-container {
