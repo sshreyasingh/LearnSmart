@@ -50,6 +50,12 @@ See [workflow/taste.md](workflow/taste.md)
 # timeout
 - Increase backend analysis timeout to prevent premature "analysis failed" errors — the analysis pipeline needs enough time to complete static analysis, AI explanations, and interview generation. Confidence: 0.65
 
+# animation
+- Scroll-reveal animations should be fast and not make content feel like it's "loading" — avoid long cascading delays and high thresholds that cause content to appear slowly during scrolling. Use lower delays (≤50ms stagger) and lower thresholds so content is visible quickly. Confidence: 0.65
+
+# landing-page
+- The HomePage hero heading should be sized so that the CTA buttons ("Start analyzing free" / "Sign in") are visible above the fold without scrolling on standard viewports. Confidence: 0.70
+
 # deployment
 - Deploy without Docker — use platform-native configs (render.yaml, vercel.json, Procfile) or manual setup on DigitalOcean instead. Do not create Dockerfiles or docker-compose unless explicitly requested. Confidence: 0.65
 - Do not hardcode deployment URLs or configuration values — always reference environment variables that are already defined for the deployment environment. Confidence: 0.70

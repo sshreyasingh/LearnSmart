@@ -116,37 +116,37 @@ export default function AnalysisPage() {
       )}
 
       <div className="space-y-6">
-        <ScrollReveal animation="fadeUp" transition="smooth">
+        <ScrollReveal animation="fadeUp" transition="fast" threshold={0.05}>
           <ProjectOverview project={project} purpose={explanations?.purpose} />
         </ScrollReveal>
         {data.difficulty && (
-          <ScrollReveal animation="fadeUp" transition="smooth" delay={80}>
+          <ScrollReveal animation="fadeUp" transition="fast" threshold={0.05}>
             <DifficultyPanel difficulty={data.difficulty} />
           </ScrollReveal>
         )}
-        <ScrollReveal animation="fadeUp" transition="smooth" delay={160}>
+        <ScrollReveal animation="fadeUp" transition="fast" threshold={0.05}>
           <ArchitectureGraph dependencyGraph={dependencyGraph} simplifiedGraph={simplifiedGraph} />
         </ScrollReveal>
-        <ScrollReveal animation="fadeUp" transition="smooth" delay={240}>
+        <ScrollReveal animation="fadeUp" transition="fast" threshold={0.05}>
           <ExplanationCards explanations={explanations} learningResources={data.learningResources} />
         </ScrollReveal>
-        <ScrollReveal animation="fadeUp" transition="smooth" delay={320}>
+        <ScrollReveal animation="fadeUp" transition="fast" threshold={0.05}>
           <KnowledgeGraph knowledgeGraph={data.knowledgeGraph} />
         </ScrollReveal>
         {data.security && (
-          <ScrollReveal animation="fadeUp" transition="smooth" delay={400}>
+          <ScrollReveal animation="fadeUp" transition="fast" threshold={0.05}>
             <SecurityReport security={data.security} />
           </ScrollReveal>
         )}
         {data.learningResources && (
-          <ScrollReveal animation="fadeUp" transition="smooth" delay={480}>
+          <ScrollReveal animation="fadeUp" transition="fast" threshold={0.05}>
             <LearningResources learningResources={data.learningResources} />
           </ScrollReveal>
         )}
-        <ScrollReveal animation="fadeUp" transition="smooth" delay={560}>
+        <ScrollReveal animation="fadeUp" transition="fast" threshold={0.05}>
           <InterviewQuestionsPanel projectId={id} />
         </ScrollReveal>
-        <ScrollReveal animation="fadeUp" transition="smooth" delay={640}>
+        <ScrollReveal animation="fadeUp" transition="fast" threshold={0.05}>
           <AIChat projectId={id} />
         </ScrollReveal>
       </div>

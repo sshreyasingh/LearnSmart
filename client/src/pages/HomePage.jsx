@@ -102,7 +102,7 @@ export default function HomePage() {
   return (
     <div className="min-h-[calc(100vh-4rem)] overflow-hidden">
       {/* ──── Hero Section ──── */}
-      <section className="relative max-w-7xl mx-auto px-4 pt-20 sm:pt-28 pb-16 sm:pb-24 text-center">
+      <section className="relative max-w-7xl mx-auto px-4 pt-12 sm:pt-16 pb-12 sm:pb-16 text-center">
         <div className="absolute inset-0 bg-gradient-hero rounded-full opacity-60 animate-pulse-soft" />
         <div className="absolute inset-0 bg-gradient-grid bg-grid opacity-40" />
 
@@ -113,7 +113,7 @@ export default function HomePage() {
         <div style={{ transform: `translateY(${heroOffset}px)` }}>
           <div className="relative">
             <ScrollReveal animation="fadeIn" transition="fast">
-              <div className="inline-flex items-center gap-2.5 px-4 py-2 bg-white/70 backdrop-blur-sm border border-emerald-200/60 rounded-full text-sm font-semibold text-primary-700 mb-8 shadow-sm">
+              <div className="inline-flex items-center gap-2.5 px-4 py-2 bg-white/70 backdrop-blur-sm border border-emerald-200/60 rounded-full text-sm font-semibold text-primary-700 mb-6 shadow-sm">
                 <span className="relative flex h-2.5 w-2.5">
                   <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75" />
                   <span className="relative inline-flex rounded-full h-2.5 w-2.5 bg-emerald-500" />
@@ -122,25 +122,25 @@ export default function HomePage() {
               </div>
             </ScrollReveal>
 
-            <h1 className="text-5xl sm:text-6xl lg:text-7xl xl:text-8xl font-black text-surface-900 mb-8 leading-[1.05] tracking-tight text-balance">
-              <ScrollReveal animation="fadeUp" transition="smooth">
+            <h1 className="text-4xl sm:text-5xl lg:text-6xl font-extrabold text-surface-900 mb-5 leading-[1.1] tracking-tight text-balance">
+              <ScrollReveal animation="fadeUp" transition="fast">
                 Understand any
               </ScrollReveal>
               <br />
-              <ScrollReveal animation="fadeUp" transition="smooth" delay={100}>
+              <ScrollReveal animation="fadeUp" transition="fast" delay={80}>
                 <span className="text-gradient">codebase instantly</span>
               </ScrollReveal>
             </h1>
 
-            <ScrollReveal animation="fadeUp" transition="smooth" delay={200}>
-              <p className="text-lg sm:text-xl text-surface-500 max-w-2xl mx-auto mb-10 leading-relaxed text-balance">
+            <ScrollReveal animation="fadeUp" transition="fast" delay={100}>
+              <p className="text-base sm:text-lg text-surface-500 max-w-2xl mx-auto mb-8 leading-relaxed text-balance">
                 Upload a ZIP, paste a URL, or connect GitHub — and get AI-powered architecture
                 explanations, interactive diagrams, interview prep, and resume-ready insights
                 in minutes.
               </p>
             </ScrollReveal>
 
-            <ScrollReveal animation="fadeUp" transition="smooth" delay={300}>
+            <ScrollReveal animation="fadeUp" transition="fast" delay={150}>
               <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
                 <Link to="/register" className="btn-primary px-10 py-4 text-base sm:text-lg w-full sm:w-auto">
                   Start analyzing free
@@ -158,7 +158,7 @@ export default function HomePage() {
       </section>
 
       {/* ──── Metrics Bar ──── */}
-      <section className="max-w-5xl mx-auto px-4 pb-16 sm:pb-20">
+      <section className="max-w-5xl mx-auto px-4 pb-12 sm:pb-16">
         <div className="glass-panel grid grid-cols-2 md:grid-cols-4 divide-x divide-surface-200/50 overflow-hidden px-2 py-2">
           {metrics.map((m) => (
             <AnimatedStat key={m.label} end={m.value} suffix={m.suffix} label={m.label} decimals={m.decimals} />
