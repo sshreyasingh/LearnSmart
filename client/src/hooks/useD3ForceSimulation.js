@@ -96,7 +96,6 @@ export function useD3ForceSimulation(nodes, links, width, height, options = {}) 
       .attr('r', (d) => Math.max(4, Math.min(d.size || 8, 30)))
       .attr('fill', (d) => d.color || '#6b7280')
       .attr('stroke', '#fff')
-      .attr('stroke-width', 1.5)
       .attr('opacity', 0.9);
 
     // Node label
@@ -106,8 +105,8 @@ export function useD3ForceSimulation(nodes, links, width, height, options = {}) 
       .attr('dx', 14)
       .attr('dy', 4)
       .attr('font-size', '10px')
-      .attr('fill', '#374151')
-      .attr('font-family', 'monospace');
+      .attr('fill', '#e2e8f0')
+      .attr('font-family', 'Inter, sans-serif');
 
     // Tooltip
     nodeElements.append('title').text((d) => {
