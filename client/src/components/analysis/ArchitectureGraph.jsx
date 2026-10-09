@@ -63,7 +63,7 @@ export function ArchitectureGraph({ dependencyGraph, simplifiedGraph }) {
         Files grouped by architectural layer with inter-layer dependency flows.
       </p>
 
-      <div className="bg-white/60 border border-emerald-200 rounded-xl p-4 mb-5">
+      <div className="bg-surface-100/60 border border-surface-300 rounded-xl p-4 mb-5">
         <h4 className="text-xs font-bold text-surface-500 uppercase tracking-widest mb-3">Layer Legend</h4>
         <div className="flex flex-wrap gap-1.5">
           {Object.entries(LAYER_COLORS).slice(0, 12).map(([id, color]) => (
@@ -89,7 +89,7 @@ export function ArchitectureGraph({ dependencyGraph, simplifiedGraph }) {
         </div>
       )}
 
-      <div className="bg-white/40 border border-emerald-200 rounded-xl overflow-x-auto mb-6">
+      <div className="bg-surface-100/40 border border-surface-300 rounded-xl overflow-x-auto mb-6">
         <MermaidDiagram
           code={mermaidCode}
           id="arch-diagram"
@@ -106,7 +106,7 @@ export function ArchitectureGraph({ dependencyGraph, simplifiedGraph }) {
             return (
               <div
                 key={layer.id}
-                className="bg-white/80 border rounded-xl p-4 hover:shadow-soft transition-shadow"
+                className="bg-surface-100/80 border rounded-xl p-4 hover:shadow-soft transition-shadow"
                 style={{ borderColor: color }}
               >
                 <div

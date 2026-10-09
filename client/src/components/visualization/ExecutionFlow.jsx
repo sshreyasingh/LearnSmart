@@ -14,7 +14,7 @@ export default function ExecutionFlow({ executionFlow }) {
 
   if (!steps || steps.length === 0) {
     return (
-      <div className="text-center py-8 text-gray-400 text-sm">
+      <div className="text-center py-8 text-surface-500 text-sm">
         No execution flow data available.
       </div>
     );
@@ -28,13 +28,13 @@ export default function ExecutionFlow({ executionFlow }) {
     <div className="space-y-5">
       <div className="flex items-center justify-between">
         <div>
-          <h3 className="text-lg font-bold text-gray-900">Execution Flow</h3>
-          <p className="text-xs text-gray-400">
+          <h3 className="text-lg font-bold text-surface-800">Execution Flow</h3>
+          <p className="text-xs text-surface-500">
             {totalSteps || steps.length} steps &middot; {phases?.length || 0} phases
           </p>
         </div>
         {entryPoint && (
-          <span className="text-xs text-gray-400 bg-gray-50 px-2.5 py-1 rounded-full">
+          <span className="text-xs text-surface-500 bg-surface-200 px-2.5 py-1 rounded-full">
             Entry: {entryPoint.split('/').pop()}
           </span>
         )}
@@ -46,7 +46,7 @@ export default function ExecutionFlow({ executionFlow }) {
           <button
             onClick={() => setActivePhase(null)}
             className={`px-3 py-1.5 rounded-lg text-xs font-medium transition-colors ${
-              !activePhase ? 'bg-gray-800 text-white' : 'bg-gray-100 text-gray-600 hover:bg-gray-200'
+              !activePhase ? 'bg-gray-800 text-white' : 'bg-surface-300 text-surface-500 hover:bg-surface-300'
             }`}
           >
             All ({steps.length})
@@ -72,7 +72,7 @@ export default function ExecutionFlow({ executionFlow }) {
       )}
 
       {/* Mermaid Flowchart */}
-      <div className="bg-white/40 border border-emerald-200 rounded-lg overflow-x-auto">
+      <div className="bg-surface-100/40 border border-surface-300 rounded-lg overflow-x-auto">
         <MermaidDiagram
           code={mermaidCode}
           id="exec-flow-diagram"
@@ -83,7 +83,7 @@ export default function ExecutionFlow({ executionFlow }) {
 
       {/* Step list */}
       <div className="relative">
-        <div className="absolute left-[17px] top-3 bottom-3 w-0.5 bg-gray-200" />
+        <div className="absolute left-[17px] top-3 bottom-3 w-0.5 bg-surface-300" />
         <div className="space-y-0">
           {filteredSteps.map((step, i) => {
             const phaseInfo = phases?.find((p) => p.phase === step.phase);
@@ -99,16 +99,16 @@ export default function ExecutionFlow({ executionFlow }) {
                 </div>
                 <div className="py-1.5 min-w-0 flex-1">
                   <div className="flex items-center gap-2">
-                    <p className={`text-sm ${step.depth === 0 ? 'font-bold' : 'font-medium'} text-gray-700`}>
+                    <p className={`text-sm ${step.depth === 0 ? 'font-bold' : 'font-medium'} text-surface-500`}>
                       {step.description}
                     </p>
                     {step.depth > 0 && (
-                      <span className="text-[10px] text-gray-400 bg-gray-50 px-1.5 rounded">
+                      <span className="text-[10px] text-surface-500 bg-surface-200 px-1.5 rounded">
                         depth {step.depth}
                       </span>
                     )}
                   </div>
-                  <div className="flex items-center gap-3 text-xs text-gray-400 mt-0.5">
+                  <div className="flex items-center gap-3 text-xs text-surface-500 mt-0.5">
                     <span>{step.file?.split('/').pop()}</span>
                     {step.phase && (
                       <span
@@ -132,7 +132,7 @@ export default function ExecutionFlow({ executionFlow }) {
           {phases
             .filter((p) => steps.some((s) => s.phase === p.phase))
             .map((phase, i) => (
-              <span key={i} className="flex items-center gap-1.5 text-xs text-gray-500">
+              <span key={i} className="flex items-center gap-1.5 text-xs text-surface-500">
                 <span className="w-2.5 h-2.5 rounded-full" style={{ backgroundColor: phase.color }} />
                 {phase.label}
               </span>

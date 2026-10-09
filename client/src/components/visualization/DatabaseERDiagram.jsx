@@ -9,7 +9,7 @@ export default function DatabaseERDiagram({ databaseER }) {
 
   if (!models || models.length === 0) {
     return (
-      <div className="text-center py-8 text-gray-400 text-sm">
+      <div className="text-center py-8 text-surface-500 text-sm">
         No database models detected.
       </div>
     );
@@ -19,15 +19,15 @@ export default function DatabaseERDiagram({ databaseER }) {
     <div className="space-y-6">
       <div className="flex items-center justify-between">
         <div>
-          <h3 className="text-lg font-bold text-gray-900">Database ER Diagram</h3>
-          <p className="text-xs text-gray-400">
+          <h3 className="text-lg font-bold text-surface-800">Database ER Diagram</h3>
+          <p className="text-xs text-surface-500">
             {models.length} models &middot; {relationships.length} relationships
           </p>
         </div>
       </div>
 
       {/* Mermaid ER Diagram */}
-      <div className="bg-white/40 border border-emerald-200 rounded-lg overflow-x-auto">
+      <div className="bg-surface-100/40 border border-surface-300 rounded-lg overflow-x-auto">
         <MermaidDiagram
           code={mermaidCode}
           id="db-er-diagram"
@@ -46,7 +46,7 @@ export default function DatabaseERDiagram({ databaseER }) {
               ? '#3b82f6'
               : '#22c55e';
           return (
-            <div key={i} className="bg-white rounded-xl border-2 overflow-hidden" style={{ borderColor }}>
+            <div key={i} className="bg-surface-100 rounded-xl border-2 overflow-hidden" style={{ borderColor }}>
               <div className="px-4 py-3" style={{ backgroundColor: borderColor }}>
                 <div className="flex items-center justify-between">
                   <p className="font-bold text-white">{model.name}</p>
@@ -66,20 +66,20 @@ export default function DatabaseERDiagram({ databaseER }) {
                           ? 'bg-purple-400'
                           : field.ref
                           ? 'bg-blue-400'
-                          : 'bg-gray-300'
+                          : 'bg-surface-400'
                       }`}
                     />
-                    <span className="font-mono text-gray-800 min-w-[100px]">{field.name}</span>
-                    <span className="text-gray-400 text-xs">{field.type}</span>
+                    <span className="font-mono text-surface-700 min-w-[100px]">{field.name}</span>
+                    <span className="text-surface-500 text-xs">{field.type}</span>
                     <div className="flex items-center gap-1 ml-auto">
                       {field.required && (
-                        <span className="text-[10px] text-red-500 font-medium">REQ</span>
+                        <span className="text-[10px] text-red-400 font-medium">REQ</span>
                       )}
                       {field.unique && (
                         <span className="text-[10px] text-purple-500 font-medium">UNQ</span>
                       )}
                       {field.ref && (
-                        <span className="text-[10px] text-blue-500 font-medium bg-blue-50 px-1.5 rounded">
+                        <span className="text-[10px] text-blue-500 font-medium bg-blue-900/15 px-1.5 rounded">
                           &rarr; {field.ref}
                         </span>
                       )}
@@ -87,7 +87,7 @@ export default function DatabaseERDiagram({ databaseER }) {
                   </div>
                 ))}
               </div>
-              <div className="px-4 py-2 bg-gray-50 text-xs text-gray-400 flex items-center justify-between">
+              <div className="px-4 py-2 bg-surface-200 text-xs text-surface-500 flex items-center justify-between">
                 <span>{model.fields.length} fields</span>
                 {model.hasTimestamps && <span className="text-green-500">timestamps</span>}
               </div>
@@ -99,28 +99,28 @@ export default function DatabaseERDiagram({ databaseER }) {
       {/* Relationships */}
       {relationships.length > 0 && (
         <div>
-          <p className="text-xs font-semibold text-gray-500 uppercase tracking-wider mb-3">
+          <p className="text-xs font-semibold text-surface-500 uppercase tracking-wider mb-3">
             Relationships
           </p>
           <div className="space-y-2">
             {relationships.map((rel, i) => (
               <div
                 key={i}
-                className="flex items-center gap-3 px-4 py-2.5 bg-white rounded-lg border border-gray-100"
+                className="flex items-center gap-3 px-4 py-2.5 bg-surface-100 rounded-lg border border-surface-300"
               >
-                <span className="font-bold text-gray-800 text-sm">{rel.from}</span>
+                <span className="font-bold text-surface-700 text-sm">{rel.from}</span>
                 <div className="flex items-center gap-1.5 text-xs">
                   {rel.type === 'one-to-many' ? (
                     <>
-                      <span className="text-gray-400 font-medium text-sm">&rarr;</span>
-                      <span className="text-gray-400 font-medium">1 to N</span>
+                      <span className="text-surface-500 font-medium text-sm">&rarr;</span>
+                      <span className="text-surface-500 font-medium">1 to N</span>
                     </>
                   ) : (
-                    <span className="text-gray-400 font-medium">1 to 1</span>
+                    <span className="text-surface-500 font-medium">1 to 1</span>
                   )}
                 </div>
-                <span className="font-bold text-gray-800 text-sm">{rel.to}</span>
-                <span className="text-xs text-gray-400 ml-auto">via {rel.throughField}</span>
+                <span className="font-bold text-surface-700 text-sm">{rel.to}</span>
+                <span className="text-xs text-surface-500 ml-auto">via {rel.throughField}</span>
               </div>
             ))}
           </div>
@@ -130,19 +130,19 @@ export default function DatabaseERDiagram({ databaseER }) {
       {/* Operations */}
       {operations && operations.length > 0 && (
         <div>
-          <p className="text-xs font-semibold text-gray-500 uppercase tracking-wider mb-3">
+          <p className="text-xs font-semibold text-surface-500 uppercase tracking-wider mb-3">
             Database Operations
           </p>
           <div className="space-y-1">
             {operations.slice(0, 20).map((op, i) => (
               <div key={i} className="flex items-center gap-2 px-3 py-1.5 text-xs">
-                <span className="text-gray-400 w-6">{op.step}.</span>
-                <span className="text-gray-700">{op.description}</span>
-                <span className="text-gray-400 ml-auto">{op.file?.split('/').pop()}</span>
+                <span className="text-surface-500 w-6">{op.step}.</span>
+                <span className="text-surface-500">{op.description}</span>
+                <span className="text-surface-500 ml-auto">{op.file?.split('/').pop()}</span>
               </div>
             ))}
             {operations.length > 20 && (
-              <p className="text-xs text-gray-400 px-3">+{operations.length - 20} more operations</p>
+              <p className="text-xs text-surface-500 px-3">+{operations.length - 20} more operations</p>
             )}
           </div>
         </div>

@@ -7,7 +7,7 @@ export default function DependencyGraph({ dependencyGraph }) {
 
   if (!dependencyGraph) {
     return (
-      <div className="text-center py-8 text-gray-400 text-sm">
+      <div className="text-center py-8 text-surface-500 text-sm">
         No dependency data available.
       </div>
     );
@@ -26,20 +26,20 @@ export default function DependencyGraph({ dependencyGraph }) {
     <div className="space-y-4">
       <div className="flex items-center justify-between">
         <div>
-          <h3 className="text-lg font-bold text-gray-900">Dependency Graph</h3>
-          <p className="text-xs text-gray-400">
+          <h3 className="text-lg font-bold text-surface-800">Dependency Graph</h3>
+          <p className="text-xs text-surface-500">
             {nodes.length} files &middot; {links.length} dependencies
           </p>
         </div>
         <div className="flex items-center gap-2 text-xs">
-          <span className="text-gray-500 mr-1">Languages:</span>
+          <span className="text-surface-500 mr-1">Languages:</span>
           {legendItems.map((item) => (
             <span key={item.label} className="flex items-center gap-1">
               <span
                 className="w-2.5 h-2.5 rounded-full inline-block"
                 style={{ backgroundColor: item.color }}
               />
-              <span className="text-gray-500">{item.label}</span>
+              <span className="text-surface-500">{item.label}</span>
             </span>
           ))}
         </div>

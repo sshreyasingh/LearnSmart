@@ -23,12 +23,12 @@ const CATEGORY_ICONS = {
 function AuthCard({ data }) {
   const d = data || {};
   if (d.authNotDetected) {
-    return <p className="text-sm text-gray-500 italic">No authentication system detected in this project.</p>;
+    return <p className="text-sm text-surface-500 italic">No authentication system detected in this project.</p>;
   }
 
   const hasContent = d.authMechanisms || d.login || d.tokenStrategy || d.authorization || d.securityAnalysis;
   if (!hasContent) {
-    return <p className="text-sm text-gray-500 italic">AI is analyzing the authentication system. Details will appear here shortly.</p>;
+    return <p className="text-sm text-surface-500 italic">AI is analyzing the authentication system. Details will appear here shortly.</p>;
   }
 
   return (
@@ -36,15 +36,15 @@ function AuthCard({ data }) {
       {d.authMechanisms && d.authMechanisms.length > 0 && (
         <div className="flex flex-wrap gap-1.5">
           {d.authMechanisms.map((m, i) => (
-            <span key={i} className="px-2 py-0.5 bg-indigo-50 text-indigo-700 rounded text-xs font-medium">{m}</span>
+            <span key={i} className="px-2 py-0.5 bg-indigo-900/20 text-indigo-400 rounded text-xs font-medium">{m}</span>
           ))}
         </div>
       )}
 
       {d.login && (
         <div>
-          <h4 className="text-sm font-semibold text-gray-900 mb-1">Login Flow</h4>
-          <ol className="text-sm text-gray-700 space-y-0.5 list-decimal list-inside">
+          <h4 className="text-sm font-semibold text-surface-800 mb-1">Login Flow</h4>
+          <ol className="text-sm text-surface-500 space-y-0.5 list-decimal list-inside">
             {d.login.flow.map((s, i) => <li key={i}>{s}</li>)}
           </ol>
         </div>
@@ -53,17 +53,17 @@ function AuthCard({ data }) {
       {d.tokenStrategy && (
         <div className="grid grid-cols-2 gap-3">
           {d.tokenStrategy.accessToken && (
-            <div className="bg-white/80 rounded-lg p-3 border border-emerald-100">
-              <div className="text-xs font-semibold text-gray-500 uppercase mb-1">Access Token</div>
-              <div className="text-sm text-gray-800">{d.tokenStrategy.accessToken.format}</div>
-              <div className="text-xs text-gray-500">{d.tokenStrategy.accessToken.expiry ? `Expiry: ${d.tokenStrategy.accessToken.expiry}` : ''}</div>
+            <div className="bg-surface-100/80 rounded-lg p-3 border border-surface-300">
+              <div className="text-xs font-semibold text-surface-500 uppercase mb-1">Access Token</div>
+              <div className="text-sm text-surface-700">{d.tokenStrategy.accessToken.format}</div>
+              <div className="text-xs text-surface-500">{d.tokenStrategy.accessToken.expiry ? `Expiry: ${d.tokenStrategy.accessToken.expiry}` : ''}</div>
             </div>
           )}
           {d.tokenStrategy.refreshToken && (
-            <div className="bg-white/60 rounded-lg p-3 border border-emerald-100">
-              <div className="text-xs font-semibold text-gray-500 uppercase mb-1">Refresh Token</div>
-              <div className="text-sm text-gray-800">{d.tokenStrategy.refreshToken.format}</div>
-              <div className="text-xs text-gray-500">{d.tokenStrategy.refreshToken.expiry ? `Expiry: ${d.tokenStrategy.refreshToken.expiry}` : ''}</div>
+            <div className="bg-surface-100/60 rounded-lg p-3 border border-surface-300">
+              <div className="text-xs font-semibold text-surface-500 uppercase mb-1">Refresh Token</div>
+              <div className="text-sm text-surface-700">{d.tokenStrategy.refreshToken.format}</div>
+              <div className="text-xs text-surface-500">{d.tokenStrategy.refreshToken.expiry ? `Expiry: ${d.tokenStrategy.refreshToken.expiry}` : ''}</div>
             </div>
           )}
         </div>
@@ -71,12 +71,12 @@ function AuthCard({ data }) {
 
       {d.authorization && (
         <div>
-          <h4 className="text-sm font-semibold text-gray-900 mb-1">Authorization</h4>
-          <p className="text-sm text-gray-700">Model: {d.authorization.model}</p>
+          <h4 className="text-sm font-semibold text-surface-800 mb-1">Authorization</h4>
+          <p className="text-sm text-surface-500">Model: {d.authorization.model}</p>
           {d.authorization.roles && d.authorization.roles.length > 0 && (
             <div className="flex flex-wrap gap-1 mt-1">
               {d.authorization.roles.map((r, i) => (
-                <span key={i} className="px-2 py-0.5 bg-amber-50 text-amber-700 rounded text-xs">{r}</span>
+                <span key={i} className="px-2 py-0.5 bg-amber-900/15 text-amber-400 rounded text-xs">{r}</span>
               ))}
             </div>
           )}
@@ -86,17 +86,17 @@ function AuthCard({ data }) {
       {d.securityAnalysis && (
         <div className="space-y-2">
           {d.securityAnalysis.strengths && d.securityAnalysis.strengths.length > 0 && (
-            <div className="p-3 bg-green-50 border border-green-200 rounded-lg">
-              <h4 className="text-xs font-semibold text-green-800 mb-1">Security Strengths</h4>
-              <ul className="text-sm text-green-700 space-y-0.5">
+            <div className="p-3 bg-emerald-900/15 border border-emerald-500/20 rounded-lg">
+              <h4 className="text-xs font-semibold text-emerald-400 mb-1">Security Strengths</h4>
+              <ul className="text-sm text-emerald-400 space-y-0.5">
                 {d.securityAnalysis.strengths.map((s, i) => <li key={i}>✓ {s}</li>)}
               </ul>
             </div>
           )}
           {d.securityAnalysis.recommendations && d.securityAnalysis.recommendations.length > 0 && (
-            <div className="p-3 bg-amber-50 border border-amber-200 rounded-lg">
-              <h4 className="text-xs font-semibold text-amber-800 mb-1">Recommendations</h4>
-              <ul className="text-sm text-amber-700 space-y-0.5">
+            <div className="p-3 bg-amber-900/15 border border-amber-500/20 rounded-lg">
+              <h4 className="text-xs font-semibold text-amber-400 mb-1">Recommendations</h4>
+              <ul className="text-sm text-amber-400 space-y-0.5">
                 {d.securityAnalysis.recommendations.map((r, i) => <li key={i}>→ {r}</li>)}
               </ul>
             </div>
@@ -110,52 +110,52 @@ function AuthCard({ data }) {
 function DatabaseCard({ data }) {
   const d = data || {};
   if (d.databaseNotDetected) {
-    return <p className="text-sm text-gray-500 italic">No database detected in this project.</p>;
+    return <p className="text-sm text-surface-500 italic">No database detected in this project.</p>;
   }
 
   const hasContent = d.databaseTechnology || d.models || d.relationships || d.dataFlow;
   if (!hasContent) {
-    return <p className="text-sm text-gray-500 italic">AI is analyzing the database structure. Details will appear here shortly.</p>;
+    return <p className="text-sm text-surface-500 italic">AI is analyzing the database structure. Details will appear here shortly.</p>;
   }
 
   return (
     <div className="space-y-4">
       {d.databaseTechnology && (
         <div className="flex items-center gap-2">
-          <span className="text-xs font-semibold text-gray-500 uppercase">Technology:</span>
-          <span className="px-2 py-0.5 bg-red-50 text-red-700 rounded text-xs font-medium">{d.databaseTechnology}</span>
+          <span className="text-xs font-semibold text-surface-500 uppercase">Technology:</span>
+          <span className="px-2 py-0.5 bg-red-900/15 text-red-400 rounded text-xs font-medium">{d.databaseTechnology}</span>
         </div>
       )}
 
       {d.dataFlow && (
         <div>
-          <h4 className="text-sm font-semibold text-gray-900 mb-1">Data Flow</h4>
-          <p className="text-sm text-gray-700">{d.dataFlow}</p>
+          <h4 className="text-sm font-semibold text-surface-800 mb-1">Data Flow</h4>
+          <p className="text-sm text-surface-500">{d.dataFlow}</p>
         </div>
       )}
 
       {d.models && d.models.length > 0 && (
         <div>
-          <h4 className="text-sm font-semibold text-gray-900 mb-2">Models ({d.models.length})</h4>
+          <h4 className="text-sm font-semibold text-surface-800 mb-2">Models ({d.models.length})</h4>
           <div className="space-y-2 max-h-80 overflow-y-auto">
             {d.models.map((model, i) => (
-              <div key={i} className="bg-gray-50 rounded-lg p-3 border border-gray-100">
-                <div className="font-medium text-sm text-gray-900">{model.name}</div>
+              <div key={i} className="bg-surface-200 rounded-lg p-3 border border-surface-300">
+                <div className="font-medium text-sm text-surface-800">{model.name}</div>
                 {model.collection && (
-                  <div className="text-xs text-gray-500 font-mono mt-0.5">{model.collection}</div>
+                  <div className="text-xs text-surface-500 font-mono mt-0.5">{model.collection}</div>
                 )}
                 {model.fields && model.fields.length > 0 && (
                   <div className="mt-2 space-y-0.5">
                     {model.fields.slice(0, 10).map((f, j) => (
                       <div key={j} className="flex items-center gap-2 text-sm">
-                        <span className="font-mono text-gray-800">{f.name}</span>
-                        <span className="text-gray-500">{f.type}</span>
+                        <span className="font-mono text-surface-700">{f.name}</span>
+                        <span className="text-surface-500">{f.type}</span>
                         {f.required && <span className="text-red-400 text-xs">required</span>}
                         {f.ref && <span className="text-blue-400 text-xs">→ {f.ref}</span>}
                       </div>
                     ))}
                     {model.fields.length > 10 && (
-                      <div className="text-xs text-gray-400 mt-1">+{model.fields.length - 10} more fields</div>
+                      <div className="text-xs text-surface-500 mt-1">+{model.fields.length - 10} more fields</div>
                     )}
                   </div>
                 )}
@@ -167,15 +167,15 @@ function DatabaseCard({ data }) {
 
       {d.relationships && d.relationships.length > 0 && (
         <div>
-          <h4 className="text-sm font-semibold text-gray-900 mb-2">Relationships</h4>
+          <h4 className="text-sm font-semibold text-surface-800 mb-2">Relationships</h4>
           <div className="space-y-1">
             {d.relationships.map((rel, i) => (
               <div key={i} className="flex items-center gap-2 text-sm">
-                <span className="font-medium text-gray-800">{rel.from}</span>
-                <span className="text-gray-500">—{rel.type}→</span>
-                <span className="font-medium text-gray-800">{rel.to}</span>
+                <span className="font-medium text-surface-700">{rel.from}</span>
+                <span className="text-surface-500">—{rel.type}→</span>
+                <span className="font-medium text-surface-700">{rel.to}</span>
                 {rel.throughField && (
-                  <span className="text-gray-400 font-mono text-xs">via {rel.throughField}</span>
+                  <span className="text-surface-500 font-mono text-xs">via {rel.throughField}</span>
                 )}
               </div>
             ))}
@@ -188,12 +188,12 @@ function DatabaseCard({ data }) {
 
 function SkillsCard({ data }) {
   if (!data) {
-    return <p className="text-sm text-gray-500 italic">No skill recommendations available yet.</p>;
+    return <p className="text-sm text-surface-500 italic">No skill recommendations available yet.</p>;
   }
 
   const { resources, concepts } = data;
   if (!resources || resources.length === 0) {
-    return <p className="text-sm text-gray-500 italic">No learning resources detected for this project.</p>;
+    return <p className="text-sm text-surface-500 italic">No learning resources detected for this project.</p>;
   }
 
   const categories = {};
@@ -209,20 +209,20 @@ function SkillsCard({ data }) {
     <div className="space-y-5">
       {categoryOrder.filter(c => categories[c]).map(cat => (
         <div key={cat}>
-          <h4 className="text-sm font-semibold text-gray-900 capitalize mb-2">{cat === 'deployment' ? 'DevOps & Deployment' : cat}</h4>
+          <h4 className="text-sm font-semibold text-surface-800 capitalize mb-2">{cat === 'deployment' ? 'DevOps & Deployment' : cat}</h4>
           <div className="space-y-2">
             {categories[cat].map((tech) => (
-              <div key={tech.technology} className="bg-white/60 rounded-lg p-3 border border-emerald-100">
+              <div key={tech.technology} className="bg-surface-100/60 rounded-lg p-3 border border-surface-300">
                 <div className="flex items-center justify-between mb-1">
-                  <span className="font-medium text-sm text-gray-900">{tech.technology}</span>
-                  <span className="text-xs text-gray-400 bg-white px-2 py-0.5 rounded-full">
+                  <span className="font-medium text-sm text-surface-800">{tech.technology}</span>
+                  <span className="text-xs text-surface-500 bg-surface-100 px-2 py-0.5 rounded-full">
                     {Math.round((tech.confidence || 0.5) * 100)}% match
                   </span>
                 </div>
                 {tech.keyConcepts && tech.keyConcepts.length > 0 && (
                   <div className="flex flex-wrap gap-1">
                     {tech.keyConcepts.map((c, i) => (
-                      <span key={i} className="text-xs bg-primary-50 text-primary-700 px-2 py-0.5 rounded-md border border-primary-100">
+                      <span key={i} className="text-xs bg-primary-500/10 text-primary-400 px-2 py-0.5 rounded-md border border-primary-500/20">
                         {c}
                       </span>
                     ))}
@@ -235,8 +235,8 @@ function SkillsCard({ data }) {
       ))}
 
       {concepts && Object.keys(concepts).length > 0 && (
-        <div className="pt-3 border-t border-emerald-200">
-          <h4 className="text-sm font-semibold text-gray-900 mb-2">Cross-Cutting Concepts</h4>
+        <div className="pt-3 border-t border-surface-300">
+          <h4 className="text-sm font-semibold text-surface-800 mb-2">Cross-Cutting Concepts</h4>
           <div className="flex flex-wrap gap-1.5">
             {Object.entries(concepts)
               .sort((a, b) => b[1].length - a[1].length)
@@ -244,7 +244,7 @@ function SkillsCard({ data }) {
               .map(([concept, techs]) => (
                 <span
                   key={concept}
-                  className="text-xs bg-amber-50 text-amber-700 px-2.5 py-1 rounded-full border border-amber-200"
+                  className="text-xs bg-amber-900/15 text-amber-400 px-2.5 py-1 rounded-full border border-amber-500/20"
                   title={`Used in: ${techs.join(', ')}`}
                 >
                   {concept}
@@ -263,36 +263,36 @@ function PurposeCard({ data }) {
   const hasContent = d.whatItDoes || d.mainFeatures || d.targetAudience || d.problemSolved || d.techHighlights;
 
   if (!hasContent) {
-    return <p className="text-sm text-gray-500 italic">AI is analyzing the project purpose...</p>;
+    return <p className="text-sm text-surface-500 italic">AI is analyzing the project purpose...</p>;
   }
 
   return (
     <div className="space-y-4">
       {d.whatItDoes && (
         <div>
-          <h4 className="text-sm font-semibold text-gray-900 mb-1">What It Does</h4>
-          <p className="text-sm text-gray-700 leading-relaxed">{d.whatItDoes}</p>
+          <h4 className="text-sm font-semibold text-surface-800 mb-1">What It Does</h4>
+          <p className="text-sm text-surface-500 leading-relaxed">{d.whatItDoes}</p>
         </div>
       )}
 
       {d.problemSolved && (
-        <div className="bg-white/60 rounded-lg p-4 border border-emerald-100">
-          <h4 className="text-sm font-semibold text-gray-900 mb-1">Problem Solved</h4>
-          <p className="text-sm text-gray-700 leading-relaxed">{d.problemSolved}</p>
+        <div className="bg-surface-100/60 rounded-lg p-4 border border-surface-300">
+          <h4 className="text-sm font-semibold text-surface-800 mb-1">Problem Solved</h4>
+          <p className="text-sm text-surface-500 leading-relaxed">{d.problemSolved}</p>
         </div>
       )}
 
       {d.mainFeatures && d.mainFeatures.length > 0 && (
         <div>
-          <h4 className="text-sm font-semibold text-gray-900 mb-2">Key Features</h4>
+          <h4 className="text-sm font-semibold text-surface-800 mb-2">Key Features</h4>
           <div className="grid gap-2 sm:grid-cols-2">
             {d.mainFeatures.map((f, i) => (
-              <div key={i} className="flex items-start gap-2 bg-white/40 rounded-lg p-3 border border-gray-100">
-                <span className="text-emerald-500 text-sm mt-0.5 shrink-0">✦</span>
+              <div key={i} className="flex items-start gap-2 bg-surface-100/40 rounded-lg p-3 border border-surface-300">
+                <span className="text-primary-400 text-sm mt-0.5 shrink-0">✦</span>
                 <div>
-                  <p className="text-sm font-medium text-gray-800">{typeof f === 'string' ? f : f.name || f.title || ''}</p>
+                  <p className="text-sm font-medium text-surface-700">{typeof f === 'string' ? f : f.name || f.title || ''}</p>
                   {typeof f === 'object' && (f.description || f.detail) && (
-                    <p className="text-xs text-gray-500 mt-0.5">{f.description || f.detail}</p>
+                    <p className="text-xs text-surface-500 mt-0.5">{f.description || f.detail}</p>
                   )}
                 </div>
               </div>
@@ -303,17 +303,17 @@ function PurposeCard({ data }) {
 
       {d.targetAudience && (
         <div>
-          <h4 className="text-sm font-semibold text-gray-900 mb-1">Target Audience</h4>
-          <p className="text-sm text-gray-700">{typeof d.targetAudience === 'string' ? d.targetAudience : d.targetAudience.join(', ')}</p>
+          <h4 className="text-sm font-semibold text-surface-800 mb-1">Target Audience</h4>
+          <p className="text-sm text-surface-500">{typeof d.targetAudience === 'string' ? d.targetAudience : d.targetAudience.join(', ')}</p>
         </div>
       )}
 
       {d.techHighlights && d.techHighlights.length > 0 && (
         <div>
-          <h4 className="text-sm font-semibold text-gray-900 mb-1">Technology Highlights</h4>
+          <h4 className="text-sm font-semibold text-surface-800 mb-1">Technology Highlights</h4>
           <div className="flex flex-wrap gap-1.5">
             {d.techHighlights.map((t, i) => (
-              <span key={i} className="px-2 py-0.5 bg-primary-50 text-primary-700 rounded text-xs font-medium border border-primary-100">
+              <span key={i} className="px-2 py-0.5 bg-primary-500/10 text-primary-400 rounded text-xs font-medium border border-primary-500/20">
                 {typeof t === 'string' ? t : t.name || t.technology || ''}
               </span>
             ))}
@@ -329,24 +329,24 @@ function ArchitectureCard({ data }) {
   const hasContent = d.architecturalStyle || d.patternsIdentified || d.layers || d.designDecisions;
 
   if (!hasContent) {
-    return <p className="text-sm text-gray-500 italic">AI is analyzing the architecture...</p>;
+    return <p className="text-sm text-surface-500 italic">AI is analyzing the architecture...</p>;
   }
 
   return (
     <div className="space-y-4">
       {d.architecturalStyle && (
         <div className="flex items-center gap-2">
-          <span className="text-xs font-semibold text-gray-500 uppercase">Style:</span>
-          <span className="px-2 py-0.5 bg-indigo-50 text-indigo-700 rounded text-xs font-medium">{d.architecturalStyle}</span>
+          <span className="text-xs font-semibold text-surface-500 uppercase">Style:</span>
+          <span className="px-2 py-0.5 bg-indigo-900/20 text-indigo-400 rounded text-xs font-medium">{d.architecturalStyle}</span>
         </div>
       )}
 
       {d.patternsIdentified && d.patternsIdentified.length > 0 && (
         <div>
-          <h4 className="text-sm font-semibold text-gray-900 mb-1">Patterns Identified</h4>
+          <h4 className="text-sm font-semibold text-surface-800 mb-1">Patterns Identified</h4>
           <div className="flex flex-wrap gap-1.5">
             {d.patternsIdentified.map((p, i) => (
-              <span key={i} className="px-2 py-0.5 bg-purple-50 text-purple-700 rounded text-xs font-medium">{p}</span>
+              <span key={i} className="px-2 py-0.5 bg-purple-900/20 text-purple-400 rounded text-xs font-medium">{p}</span>
             ))}
           </div>
         </div>
@@ -354,13 +354,13 @@ function ArchitectureCard({ data }) {
 
       {d.layers && d.layers.length > 0 && (
         <div>
-          <h4 className="text-sm font-semibold text-gray-900 mb-2">Layers</h4>
+          <h4 className="text-sm font-semibold text-surface-800 mb-2">Layers</h4>
           <div className="space-y-1.5">
             {d.layers.map((layer, i) => (
               <div key={i} className="flex items-center gap-2 text-sm">
                 <span className="w-2 h-2 rounded-full bg-indigo-400 shrink-0" />
-                <span className="font-medium text-gray-800">{layer.name || layer}</span>
-                {layer.responsibility && <span className="text-gray-500">— {layer.responsibility}</span>}
+                <span className="font-medium text-surface-700">{layer.name || layer}</span>
+                {layer.responsibility && <span className="text-surface-500">— {layer.responsibility}</span>}
               </div>
             ))}
           </div>
@@ -369,17 +369,17 @@ function ArchitectureCard({ data }) {
 
       {d.dataFlow && (
         <div>
-          <h4 className="text-sm font-semibold text-gray-900 mb-1">Data Flow</h4>
-          <p className="text-sm text-gray-700">{typeof d.dataFlow === 'string' ? d.dataFlow : d.dataFlow.description || JSON.stringify(d.dataFlow)}</p>
+          <h4 className="text-sm font-semibold text-surface-800 mb-1">Data Flow</h4>
+          <p className="text-sm text-surface-500">{typeof d.dataFlow === 'string' ? d.dataFlow : d.dataFlow.description || JSON.stringify(d.dataFlow)}</p>
         </div>
       )}
 
       {d.designDecisions && d.designDecisions.length > 0 && (
         <div>
-          <h4 className="text-sm font-semibold text-gray-900 mb-1">Design Decisions</h4>
+          <h4 className="text-sm font-semibold text-surface-800 mb-1">Design Decisions</h4>
           <ul className="space-y-1">
             {d.designDecisions.map((dd, i) => (
-              <li key={i} className="text-sm text-gray-700 pl-3 border-l-2 border-indigo-200">
+              <li key={i} className="text-sm text-surface-500 pl-3 border-l-2 border-indigo-500/20">
                 <span className="font-medium">{dd.decision || dd.topic || 'Decision'}:</span> {dd.rationale || dd.detail || dd}
               </li>
             ))}
@@ -388,18 +388,18 @@ function ArchitectureCard({ data }) {
       )}
 
       {d.strengths && d.strengths.length > 0 && (
-        <div className="p-3 bg-green-50 border border-green-200 rounded-lg">
-          <h4 className="text-xs font-semibold text-green-800 mb-1">Strengths</h4>
-          <ul className="text-sm text-green-700 space-y-0.5">
+        <div className="p-3 bg-emerald-900/15 border border-emerald-500/20 rounded-lg">
+          <h4 className="text-xs font-semibold text-emerald-400 mb-1">Strengths</h4>
+          <ul className="text-sm text-emerald-400 space-y-0.5">
             {d.strengths.map((s, i) => <li key={i}>✓ {s}</li>)}
           </ul>
         </div>
       )}
 
       {d.weaknesses && d.weaknesses.length > 0 && (
-        <div className="p-3 bg-amber-50 border border-amber-200 rounded-lg">
-          <h4 className="text-xs font-semibold text-amber-800 mb-1">Considerations</h4>
-          <ul className="text-sm text-amber-700 space-y-0.5">
+        <div className="p-3 bg-amber-900/15 border border-amber-500/20 rounded-lg">
+          <h4 className="text-xs font-semibold text-amber-400 mb-1">Considerations</h4>
+          <ul className="text-sm text-amber-400 space-y-0.5">
             {d.weaknesses.map((w, i) => <li key={i}>→ {w}</li>)}
           </ul>
         </div>
@@ -413,21 +413,21 @@ function WorkflowCard({ data }) {
   const hasContent = d.entryPoints || d.requestLifecycle || d.middlewareChain || d.errorHandling;
 
   if (!hasContent) {
-    return <p className="text-sm text-gray-500 italic">AI is analyzing the workflow...</p>;
+    return <p className="text-sm text-surface-500 italic">AI is analyzing the workflow...</p>;
   }
 
   return (
     <div className="space-y-4">
       {d.entryPoints && d.entryPoints.length > 0 && (
         <div>
-          <h4 className="text-sm font-semibold text-gray-900 mb-1">Entry Points</h4>
+          <h4 className="text-sm font-semibold text-surface-800 mb-1">Entry Points</h4>
           <ul className="space-y-1">
             {d.entryPoints.map((ep, i) => (
-              <li key={i} className="text-sm text-gray-700 flex items-center gap-2">
-                <span className="text-emerald-500">▶</span>
+              <li key={i} className="text-sm text-surface-500 flex items-center gap-2">
+                <span className="text-primary-400">▶</span>
                 {ep.path || ep.file || ep}
-                {ep.method && <span className="text-xs text-gray-400 font-mono">[{ep.method}]</span>}
-                {ep.description && <span className="text-gray-500">— {ep.description}</span>}
+                {ep.method && <span className="text-xs text-surface-500 font-mono">[{ep.method}]</span>}
+                {ep.description && <span className="text-surface-500">— {ep.description}</span>}
               </li>
             ))}
           </ul>
@@ -436,15 +436,15 @@ function WorkflowCard({ data }) {
 
       {d.bootstrap && (
         <div>
-          <h4 className="text-sm font-semibold text-gray-900 mb-1">Bootstrap Sequence</h4>
-          <p className="text-sm text-gray-700">{typeof d.bootstrap === 'string' ? d.bootstrap : d.bootstrap.description || JSON.stringify(d.bootstrap)}</p>
+          <h4 className="text-sm font-semibold text-surface-800 mb-1">Bootstrap Sequence</h4>
+          <p className="text-sm text-surface-500">{typeof d.bootstrap === 'string' ? d.bootstrap : d.bootstrap.description || JSON.stringify(d.bootstrap)}</p>
         </div>
       )}
 
       {d.requestLifecycle && (
         <div>
-          <h4 className="text-sm font-semibold text-gray-900 mb-1">Request Lifecycle</h4>
-          <ol className="text-sm text-gray-700 space-y-0.5 list-decimal list-inside">
+          <h4 className="text-sm font-semibold text-surface-800 mb-1">Request Lifecycle</h4>
+          <ol className="text-sm text-surface-500 space-y-0.5 list-decimal list-inside">
             {(Array.isArray(d.requestLifecycle) ? d.requestLifecycle : d.requestLifecycle.steps || []).map((step, i) => (
               <li key={i}>{step.step || step.action || step}</li>
             ))}
@@ -454,12 +454,12 @@ function WorkflowCard({ data }) {
 
       {d.middlewareChain && d.middlewareChain.length > 0 && (
         <div>
-          <h4 className="text-sm font-semibold text-gray-900 mb-1">Middleware Chain</h4>
+          <h4 className="text-sm font-semibold text-surface-800 mb-1">Middleware Chain</h4>
           <div className="flex flex-wrap items-center gap-1">
             {d.middlewareChain.map((mw, i) => (
               <span key={i} className="flex items-center gap-1">
-                <span className="px-2 py-0.5 bg-cyan-50 text-cyan-700 rounded text-xs font-mono">{mw.name || mw}</span>
-                {i < d.middlewareChain.length - 1 && <span className="text-gray-300">→</span>}
+                <span className="px-2 py-0.5 bg-cyan-900/20 text-cyan-400 rounded text-xs font-mono">{mw.name || mw}</span>
+                {i < d.middlewareChain.length - 1 && <span className="text-surface-400">→</span>}
               </span>
             ))}
           </div>
@@ -468,20 +468,20 @@ function WorkflowCard({ data }) {
 
       {d.errorHandling && (
         <div>
-          <h4 className="text-sm font-semibold text-gray-900 mb-1">Error Handling</h4>
-          <p className="text-sm text-gray-700">{typeof d.errorHandling === 'string' ? d.errorHandling : d.errorHandling.strategy || JSON.stringify(d.errorHandling)}</p>
+          <h4 className="text-sm font-semibold text-surface-800 mb-1">Error Handling</h4>
+          <p className="text-sm text-surface-500">{typeof d.errorHandling === 'string' ? d.errorHandling : d.errorHandling.strategy || JSON.stringify(d.errorHandling)}</p>
         </div>
       )}
 
       {d.backgroundProcesses && d.backgroundProcesses.length > 0 && (
         <div>
-          <h4 className="text-sm font-semibold text-gray-900 mb-1">Background Processes</h4>
+          <h4 className="text-sm font-semibold text-surface-800 mb-1">Background Processes</h4>
           <ul className="space-y-1">
             {d.backgroundProcesses.map((bp, i) => (
-              <li key={i} className="text-sm text-gray-700 flex items-center gap-2">
+              <li key={i} className="text-sm text-surface-500 flex items-center gap-2">
                 <span className="w-1.5 h-1.5 rounded-full bg-amber-400" />
                 {bp.name || bp.process || bp}
-                {bp.description && <span className="text-gray-500">— {bp.description}</span>}
+                {bp.description && <span className="text-surface-500">— {bp.description}</span>}
               </li>
             ))}
           </ul>
@@ -496,44 +496,44 @@ function ApiCard({ data }) {
   const hasContent = d.apiStyle || d.endpoints || d.basePrefix;
 
   if (!hasContent) {
-    return <p className="text-sm text-gray-500 italic">AI is analyzing the API structure...</p>;
+    return <p className="text-sm text-surface-500 italic">AI is analyzing the API structure...</p>;
   }
 
   return (
     <div className="space-y-4">
       <div className="flex flex-wrap items-center gap-2">
         {d.apiStyle && (
-          <span className="px-2 py-0.5 bg-blue-50 text-blue-700 rounded text-xs font-medium">{d.apiStyle}</span>
+          <span className="px-2 py-0.5 bg-blue-900/15 text-blue-400 rounded text-xs font-medium">{d.apiStyle}</span>
         )}
         {d.basePrefix && (
-          <span className="text-xs font-mono text-gray-500 bg-white/60 px-2 py-0.5 rounded">{d.basePrefix}</span>
+          <span className="text-xs font-mono text-surface-500 bg-surface-100/60 px-2 py-0.5 rounded">{d.basePrefix}</span>
         )}
         {d.apiVersioning && (
-          <span className="text-xs text-gray-400">{d.apiVersioning}</span>
+          <span className="text-xs text-surface-500">{d.apiVersioning}</span>
         )}
       </div>
 
       {d.endpoints && d.endpoints.length > 0 && (
         <div>
-          <h4 className="text-sm font-semibold text-gray-900 mb-2">Endpoints ({d.endpoints.length})</h4>
+          <h4 className="text-sm font-semibold text-surface-800 mb-2">Endpoints ({d.endpoints.length})</h4>
           <div className="space-y-1 max-h-80 overflow-y-auto">
             {d.endpoints.slice(0, 40).map((ep, i) => (
-              <div key={i} className="flex items-center gap-2 text-sm bg-white/40 rounded px-2 py-1">
+              <div key={i} className="flex items-center gap-2 text-sm bg-surface-100/40 rounded px-2 py-1">
                 <span className={`text-xs font-bold uppercase px-1.5 py-0.5 rounded ${
-                  ep.method === 'GET' ? 'bg-green-100 text-green-700' :
-                  ep.method === 'POST' ? 'bg-blue-100 text-blue-700' :
-                  ep.method === 'PUT' ? 'bg-amber-100 text-amber-700' :
-                  ep.method === 'DELETE' ? 'bg-red-100 text-red-700' :
-                  'bg-gray-100 text-gray-600'
+                  ep.method === 'GET' ? 'bg-emerald-900/20 text-emerald-400' :
+                  ep.method === 'POST' ? 'bg-blue-100 text-blue-400' :
+                  ep.method === 'PUT' ? 'bg-amber-100 text-amber-400' :
+                  ep.method === 'DELETE' ? 'bg-red-100 text-red-400' :
+                  'bg-surface-300 text-surface-500'
                 }`}>
                   {ep.method || 'ANY'}
                 </span>
-                <span className="font-mono text-gray-800">{ep.path || ep.route || ''}</span>
-                {ep.description && <span className="text-gray-400 ml-auto text-xs">{ep.description}</span>}
+                <span className="font-mono text-surface-700">{ep.path || ep.route || ''}</span>
+                {ep.description && <span className="text-surface-500 ml-auto text-xs">{ep.description}</span>}
               </div>
             ))}
             {d.endpoints.length > 40 && (
-              <p className="text-xs text-gray-400 mt-1">+{d.endpoints.length - 40} more endpoints</p>
+              <p className="text-xs text-surface-500 mt-1">+{d.endpoints.length - 40} more endpoints</p>
             )}
           </div>
         </div>
@@ -541,24 +541,24 @@ function ApiCard({ data }) {
 
       {d.errorFormat && (
         <div>
-          <h4 className="text-sm font-semibold text-gray-900 mb-1">Error Format</h4>
-          <p className="text-sm text-gray-700">{typeof d.errorFormat === 'string' ? d.errorFormat : d.errorFormat.description || JSON.stringify(d.errorFormat)}</p>
+          <h4 className="text-sm font-semibold text-surface-800 mb-1">Error Format</h4>
+          <p className="text-sm text-surface-500">{typeof d.errorFormat === 'string' ? d.errorFormat : d.errorFormat.description || JSON.stringify(d.errorFormat)}</p>
         </div>
       )}
 
       {d.rateLimiting && (
         <div>
-          <h4 className="text-sm font-semibold text-gray-900 mb-1">Rate Limiting</h4>
-          <p className="text-sm text-gray-700">{typeof d.rateLimiting === 'string' ? d.rateLimiting : d.rateLimiting.description || JSON.stringify(d.rateLimiting)}</p>
+          <h4 className="text-sm font-semibold text-surface-800 mb-1">Rate Limiting</h4>
+          <p className="text-sm text-surface-500">{typeof d.rateLimiting === 'string' ? d.rateLimiting : d.rateLimiting.description || JSON.stringify(d.rateLimiting)}</p>
         </div>
       )}
 
       {d.globalMiddleware && d.globalMiddleware.length > 0 && (
         <div>
-          <h4 className="text-sm font-semibold text-gray-900 mb-1">Global Middleware</h4>
+          <h4 className="text-sm font-semibold text-surface-800 mb-1">Global Middleware</h4>
           <div className="flex flex-wrap gap-1.5">
             {d.globalMiddleware.map((gm, i) => (
-              <span key={i} className="px-2 py-0.5 bg-gray-100 text-gray-600 rounded text-xs">{gm.name || gm}</span>
+              <span key={i} className="px-2 py-0.5 bg-surface-300 text-surface-500 rounded text-xs">{gm.name || gm}</span>
             ))}
           </div>
         </div>
@@ -612,7 +612,7 @@ export function ExplanationCards({ explanations, learningResources }) {
       <h2 className="text-xl font-bold text-surface-900 mb-4">Detailed Analysis</h2>
 
       {errorCategories.length > 0 && !hasSkills && categories.length === 0 && (
-        <div className="flex items-center gap-2 bg-amber-50 border border-amber-200 text-amber-700 px-4 py-3 rounded-xl mb-4 text-sm">
+        <div className="flex items-center gap-2 bg-amber-900/15 border border-amber-500/20 text-amber-400 px-4 py-3 rounded-xl mb-4 text-sm">
           <svg className="w-5 h-5 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-2.5L13.732 4.5c-.77-.833-2.694-.833-3.464 0L4.08 16.5c-.77.833.192 2.5 1.732 2.5z" />
           </svg>
@@ -629,7 +629,7 @@ export function ExplanationCards({ explanations, learningResources }) {
               className={`flex items-center gap-2 px-4 py-2.5 rounded-xl text-sm font-semibold transition-all duration-200 ${
                 displayTab === cat
                   ? 'bg-surface-800 text-white shadow-soft'
-                  : 'bg-white/60 text-surface-600 hover:bg-white hover:shadow-sm'
+                  : 'bg-surface-100/60 text-surface-600 hover:bg-surface-100 hover:shadow-sm'
               }`}
             >
               <span>{CATEGORY_ICONS[cat] || '📋'}</span>
@@ -643,7 +643,7 @@ export function ExplanationCards({ explanations, learningResources }) {
               className={`flex items-center gap-2 px-4 py-2.5 rounded-xl text-sm font-semibold transition-all duration-200 ${
                 displayTab === cat
                   ? 'bg-amber-600 text-white shadow-soft'
-                  : 'bg-amber-50 text-amber-600 border border-amber-200 hover:bg-amber-100'
+                  : 'bg-amber-900/15 text-amber-600 border border-amber-500/20 hover:bg-amber-100'
               }`}
             >
               <span>{CATEGORY_ICONS[cat] || '⚠️'}</span>
@@ -658,9 +658,9 @@ export function ExplanationCards({ explanations, learningResources }) {
           {errorCategories.map((cat) => {
             const err = explanations[cat];
             return (
-              <div key={cat} className="bg-red-50 border border-red-200 rounded-xl p-4">
-                <h4 className="text-sm font-semibold text-red-800">{CATEGORY_LABELS[cat] || cat}</h4>
-                <p className="text-sm text-red-600 mt-1">{err?.error || 'Unknown error'}</p>
+              <div key={cat} className="bg-red-900/15 border border-red-500/20 rounded-xl p-4">
+                <h4 className="text-sm font-semibold text-red-400">{CATEGORY_LABELS[cat] || cat}</h4>
+                <p className="text-sm text-red-400 mt-1">{err?.error || 'Unknown error'}</p>
                 <p className="text-xs text-red-400 mt-2">
                   Check that your OpenRouter API key has credits at https://openrouter.ai/settings/credits
                 </p>
@@ -671,16 +671,16 @@ export function ExplanationCards({ explanations, learningResources }) {
       )}
 
       {isErrorTab && activeData?.error && (
-        <div className="bg-red-50 border border-red-200 rounded-xl p-4">
-          <h4 className="text-sm font-semibold text-red-800">{CATEGORY_LABELS[displayTab] || displayTab}</h4>
-          <p className="text-sm text-red-600 mt-1">{activeData.error}</p>
+        <div className="bg-red-900/15 border border-red-500/20 rounded-xl p-4">
+          <h4 className="text-sm font-semibold text-red-400">{CATEGORY_LABELS[displayTab] || displayTab}</h4>
+          <p className="text-sm text-red-400 mt-1">{activeData.error}</p>
         </div>
       )}
 
       {hasData && !isErrorTab && Renderer ? (
         <Renderer data={activeData} />
       ) : hasData && !isErrorTab ? (
-        <pre className="text-xs text-gray-500 overflow-x-auto whitespace-pre-wrap">
+        <pre className="text-xs text-surface-500 overflow-x-auto whitespace-pre-wrap">
           {JSON.stringify(activeData, null, 2)}
         </pre>
       ) : null}

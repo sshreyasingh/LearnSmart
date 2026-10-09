@@ -39,11 +39,11 @@ export default function OAuthCallbackPage() {
         {error ? (
           <div>
             <div className="w-16 h-16 bg-red-100 rounded-2xl flex items-center justify-center mx-auto mb-4">
-              <svg className="h-8 w-8 text-red-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <svg className="h-8 w-8 text-red-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
               </svg>
             </div>
-            <p className="text-red-600 font-semibold mb-2">{error}</p>
+            <p className="text-red-400 font-semibold mb-2">{error}</p>
             <p className="text-surface-400 text-sm">Redirecting to login...</p>
           </div>
         ) : (

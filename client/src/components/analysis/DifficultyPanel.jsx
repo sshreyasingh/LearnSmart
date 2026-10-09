@@ -102,8 +102,8 @@ export function DifficultyPanel({ difficulty }) {
         <p className="text-sm text-surface-500">{summary}</p>
       </div>
 
-      <div className="grid grid-cols-1 lg:grid-cols-3 border-t border-emerald-200">
-        <div className="flex flex-col items-center justify-center bg-white/40 p-6 lg:border-r border-emerald-200">
+      <div className="grid grid-cols-1 lg:grid-cols-3 border-t border-surface-300">
+        <div className="flex flex-col items-center justify-center bg-surface-100/40 p-6 lg:border-r border-surface-300">
           <RadialGauge value={score} max={10} color={color} size={140} strokeWidth={14} />
           <p className="text-xs text-surface-400 mt-3 text-center max-w-[180px] leading-relaxed">{levelDescription}</p>
         </div>

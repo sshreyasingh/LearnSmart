@@ -28,10 +28,10 @@ const ICONS = {
 };
 
 const STYLES = {
-  success: 'bg-emerald-50 border-emerald-200 text-emerald-800',
-  error: 'bg-red-50 border-red-200 text-red-800',
-  warning: 'bg-amber-50 border-amber-200 text-amber-800',
-  info: 'bg-blue-50 border-blue-200 text-blue-800',
+  success: 'bg-primary-500/10 border-surface-300 text-primary-400',
+  error: 'bg-red-900/15 border-red-500/20 text-red-400',
+  warning: 'bg-amber-900/15 border-amber-500/20 text-amber-400',
+  info: 'bg-blue-900/15 border-blue-500/20 text-blue-400',
 };
 
 function ToastItem({ toast, onDismiss }) {

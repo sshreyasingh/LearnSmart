@@ -30,7 +30,7 @@ export function Modal({ open, onClose, title, children, size = 'md', footer }) {
         className="absolute inset-0 bg-black/40 backdrop-blur-sm animate-fade-in"
         onClick={onClose}
       />
-      <div className={`relative bg-white rounded-2xl shadow-soft-lg border border-surface-200 w-full ${sizes[size]} max-h-[85vh] flex flex-col animate-scale-in`}>
+      <div className={`relative bg-surface-100 rounded-2xl shadow-soft-lg border border-surface-200 w-full ${sizes[size]} max-h-[85vh] flex flex-col animate-scale-in`}>
         {title && (
           <div className="flex items-center justify-between px-6 py-4 border-b border-surface-100">
             <h2 className="text-lg font-bold text-surface-900">{title}</h2>

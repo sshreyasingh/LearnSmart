@@ -15,15 +15,16 @@ import { LearningResources } from '../components/analysis/LearningResources';
 import { DifficultyPanel } from '../components/analysis/DifficultyPanel';
 import { AnalysisSkeleton } from '../components/common/Skeleton';
 import { ErrorState } from '../components/common/Feedback';
+import { ScrollReveal } from '../components/common/Animations';
 
 function ProcessingBanner({ progress }) {
   return (
-    <div className="flex items-center gap-3 bg-blue-50 border border-blue-200 px-4 py-3 rounded-xl mb-6 text-sm animate-fade-in">
-      <svg className="animate-spin h-4 w-4 text-blue-600 shrink-0" viewBox="0 0 24 24">
+    <div className="alert-info mb-6">
+      <svg className="animate-spin h-5 w-5 text-blue-600 shrink-0" viewBox="0 0 24 24">
         <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" fill="none" />
         <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z" />
       </svg>
-      <span className="text-blue-700 font-medium">{progress?.phase || 'Preparing analysis'} ({progress?.current || 0}%). Results appear as they become available.</span>
+      <span>{progress?.phase || 'Preparing analysis'} ({progress?.current || 0}%). Results appear as they become available.</span>
     </div>
   );
 }
@@ -46,7 +47,7 @@ export default function AnalysisPage() {
     <div className="page-container">
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-8">
         <div>
-          <h1 className="text-3xl font-bold text-surface-900">{project?.projectName || 'Project Analysis'}</h1>
+          <h1 className="text-3xl sm:text-4xl font-extrabold text-surface-900 tracking-tight">{project?.projectName || 'Project Analysis'}</h1>
           <div className="flex flex-wrap items-center gap-3 mt-2 text-sm text-surface-500">
             <span>{project?.fileCount} files</span>
             <span className="text-surface-300">·</span>
@@ -89,45 +90,85 @@ export default function AnalysisPage() {
       </div>
 
       {partial && (
-        <div className="flex items-center gap-2 bg-amber-50 border border-amber-200 text-amber-700 px-4 py-3 rounded-xl mb-6 text-sm">
-          <svg className="w-5 h-5 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+        <div className="alert-warning mb-6">
+          <svg className="w-5 h-5 shrink-0 mt-px" fill="none" viewBox="0 0 24 24" stroke="currentColor">
             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-2.5L13.732 4.5c-.77-.833-2.694-.833-3.464 0L4.08 16.5c-.77.833.192 2.5 1.732 2.5z" />
           </svg>
-          Some sections could not be generated. Available results are shown below.
-          {data.errors?.length > 0 && <ul className="list-disc pl-5">{data.errors.map((item, index) => <li key={index}>{item.message}</li>)}</ul>}
+          <div>
+            <span>Some sections could not be generated. Available results are shown below.</span>
+            {data.errors?.length > 0 && <ul className="list-disc pl-5 mt-1">{data.errors.map((item, index) => <li key={index}>{item.message}</li>)}</ul>}
+          </div>
         </div>
       )}
 
       {(reanalyzing || data?.processing) && <ProcessingBanner progress={data.progress} />}
 
       {reanalyzeError && (
-        <div className="flex items-center justify-between bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded-xl mb-6 text-sm">
+        <div className="alert-error mb-6 justify-between">
           <div className="flex items-center gap-2">
-            <svg className="w-5 h-5 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <svg className="w-5 h-5 shrink-0 mt-px" fill="none" viewBox="0 0 24 24" stroke="currentColor">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
             </svg>
-            {reanalyzeError}
+            <span>{reanalyzeError}</span>
           </div>
-          <button onClick={clearReanalyzeError} className="ml-3 text-red-500 hover:text-red-700 font-medium">
+          <button onClick={clearReanalyzeError} className="ml-3 text-red-400 hover:text-red-400 font-medium shrink-0">
             Dismiss
           </button>
         </div>
       )}
 
       <div className="space-y-6">
-        <ProjectOverview processing={data.processing} project={project} purpose={explanations?.purpose} />
-        <MetricsPanel metrics={data.metrics} />
-        {data.staticAnalysis && <SourceReport analysis={data.staticAnalysis} />}
-        {data.executiveSummary && <section className="section-card"><h2 className="text-xl font-bold mb-3">Project Summary</h2><p className="whitespace-pre-wrap">{data.executiveSummary}</p></section>}
+        <ScrollReveal animation="fadeUp" transition="fast" threshold={0.05}>
+          <ProjectOverview processing={data.processing} project={project} purpose={explanations?.purpose} />
+        </ScrollReveal>
+        <ScrollReveal animation="fadeUp" transition="fast" threshold={0.05}>
+          <MetricsPanel metrics={data.metrics} />
+        </ScrollReveal>
+        {data.staticAnalysis && (
+          <ScrollReveal animation="fadeUp" transition="fast" threshold={0.05}>
+            <SourceReport analysis={data.staticAnalysis} />
+          </ScrollReveal>
+        )}
+        {data.executiveSummary && (
+          <ScrollReveal animation="fadeUp" transition="fast" threshold={0.05}>
+            <section className="section-card"><h2 className="text-xl font-bold mb-3">Project Summary</h2><p className="whitespace-pre-wrap">{data.executiveSummary}</p></section>
+          </ScrollReveal>
+        )}
         {data.errorMessage && !data.staticAnalysis && <Link to="/upload" className="btn-secondary">Upload repository again</Link>}
-        {data.difficulty && <DifficultyPanel difficulty={data.difficulty} />}
-        <ArchitectureGraph dependencyGraph={dependencyGraph} simplifiedGraph={simplifiedGraph} />
-        <ExplanationCards explanations={explanations} learningResources={data.learningResources} />
-        <KnowledgeGraph knowledgeGraph={data.knowledgeGraph} />
-        {data.security && <SecurityReport security={data.security} />}
-        {data.learningResources && <LearningResources learningResources={data.learningResources} />}
-        {!data.processing && data.staticAnalysis && <InterviewQuestionsPanel key={data.generatedAt} projectId={id} />}
-        {!data.processing && data.staticAnalysis && <AIChat projectId={id} />}
+        {data.difficulty && (
+          <ScrollReveal animation="fadeUp" transition="fast" threshold={0.05}>
+            <DifficultyPanel difficulty={data.difficulty} />
+          </ScrollReveal>
+        )}
+        <ScrollReveal animation="fadeUp" transition="fast" threshold={0.05}>
+          <ArchitectureGraph dependencyGraph={dependencyGraph} simplifiedGraph={simplifiedGraph} />
+        </ScrollReveal>
+        <ScrollReveal animation="fadeUp" transition="fast" threshold={0.05}>
+          <ExplanationCards explanations={explanations} learningResources={data.learningResources} />
+        </ScrollReveal>
+        <ScrollReveal animation="fadeUp" transition="fast" threshold={0.05}>
+          <KnowledgeGraph knowledgeGraph={data.knowledgeGraph} />
+        </ScrollReveal>
+        {data.security && (
+          <ScrollReveal animation="fadeUp" transition="fast" threshold={0.05}>
+            <SecurityReport security={data.security} />
+          </ScrollReveal>
+        )}
+        {data.learningResources && (
+          <ScrollReveal animation="fadeUp" transition="fast" threshold={0.05}>
+            <LearningResources learningResources={data.learningResources} />
+          </ScrollReveal>
+        )}
+        {!data.processing && data.staticAnalysis && (
+          <ScrollReveal animation="fadeUp" transition="fast" threshold={0.05}>
+            <InterviewQuestionsPanel key={data.generatedAt} projectId={id} />
+          </ScrollReveal>
+        )}
+        {!data.processing && data.staticAnalysis && (
+          <ScrollReveal animation="fadeUp" transition="fast" threshold={0.05}>
+            <AIChat projectId={id} />
+          </ScrollReveal>
+        )}
       </div>
 
       <div className="fixed bottom-6 right-6 z-40">

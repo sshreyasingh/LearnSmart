@@ -69,7 +69,7 @@ export default function ProgressLoader({ projectId }) {
         </div>
       ) : (
         <div className="w-20 h-20 bg-red-100 rounded-2xl flex items-center justify-center mx-auto mb-6">
-          <svg className="h-10 w-10 text-red-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <svg className="h-10 w-10 text-red-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-2.5L13.732 4.5c-.77-.833-2.694-.833-3.464 0L4.08 16.5c-.77.833.192 2.5 1.732 2.5z" />
           </svg>
         </div>
@@ -81,14 +81,14 @@ export default function ProgressLoader({ projectId }) {
       <div className="flex items-center justify-center gap-1.5 mt-6">
         {phases.slice(0, -1).map((p, i) => {
           let bg = 'bg-surface-200';
-          if (i < currentIdx) bg = 'bg-emerald-500';
+          if (i < currentIdx) bg = 'bg-primary-500/100';
           else if (i === currentIdx && !isError) bg = 'bg-primary-500 animate-pulse';
-          else if (i === currentIdx && isError) bg = 'bg-red-500';
+          else if (i === currentIdx && isError) bg = 'bg-red-900/150';
           return (
             <div key={p} className="flex items-center gap-1.5">
               <div className={`w-3.5 h-3.5 rounded-full transition-all duration-300 ${bg}`} />
               {i < phases.length - 2 && (
-                <div className={`w-8 h-0.5 rounded-full transition-all duration-300 ${i < currentIdx ? 'bg-emerald-500' : 'bg-surface-200'}`} />
+                <div className={`w-8 h-0.5 rounded-full transition-all duration-300 ${i < currentIdx ? 'bg-primary-500/100' : 'bg-surface-200'}`} />
               )}
             </div>
           );
@@ -96,7 +96,7 @@ export default function ProgressLoader({ projectId }) {
       </div>
       <div className="flex justify-center gap-3 mt-2">
         {phases.slice(0, -1).map((p, i) => (
-          <span key={p} className={`text-[10px] font-semibold uppercase tracking-wide ${i <= currentIdx && !isError ? 'text-surface-600' : i === currentIdx && isError ? 'text-red-500' : 'text-surface-400'}`}>
+          <span key={p} className={`text-[10px] font-semibold uppercase tracking-wide ${i <= currentIdx && !isError ? 'text-surface-600' : i === currentIdx && isError ? 'text-red-400' : 'text-surface-400'}`}>
             {i === 0 ? 'Clone' : i === 1 ? 'Parse' : i === 2 ? 'Summarize' : i === 3 ? 'AI Analyze' : 'Build'}
           </span>
         ))}
