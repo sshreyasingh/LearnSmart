@@ -64,6 +64,9 @@ const projectSchema = new mongoose.Schema(
       },
     },
     lastAnalyzedAt: { type: Date },
+    jobId: { type: String },
+    jobLeaseUntil: { type: Date },
+    sourceReady: { type: Boolean, default: false },
   },
   { timestamps: true }
 );

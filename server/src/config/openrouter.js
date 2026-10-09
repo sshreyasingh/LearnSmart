@@ -20,8 +20,8 @@ const getOpenRouterClient = () => {
       'X-Title': 'LearnSmart',
       'Connection': 'keep-alive',
     },
-    timeout: 300000,
-    maxRetries: 2,
+    timeout: 45000,
+    maxRetries: 0,
   });
 
   return client;
@@ -64,12 +64,12 @@ const getEmbeddingModel = () => {
   if (!openai) return null;
 
   embeddingClient = {
-    create: async (text) => {
+    create: async (text, options = {}) => {
       const resp = await openai.embeddings.create({
         model: env.OPENROUTER_EMBEDDING_MODEL,
         input: text,
         encoding_format: 'float',
-      });
+      }, { timeout: 15000, ...options });
       return resp;
     },
   };

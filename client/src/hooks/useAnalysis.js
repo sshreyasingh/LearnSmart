@@ -1,5 +1,4 @@
 import { useState, useEffect, useCallback } from 'react';
-import { getProjectAnalysis } from '../api/analysis.api';
 import api from '../api/client';
 
 export function useAnalysis(projectId, forceAnalysis = false) {
@@ -7,42 +6,43 @@ export function useAnalysis(projectId, forceAnalysis = false) {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
   const [reanalyzing, setReanalyzing] = useState(false);
-  const [reanalyzeError, setReanalyzeError] = useState('');
+  const [request, setRequest] = useState({ force: forceAnalysis, sequence: 0 });
 
-  const fetch = useCallback(async (force = false) => {
-    if (force) {
-      setReanalyzing(true);
-      setReanalyzeError('');
-    } else {
-      setLoading(true);
-    }
-    setError('');
-    try {
-      const res = force
-        ? await api.get(`/analysis/${projectId}?force=true`)
-        : await getProjectAnalysis(projectId);
-      setData(res.data.data);
-    } catch (err) {
-      const msg = err.response?.data?.message || 'Failed to load analysis';
-      if (force) {
-        setReanalyzeError(msg);
-      } else {
-        setError(msg);
-      }
-    } finally {
-      setLoading(false);
-      setReanalyzing(false);
-    }
-  }, [projectId]);
-
+  useEffect(() => { setData(null); }, [projectId]);
   useEffect(() => {
-    fetch(forceAnalysis);
-  }, [fetch, forceAnalysis]);
+    let active = true;
+    let timer;
+    const controller = new AbortController();
+    setError('');
+    setLoading(true);
+    const poll = async (force = false) => {
+      try {
+        const response = await api.get(`/analysis/${projectId}`, {
+          params: force ? { force: true } : {}, signal: controller.signal, timeout: 20000,
+        });
+        if (!active) return;
+        const result = response.data.data;
+        setData(result);
+        setError(result.errorMessage || '');
+        setReanalyzing(!!result.processing);
+        if (result.processing) timer = setTimeout(() => poll(false), 5000);
+      } catch (err) {
+        if (!active || controller.signal.aborted) return;
+        setError(err.response?.data?.message || 'Could not check analysis status. Retry to reconnect.');
+        setReanalyzing(false);
+      } finally {
+        if (active) setLoading(false);
+      }
+    };
+    poll(request.force);
+    return () => { active = false; clearTimeout(timer); controller.abort(); };
+  }, [projectId, request]);
 
+  const refetch = useCallback((force = false) => {
+    setRequest(previous => ({ force: force === true, sequence: previous.sequence + 1 }));
+  }, []);
   return {
-    data, loading, error, reanalyzing, reanalyzeError,
-    refetch: fetch,
-    reanalyze: () => fetch(true),
-    clearReanalyzeError: () => setReanalyzeError(''),
+    data, loading, error, reanalyzing, reanalyzeError: error,
+    refetch, reanalyze: () => refetch(true), clearReanalyzeError: () => setError(''),
   };
 }

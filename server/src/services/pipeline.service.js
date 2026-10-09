@@ -3,9 +3,7 @@ const fsp = require('fs').promises;
 const fileService = require('./file.service');
 const gitService = require('./git.service');
 const { chunkAllFiles } = require('./chunking.service');
-const { embedBatch, embedQuery, cosineSimilarity, EMBEDDING_DIMENSION } = require('./embedding.service');
-const { buildAnalysisContext } = require('./promptBuilder.service');
-const { estimateTokens } = require('./ai.service');
+const { embedBatch } = require('./embedding.service');
 const chromaStore = require('./chromaStore.service');
 const { indexPipelineOutput: indexJsonStore } = require('./vectorStore.service');
 const { sendProgress } = require('./progress.service');
@@ -93,6 +91,7 @@ const runIngestionPipeline = async (options) => {
 
     const parsedFiles = textFiles.map((f) => ({
       filePath: f.filePath,
+      fileName: f.fileName || path.basename(f.filePath),
       language: f.language,
       content: f.content,
       loc: f.loc,
@@ -109,119 +108,8 @@ const runIngestionPipeline = async (options) => {
       fileCount: textFiles.length,
     });
 
-    emitProgress(res, PROGRESS_EVENTS.CHUNKING, { message: 'Chunking code for embeddings...' });
-    sendProgress(pidStr, PROGRESS_EVENTS.CHUNKING, { message: 'Chunking code for embeddings...' });
+    return { projectDir, extractDir, textFiles: parsedFiles };
 
-    const chunks = await chunkAllFiles(parsedFiles, (progress) => {
-      if (progress.processed % 10 === 0 || progress.processed === progress.total) {
-        emitProgress(res, PROGRESS_EVENTS.CHUNKING, {
-          message: `Chunked ${progress.processed}/${progress.total} files`,
-          processed: progress.processed,
-          total: progress.total,
-          chunksSoFar: progress.chunksSoFar,
-        });
-        sendProgress(pidStr, PROGRESS_EVENTS.CHUNKING, {
-          message: `Chunked ${progress.processed}/${progress.total} files`,
-        });
-      }
-    });
-
-    emitProgress(res, PROGRESS_EVENTS.CHUNKING, {
-      message: `Created ${chunks.length} code chunks`,
-      totalChunks: chunks.length,
-    });
-
-    emitProgress(res, PROGRESS_EVENTS.EMBEDDING, { message: 'Generating embeddings...' });
-    sendProgress(pidStr, PROGRESS_EVENTS.EMBEDDING, { message: 'Generating embeddings...' });
-
-    const textsToEmbed = chunks.map((chunk) => {
-      const symbolInfo = chunk.functionName ? ` [${chunk.symbolType}: ${chunk.functionName}]` :
-        chunk.className ? ` [${chunk.symbolType}: ${chunk.className}]` : '';
-      return `File: ${chunk.filePath} (lines ${chunk.startLine + 1}-${chunk.endLine})${symbolInfo}\n\n${chunk.content}`;
-    });
-
-    const vectors = await embedBatch(textsToEmbed, (progress) => {
-      if (progress.embedded % 20 === 0 || progress.embedded === progress.total) {
-        emitProgress(res, PROGRESS_EVENTS.EMBEDDING, {
-          message: `Embedded ${progress.embedded}/${progress.total} chunks`,
-          embedded: progress.embedded,
-          total: progress.total,
-        });
-        sendProgress(pidStr, PROGRESS_EVENTS.EMBEDDING, {
-          message: `Embedded ${progress.embedded}/${progress.total} chunks`,
-        });
-      }
-    });
-
-    // Validate vector quality
-    const zeroVectors = vectors.filter(v => v.every(c => c === 0)).length;
-    const zeroPct = vectors.length > 0 ? Math.round((zeroVectors / vectors.length) * 100) : 0;
-    if (zeroPct > 50) {
-      console.error(`[Pipeline] CRITICAL: ${zeroPct}% of chunk vectors are zero — RAG retrieval will not work. Check OpenRouter embedding API key and rate limits.`);
-    } else if (zeroPct > 20) {
-      console.warn(`[Pipeline] WARNING: ${zeroPct}% of vectors are zero. RAG quality may be reduced.`);
-    } else if (zeroPct > 0) {
-      console.warn(`[Pipeline] ${zeroPct}% of vectors are zero (${zeroVectors}/${vectors.length})`);
-    } else {
-      console.log(`[Pipeline] Vector quality OK — all ${vectors.length} embeddings are non-zero`);
-    }
-
-    emitProgress(res, PROGRESS_EVENTS.BUILDING_INDEX, { message: 'Building vector index...' });
-    sendProgress(pidStr, PROGRESS_EVENTS.BUILDING_INDEX, { message: 'Building vector index...' });
-
-    const vectorStore = chunks.map((chunk, i) => ({
-      chunkHash: `${chunk.filePath}:${chunk.startLine}:${chunk.endLine}`,
-      filePath: chunk.filePath,
-      fileName: chunk.fileName,
-      language: chunk.language,
-      content: chunk.content,
-      startLine: chunk.startLine,
-      endLine: chunk.endLine,
-      functionName: chunk.functionName || null,
-      className: chunk.className || null,
-      symbolType: chunk.symbolType || null,
-      isSubChunk: chunk.isSubChunk || false,
-      tokenCount: chunk.tokenCount || 0,
-      vector: vectors[i] || new Array(EMBEDDING_DIMENSION).fill(0),
-    }));
-
-    // Index into JSON store (always)
-    try {
-      await indexJsonStore(projectId, vectorStore);
-    } catch (err) {
-      console.warn('[Pipeline] JSON store indexing failed:', err.message);
-    }
-
-    // Index into ChromaDB (if available)
-    if (chromaStore.isReady()) {
-      try {
-        emitProgress(res, PROGRESS_EVENTS.BUILDING_INDEX, { message: 'Indexing into ChromaDB...' });
-        const result = await chromaStore.indexChunks(projectId, chunks, vectors);
-        if (result) {
-          emitProgress(res, PROGRESS_EVENTS.BUILDING_INDEX, { message: `Indexed ${result.indexed} chunks in ChromaDB` });
-        }
-      } catch (err) {
-        console.warn('[Pipeline] ChromaDB indexing skipped:', err.message);
-      }
-    }
-
-    emitProgress(res, PROGRESS_EVENTS.READY, {
-      message: 'Pipeline complete — ready for AI analysis',
-      totalChunks: vectorStore.length,
-      totalFiles: textFiles.length,
-      totalLOC: parsedFiles.reduce((s, f) => s + f.loc, 0),
-    });
-    sendProgress(pidStr, PROGRESS_EVENTS.READY, {
-      message: 'Project ready! View on dashboard or click View to analyze.',
-    });
-
-    return {
-      projectDir,
-      extractDir,
-      textFiles: parsedFiles,
-      chunks,
-      vectorStore,
-    };
   } catch (error) {
     emitProgress(res, PROGRESS_EVENTS.ERROR, {
       message: error.message,
@@ -230,6 +118,39 @@ const runIngestionPipeline = async (options) => {
     sendProgress(pidStr, PROGRESS_EVENTS.ERROR, { message: error.message });
     throw error;
   }
+};
+
+// Indexing is optional enrichment; source analysis can run independently.
+const runIndexingPipeline = async ({ projectId, textFiles }) => {
+  const pidStr = projectId.toString();
+  sendProgress(pidStr, PROGRESS_EVENTS.CHUNKING, { message: 'Preparing code search...' });
+  const chunks = await chunkAllFiles(textFiles);
+  const lexicalStore = chunks.map(chunk => ({
+    ...chunk, chunkHash: `${chunk.filePath}:${chunk.startLine}:${chunk.endLine}`, vector: [],
+  }));
+  // Publish searchable source chunks before waiting for the embedding provider.
+  await indexJsonStore(pidStr, lexicalStore);
+  const texts = chunks.map(chunk => `File: ${chunk.filePath} (lines ${chunk.startLine + 1}-${chunk.endLine})\n\n${chunk.content}`);
+  let vectors;
+  try {
+    vectors = await embedBatch(texts, ({ embedded, total }) => {
+      if (embedded % 20 === 0 || embedded === total) {
+        sendProgress(pidStr, PROGRESS_EVENTS.EMBEDDING, { message: `Embedded ${embedded}/${total} chunks` });
+      }
+    });
+  } catch (error) {
+    console.warn('Semantic indexing unavailable:', error.message);
+    return { chunks, vectorStore: lexicalStore, warning: 'Semantic search unavailable; code chat uses keyword search.' };
+  }
+
+  const missing = vectors.filter(vector => !vector.some(value => value !== 0)).length;
+  const warning = missing ? `Semantic indexing incomplete (${missing}/${chunks.length} chunks missing); keyword search is available.` : null;
+  const vectorStore = lexicalStore.map((chunk, i) => ({ ...chunk, vector: vectors[i] || [] }));
+  await indexJsonStore(pidStr, vectorStore);
+  if (chromaStore.isReady() && !missing) {
+    await chromaStore.indexChunks(pidStr, chunks, vectors);
+  }
+  return { chunks, vectorStore, warning };
 };
 
 const runRAGQuery = async (options) => {
@@ -294,6 +215,7 @@ const cleanupProject = async (userId, projectId) => {
 
 module.exports = {
   runIngestionPipeline,
+  runIndexingPipeline,
   runRAGQuery,
   cleanupProject,
   emitProgress,

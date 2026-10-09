@@ -4,6 +4,7 @@
   "description": "LearnSmart — AI-powered codebase analysis platform",
   "main": "src/app.js",
   "scripts": {
+    "test": "node --test test/*.test.js",
     "start": "node src/app.js",
     "dev": "node --watch src/app.js",
     "postinstall": "npx playwright install chromium 2>/dev/null || echo 'Playwright browser install skipped'"

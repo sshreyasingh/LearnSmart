@@ -1,4 +1,4 @@
-const { exec, spawn } = require('child_process');
+const { spawn } = require('child_process');
 const fs = require('fs');
 const fsp = require('fs').promises;
 const path = require('path');
@@ -10,21 +10,12 @@ const CLONE_TIMEOUT = 300000;
 
 const sanitizeUrl = (url) => url.replace(/[`|;!$&(){}\[\]<>*\n\r']/g, '');
 
-const execAsync = (command, options = {}) => {
-  return new Promise((resolve, reject) => {
-    exec(command, { timeout: CLONE_TIMEOUT, ...options }, (error, stdout, stderr) => {
-      if (error) {
-        reject(new Error(stderr || error.message));
-        return;
-      }
-      resolve(stdout.trim());
-    });
-  });
-};
-
 const execSpawnAsync = (command, onProgress) => {
   return new Promise((resolve, reject) => {
-    const proc = spawn(command, { shell: true, stdio: ['ignore', 'pipe', 'pipe'] });
+    const proc = spawn(command[0], command.slice(1), {
+      shell: false, windowsHide: true, stdio: ['ignore', 'pipe', 'pipe'],
+      env: { ...process.env, GIT_TERMINAL_PROMPT: '0', GCM_INTERACTIVE: 'Never' },
+    });
     let stdout = '';
     let stderr = '';
 
@@ -159,16 +150,12 @@ const cloneRepo = async (repoUrl, targetDir, onProgress) => {
   const result = parseRepoUrl(repoUrl);
   const cloneUrl = result ? result.cloneUrl : repoUrl;
   const safeUrl = sanitizeUrl(cloneUrl);
-  const safeDir = sanitizeUrl(targetDir);
+  const safeDir = targetDir;
 
-  const cmd = `git clone --depth 1 --single-branch --no-tags "${safeUrl}" "${safeDir}"`;
+  const cmd = ['git', 'clone', '--progress', '--depth', '1', '--single-branch', '--no-tags', safeUrl, safeDir];
 
   try {
-    if (onProgress) {
-      await execSpawnAsync(cmd, onProgress);
-    } else {
-      await execAsync(cmd);
-    }
+    await execSpawnAsync(cmd, onProgress);
   } catch (err) {
     throw new AppError(`Failed to clone repository: ${err.message}`, 400, 'CLONE_FAILED');
   }
@@ -181,20 +168,16 @@ const cloneFromGitHub = async (owner, repo, targetDir, accessToken, onProgress) 
 
   const safeOwner = sanitizeUrl(owner);
   const safeRepo = sanitizeUrl(repo);
-  const safeDir = sanitizeUrl(targetDir);
+  const safeDir = targetDir;
 
   const cloneUrl = accessToken
     ? `https://${sanitizeUrl(accessToken)}@github.com/${safeOwner}/${safeRepo}.git`
     : `https://github.com/${safeOwner}/${safeRepo}.git`;
 
-  const cmd = `git clone --depth 1 --single-branch --no-tags "${cloneUrl}" "${safeDir}"`;
+  const cmd = ['git', 'clone', '--progress', '--depth', '1', '--single-branch', '--no-tags', cloneUrl, safeDir];
 
   try {
-    if (onProgress) {
-      await execSpawnAsync(cmd, onProgress);
-    } else {
-      await execAsync(cmd);
-    }
+    await execSpawnAsync(cmd, onProgress);
   } catch (err) {
     throw new AppError(`Failed to clone GitHub repository: ${err.message}`, 400, 'CLONE_FAILED');
   }

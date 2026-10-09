@@ -553,9 +553,9 @@ const buildDatabaseContext = (staticAnalysis) => {
   return lines.join('\n');
 };
 
-const runProjectAnalysis = async (extractDir, projectMeta) => {
+const runProjectAnalysis = async (extractDir, projectMeta, existingStaticAnalysis) => {
   // Step 1: Static Analysis (Feature 4) — pure rules, NO AI
-  const staticAnalysis = await runStaticAnalysis(extractDir);
+  const staticAnalysis = existingStaticAnalysis || await runStaticAnalysis(extractDir);
 
   // Step 2: Build focused contexts — each AI call gets only what it needs
   const lightContext = buildLightContextForPurpose(staticAnalysis, projectMeta);
@@ -596,8 +596,8 @@ const runProjectAnalysis = async (extractDir, projectMeta) => {
 // Legacy support — wraps new analysis in old shape
 // ============================================================
 
-const runProjectWideAnalysis = async (extractDir, projectMeta) => {
-  const result = await runProjectAnalysis(extractDir, projectMeta);
+const runProjectWideAnalysis = async (extractDir, projectMeta, existingStaticAnalysis) => {
+  const result = await runProjectAnalysis(extractDir, projectMeta, existingStaticAnalysis);
 
   // Map new AI explanations back to old format for backward compatibility
   const purpose = result.aiExplanations.projectPurpose;
@@ -606,6 +606,7 @@ const runProjectWideAnalysis = async (extractDir, projectMeta) => {
 
   return {
     projectMeta: result.projectMeta,
+    aiExplanations: result.aiExplanations,
     explanations: {
       purpose: purpose ? {
         title: purpose.title,

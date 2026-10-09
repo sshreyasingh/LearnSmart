@@ -1,5 +1,7 @@
-function AboutSection({ data }) {
+function AboutSection({ data, processing }) {
   const hasAiContent = data.whatItDoes || data.problemSolved || data.targetAudience || data.keyFeatures?.length > 0;
+
+  if (!hasAiContent && !processing) return <p className="text-sm text-surface-500">AI summary unavailable. See the source code report below or retry analysis.</p>;
 
   if (!hasAiContent) {
     return (
@@ -69,7 +71,7 @@ function AboutSection({ data }) {
   );
 }
 
-export function ProjectOverview({ project, purpose }) {
+export function ProjectOverview({ project, purpose, processing = false }) {
   const techStack = project?.detectedTechStack || [];
   const data = purpose || {};
 
@@ -79,7 +81,7 @@ export function ProjectOverview({ project, purpose }) {
         About {data.title || project?.projectName || 'This Project'}
       </h2>
 
-      <AboutSection data={data} />
+      <AboutSection processing={processing} data={data} />
 
       <div className="mt-6 pt-6 border-t border-emerald-200/60">
         <h3 className="text-xs font-bold text-surface-500 uppercase tracking-widest mb-4">Project Stats</h3>

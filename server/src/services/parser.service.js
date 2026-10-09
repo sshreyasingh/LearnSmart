@@ -688,7 +688,7 @@ const parseFile = async (filePath, content, language) => {
           }
         }
 
-        return { ...result, filePath, language: lang, lines, loc, config: parseConfigFile(filePath, content), errors };
+        return { ...result, filePath, content, language: lang, lines, loc, config: parseConfigFile(filePath, content), errors };
       }
     } catch (err) {
       errors.push({
@@ -722,6 +722,7 @@ const parseFile = async (filePath, content, language) => {
 
   const parsed = {
     filePath,
+    content,
     language: lang,
     lines,
     loc,

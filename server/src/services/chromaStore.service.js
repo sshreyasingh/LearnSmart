@@ -33,7 +33,7 @@ const indexChunks = async (projectId, chunks, vectors) => {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ chunks, vectors }),
-      signal: AbortSignal.timeout(120000),
+      signal: AbortSignal.timeout(20000),
     });
 
     if (!res.ok) {

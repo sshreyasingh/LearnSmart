@@ -154,19 +154,19 @@ const callOpenRouterJSON = async (messages, options = {}) => {
     if (last.role === 'user') last.content += '\n\nCRITICAL: Return ONLY a valid JSON object or array. No markdown, no explanation. Start with { or [.';
   }
 
-  for (let attempt = 1; attempt <= 3; attempt++) {
+  for (let attempt = 1; attempt <= 2; attempt++) {
     try {
       const result = await callOpenRouter(jsonMessages, { ...options, max_tokens: options.max_tokens ?? 8192, temperature: options.temperature ?? 0 });
       const parsed = extractJSON(result.content);
       if (parsed !== null) { recordSuccess(); return { data: parsed, raw: result.content, usage: result.usage }; }
 
-      if (attempt < 3) {
+      if (attempt < 2) {
         jsonMessages.push({ role: 'assistant', content: result.content });
         jsonMessages.push({ role: 'user', content: 'PARSE ERROR. Your response had markdown or extra text. Return ONLY the raw JSON object now.' });
       }
     } catch (error) {
       if (error instanceof AppError && (error.errorCode === 'AI_NOT_CONFIGURED' || error.errorCode === 'AI_AUTH_FAILED' || error.errorCode === 'AI_CIRCUIT_OPEN')) throw error;
-      if (!shouldRetry(error) || attempt === 3) throw error;
+      if (!shouldRetry(error) || attempt === 2) throw error;
     }
   }
 

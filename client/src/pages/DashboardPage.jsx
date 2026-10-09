@@ -9,6 +9,9 @@ import { EmptyState } from '../components/common/Feedback';
 const STATUS_STYLES = {
   completed: 'badge-success',
   failed: 'badge-error',
+  completed_with_warnings: 'badge-warning',
+  extracting: 'badge-info',
+  analyzing: 'badge-info',
   processing: 'badge-warning',
   queued: 'badge-info',
 };
@@ -31,6 +34,13 @@ export default function DashboardPage() {
   };
 
   useEffect(() => { fetchProjects(); }, []);
+
+  const hasProcessingProjects = projects.some(project => ['uploading', 'extracting', 'analyzing'].includes(project.status));
+  useEffect(() => {
+    if (!hasProcessingProjects) return;
+    const timer = setInterval(fetchProjects, 10000);
+    return () => clearInterval(timer);
+  }, [hasProcessingProjects]);
 
   const handleDelete = async (id) => {
     if (!confirm('Delete this project?')) return;

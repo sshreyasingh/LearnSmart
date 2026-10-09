@@ -6,7 +6,7 @@ const AppError = require('../utils/AppError');
 
 const EMBEDDING_DIMENSION = 2048;
 const CONCURRENCY = 5;
-const MAX_RETRIES = 3;
+const MAX_RETRIES = 2;
 const BASE_DELAY_MS = 1000;
 
 const embeddingCache = new Map();
@@ -98,7 +98,7 @@ const isRetryableError = (error) => {
 
 const getRetryDelay = (attempt) => BASE_DELAY_MS * Math.pow(2, attempt - 1) + Math.floor(Math.random() * 500);
 
-const embedSingle = async (text) => {
+const embedSingle = async (text, signal) => {
   if (!text || !text.trim()) return new Array(EMBEDDING_DIMENSION).fill(0);
 
   const cached = getCachedEmbedding(text);
@@ -110,9 +110,11 @@ const embedSingle = async (text) => {
   let lastError = null;
 
   for (let attempt = 1; attempt <= MAX_RETRIES; attempt++) {
+    signal?.throwIfAborted();
     try {
-      const resp = await model.create(text);
+      const resp = await model.create(text, { signal });
       const values = resp.data?.[0]?.embedding || [];
+      if (!values.length || !values.some(v => v !== 0)) throw new Error('Embedding provider returned an empty vector');
       const vector = values.length >= EMBEDDING_DIMENSION
         ? values.slice(0, EMBEDDING_DIMENSION)
         : [...values, ...new Array(EMBEDDING_DIMENSION - values.length).fill(0)];
@@ -150,27 +152,34 @@ const embedBatch = async (texts, onProgress) => {
   let done = 0;
   let total = texts.length;
   let zeroCount = 0;
+  let stop = false;
+  const signal = AbortSignal.timeout(90000);
 
   const worker = async () => {
-    while (cursor < total) {
+    while (cursor < total && !stop && !signal.aborted) {
       const i = cursor++;
       try {
-        results[i] = await embedSingle(texts[i]);
+        results[i] = await embedSingle(texts[i], signal);
         // Count zero vectors for quality tracking
         if (results[i].every(v => v === 0)) zeroCount++;
       } catch (err) {
         console.error(`[Embedding] Failed to embed chunk ${i}/${total}: ${err.message}`);
         // Don't silently fill with zeros — the pipeline will detect and handle this
-        results[i] = new Array(EMBEDDING_DIMENSION).fill(0);
+        results[i] = [];
         zeroCount++;
+        // Stop this batch after exhausted retries or a permanent provider error.
+        stop = true;
       }
       done++;
-      if (onProgress && done % 5 === 0) onProgress({ embedded: done, total });
+      if (onProgress) onProgress({ embedded: done, total });
     }
   };
 
   const workers = Array.from({ length: Math.min(CONCURRENCY, texts.length) }, () => worker());
   await Promise.all(workers);
+  for (let i = 0; i < total; i++) {
+    if (!results[i]) { results[i] = []; zeroCount++; }
+  }
 
   // Log quality warning
   const zeroPct = total > 0 ? Math.round((zeroCount / total) * 100) : 0;

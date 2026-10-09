@@ -45,7 +45,7 @@ export default function UploadPage() {
     try {
       const [owner, repoName] = repo.fullName.split('/');
       const res = await uploadProjectFromGitHub(owner, repoName, repoName);
-      navigate(`/projects/${res.data.data.project._id}?force=true`);
+      navigate(`/projects/${res.data.data.project._id}`);
     } catch (err) {
       setError(err.response?.data?.message || 'Failed to analyze repository');
       setLoading(false);
@@ -58,7 +58,7 @@ export default function UploadPage() {
     try {
       const name = url.split('/').pop()?.replace('.git', '') || 'repo';
       const res = await uploadProjectFromUrl(url, name);
-      navigate(`/projects/${res.data.data.project._id}?force=true`);
+      navigate(`/projects/${res.data.data.project._id}`);
     } catch (err) {
       setError(err.response?.data?.message || 'Failed to clone repository');
       setLoading(false);
@@ -79,7 +79,7 @@ export default function UploadPage() {
       formData.append('uploadMethod', 'zip');
       formData.append('projectName', zipFile.name.replace(/\.zip$/i, ''));
       const res = await uploadProjectZip(formData);
-      navigate(`/projects/${res.data.data.project._id}?force=true`);
+      navigate(`/projects/${res.data.data.project._id}`);
     } catch (err) {
       setError(err.response?.data?.message || 'Upload failed');
       setLoading(false);
@@ -110,9 +110,9 @@ export default function UploadPage() {
     return (
       <div className="page-container max-w-xl mx-auto text-center">
         <Spinner size="lg" />
-        <p className="text-surface-700 font-medium mt-4">Cloning repository...</p>
+        <p className="text-surface-700 font-medium mt-4">Submitting project...</p>
         <p className="text-sm text-surface-500 mt-1">
-          Once ready, it will appear on your dashboard and analysis will begin automatically.
+          Your project will open with live progress as soon as the upload is accepted.
         </p>
       </div>
     );

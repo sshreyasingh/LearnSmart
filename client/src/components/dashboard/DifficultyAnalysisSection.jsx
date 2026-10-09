@@ -42,13 +42,14 @@ export default function DifficultyAnalysisSection({ projects }) {
   const [difficulties, setDifficulties] = useState({});
   const [loading, setLoading] = useState(true);
   const [expanded, setExpanded] = useState(null);
+  const projectVersion = projects.map(p => `${p._id}:${p.status}:${p.lastAnalyzedAt || ''}`).join('|');
 
   useEffect(() => {
     const fetchAll = async () => {
       if (!projects || projects.length === 0) { setLoading(false); return; }
       const results = {};
       await Promise.allSettled(
-        projects.map(async (p) => {
+        projects.filter(p => ['completed', 'completed_with_warnings'].includes(p.status)).map(async (p) => {
           try {
             const res = await getDifficultyAnalysis(p._id);
             if (res.data?.data?.difficulty) results[p._id] = res.data.data.difficulty;
@@ -59,7 +60,7 @@ export default function DifficultyAnalysisSection({ projects }) {
       setLoading(false);
     };
     fetchAll();
-  }, [projects]);
+  }, [projectVersion]);
 
   const hasDifficultyData = Object.keys(difficulties).length > 0;
   const allDifficulties = Object.values(difficulties);

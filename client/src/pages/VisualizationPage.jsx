@@ -19,17 +19,26 @@ export default function VisualizationPage() {
   const [activeDiagram, setActiveDiagram] = useState('dependencyGraph');
 
   useEffect(() => {
+    let active = true;
+    let timer;
+    setLoading(true);
+    setData(null);
+    setError('');
     const fetch = async () => {
       try {
         const res = await getStaticAnalysis(id);
+        if (!active) return;
         setData(res.data.data);
+        setError(res.data.data.errorMessage || '');
+        if (res.data.data.processing) timer = setTimeout(fetch, 5000);
       } catch (err) {
-        setError(err.response?.data?.message || 'Failed to load analysis data');
+        if (active) setError(err.response?.data?.message || 'Failed to load analysis data');
       } finally {
-        setLoading(false);
+        if (active) setLoading(false);
       }
     };
     fetch();
+    return () => { active = false; clearTimeout(timer); };
   }, [id]);
 
   if (loading) return <Spinner size="lg" className="min-h-[60vh]" />;
@@ -55,6 +64,8 @@ export default function VisualizationPage() {
           Analysis Page →
         </Link>
       </div>
+
+      {data?.processing && <p className="mb-4 text-sm text-blue-700">{data.progress?.phase || 'Preparing diagrams'}. Diagrams will appear as the source report becomes available.</p>}
 
       <div className="mb-6">
         <DiagramControls

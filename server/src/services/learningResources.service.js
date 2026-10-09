@@ -557,7 +557,7 @@ const lookup = (name) => {
  * @param {object} project - Project object with tech stack
  * @returns {object} Learning resources object for the client
  */
-const generateLearningResources = async (techStack, project) => {
+const generateLearningResources = async (techStack, project, { scrape = false } = {}) => {
   const techNames = [];
 
   // Collect all tech names from the detected stack
@@ -663,7 +663,7 @@ const generateLearningResources = async (techStack, project) => {
   let scrapedCount = 0;
   const scraperErrors = [];
 
-  if (techNamesForScraping.length > 0) {
+  if (scrape && techNamesForScraping.length > 0) {
     try {
       const scrapedResults = await scrapeTechsInParallel(techNamesForScraping);
 

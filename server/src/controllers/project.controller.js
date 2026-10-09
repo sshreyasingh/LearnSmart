@@ -1,11 +1,7 @@
-const path = require('path');
-const fsp = require('fs').promises;
 const Project = require('../models/Project');
 const User = require('../models/User');
-const fileService = require('../services/file.service');
 const gitService = require('../services/git.service');
 const { runIngestionPipeline, cleanupProject } = require('../services/pipeline.service');
-const { indexPipelineOutput } = require('../services/vectorStore.service');
 const { extractTechStackNames, detectAll } = require('../services/techStack.service');
 const { parseConfigFile } = require('../services/parser.service');
 const AppError = require('../utils/AppError');
@@ -22,70 +18,61 @@ const detectTechStackFromRawFiles = (textFiles) => {
   return extractTechStackNames(techReport);
 };
 
-const getUploadDir = (userId, projectId) => {
-  return path.join(__dirname, '..', '..', 'uploads', userId.toString(), projectId.toString());
-};
-
 const createProject = async (req, res, next) => {
-  let project;
   try {
+    const { launchJob, newJobFields } = require('../services/projectJobs.service');
+    const { runIndexingPipeline } = require('../services/pipeline.service');
+    const { runAnalysisAndSave } = require('./analysis.controller');
     const userId = req.user._id;
-    const projectName = req.body.projectName || 'Untitled Project';
     const uploadMethod = req.body.uploadMethod || 'zip';
-
-    project = await Project.create({
-      userId, projectName, status: 'extracting', fileCount: 0, totalSizeKB: 0, totalLOC: 0, detectedTechStack: [],
-    });
-
-    const fullUser = await User.findById(req.user._id);
+    if (!['zip', 'github', 'url'].includes(uploadMethod) ||
+        (uploadMethod === 'zip' && !req.file) ||
+        (uploadMethod === 'github' && (!req.body.owner || !req.body.repo)) ||
+        (uploadMethod === 'url' && !req.body.repoUrl)) {
+      throw new AppError('Provide a ZIP file or repository source.', 400, 'NO_SOURCE_CODE');
+    }
+    const fullUser = await User.findById(userId);
     const githubToken = fullUser ? fullUser.getProviderToken('github') : null;
-
-    const pipelineResult = await runIngestionPipeline({
-      userId, projectId: project._id, uploadMethod,
-      zipBuffer: req.file ? req.file.buffer : null,
-      githubOwner: req.body.owner, githubRepo: req.body.repo,
-      githubToken,
-      repoUrl: req.body.repoUrl,
+    const project = await Project.create({
+      userId, projectName: req.body.projectName || 'Untitled Project', status: 'extracting',
+      ...newJobFields(uploadMethod === 'zip' ? 'Extracting ZIP archive' : 'Cloning repository'),
     });
-
-    const { textFiles, vectorStore } = pipelineResult;
-
-    if (textFiles.length === 0) {
-      project.status = 'failed';
-      project.errorMessage = 'No readable source files found';
-      await project.save();
-      await cleanupProject(userId, project._id);
-      return res.status(400).json({ status: 'error', errorCode: 'NO_TEXT_FILES', message: 'No readable source files found' });
-    }
-
-    project.fileCount = textFiles.length;
-    project.totalSizeKB = Math.round(textFiles.reduce((s, f) => s + f.sizeKB, 0) * 100) / 100;
-    project.totalLOC = textFiles.reduce((s, f) => s + f.loc, 0);
-    project.detectedTechStack = detectTechStackFromRawFiles(textFiles);
-    project.status = 'completed';
-    await project.save();
-
-    await indexPipelineOutput(project._id.toString(), vectorStore);
-
-    res.status(201).json({
-      status: 'success',
-      data: {
-        project: {
-          _id: project._id, projectName: project.projectName, fileCount: project.fileCount,
-          totalSizeKB: project.totalSizeKB, totalLOC: project.totalLOC,
-          detectedTechStack: project.detectedTechStack, status: project.status, createdAt: project.createdAt,
-        },
-        ragIndex: { chunksIndexed: vectorStore.length },
-      },
+    // Copy inputs; the background task does not retain the request/response objects.
+    const inputs = {
+      userId, projectId: project._id, uploadMethod, githubToken,
+      zipBuffer: req.file?.buffer, githubOwner: req.body.owner,
+      githubRepo: req.body.repo, repoUrl: req.body.repoUrl,
+    };
+    launchJob(project, async context => {
+      const { textFiles } = await runIngestionPipeline(inputs);
+      inputs.zipBuffer = null;
+      const metadata = {
+        fileCount: textFiles.length,
+        totalSizeKB: Math.round(textFiles.reduce((sum, f) => sum + f.sizeKB, 0) * 100) / 100,
+        totalLOC: textFiles.reduce((sum, f) => sum + f.loc, 0),
+        detectedTechStack: detectTechStackFromRawFiles(textFiles),
+        sourceReady: true, status: 'analyzing',
+      };
+      await Project.updateOne({ _id: project._id, jobId: project.jobId }, { $set: metadata });
+      const current = { ...project.toObject(), ...metadata };
+      // Wait for both branches to settle before releasing the job's lease.
+      const results = await Promise.allSettled([
+        runAnalysisAndSave(userId, current, context),
+        (async () => {
+          try {
+            const result = await runIndexingPipeline({ projectId: project._id, textFiles });
+            if (result.warning) await context.warn('Code chat', result.warning);
+          } catch (error) {
+            console.warn('Code indexing failed:', error.message);
+            await context.warn('Code chat', 'Code indexing failed. The analysis report is still available.');
+          }
+        })(),
+      ]);
+      const failed = results.find(result => result.status === 'rejected');
+      if (failed) throw failed.reason;
     });
-  } catch (error) {
-    if (project) {
-      project.status = 'failed';
-      project.errorMessage = error.message;
-      await project.save().catch(() => {});
-    }
-    next(error);
-  }
+    res.status(202).json({ status: 'success', data: { project, processing: true } });
+  } catch (error) { next(error); }
 };
 
 const getProjects = async (req, res, next) => {
@@ -94,19 +81,35 @@ const getProjects = async (req, res, next) => {
     const limit = Math.min(parseInt(req.query.limit) || 10, 50);
     const projects = await Project.find(
       { userId: req.user._id },
-      '_id projectName status fileCount totalLOC detectedTechStack createdAt lastAnalyzedAt'
+      '_id projectName status fileCount totalLOC detectedTechStack createdAt lastAnalyzedAt jobLeaseUntil'
     ).sort({ createdAt: -1 }).skip((page - 1) * limit).limit(limit).lean();
+    const { refreshProject, isProcessing } = require('../services/projectJobs.service');
+    await Promise.all(projects.map(async project => {
+      if (isProcessing(project) && (!project.jobLeaseUntil || new Date(project.jobLeaseUntil) < new Date())) {
+        const current = await refreshProject(project._id);
+        project.status = current.status;
+      }
+      delete project.jobLeaseUntil;
+    }));
     const total = await Project.countDocuments({ userId: req.user._id });
     res.json({ status: 'success', data: { projects }, pagination: { page, limit, total, pages: Math.ceil(total / limit) } });
   } catch (error) { next(error); }
 };
 
 const getProject = async (req, res, next) => {
-  try { res.json({ status: 'success', data: { project: req.project } }); } catch (error) { next(error); }
+  try {
+    const { refreshProject } = require('../services/projectJobs.service');
+    const project = await refreshProject(req.project._id);
+    res.json({ status: 'success', data: { project } });
+  } catch (error) { next(error); }
 };
 
 const deleteProject = async (req, res, next) => {
   try {
+    const { ACTIVE_STATUSES, refreshProject } = require('../services/projectJobs.service');
+    await refreshProject(req.project._id);
+    const deleted = await Project.findOneAndDelete({ _id: req.project._id, status: { $nin: ACTIVE_STATUSES } });
+    if (!deleted) throw new AppError('Processing is still running. Delete the project after it finishes.', 409, 'PROJECT_BUSY');
     const { deleteStore } = require('../services/vectorStore.service');
     const AnalysisResult = require('../models/AnalysisResult');
     const Skill = require('../models/Skill');
@@ -119,7 +122,7 @@ const deleteProject = async (req, res, next) => {
       deleteStore(req.project._id.toString()),
     ]);
 
-    await Project.findByIdAndDelete(req.project._id);
+
     await cleanupProject(req.user._id, req.project._id);
     res.json({ status: 'success', data: { message: 'Project deleted' } });
   } catch (error) { next(error); }

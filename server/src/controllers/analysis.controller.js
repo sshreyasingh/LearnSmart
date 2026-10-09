@@ -1,7 +1,6 @@
 const path = require('path');
 const AnalysisResult = require('../models/AnalysisResult');
-const Project = require('../models/Project');
-const { runStaticAnalysis } = require('../services/staticAnalysis.service');
+const { runStaticAnalysis } = require('../services/staticAnalysisRunner.service');
 const { predictDifficulty } = require('../services/difficultyPredictor.service');
 const { generateLearningResources } = require('../services/learningResources.service');
 const { autoGenerateQuestions } = require('../services/interview.service');
@@ -11,7 +10,7 @@ const getExtractDir = (userId, projectId) =>
   path.join(__dirname, '..', '..', 'uploads', userId.toString(), projectId.toString(), 'extracted');
 
 const normalizeDifficulty = (diff) => {
-  if (!diff) return null;
+  if (!diff || !Number.isFinite(diff.score)) return null;
   return {
     score: diff.score,
     level: diff.level,
@@ -28,6 +27,11 @@ const normalizeDifficulty = (diff) => {
 };
 
 const buildCachedResponse = (project, cached) => ({
+  processing: require('../services/projectJobs.service').isProcessing(project),
+  progress: project.analysisProgress,
+  partial: project.status === 'completed_with_warnings' || project.status === 'failed',
+  errors: project.analysisErrors || [],
+  errorMessage: project.errorMessage,
   project: {
     _id: project._id, projectName: project.projectName, fileCount: project.fileCount,
     totalSizeKB: project.totalSizeKB, totalLOC: project.totalLOC,
@@ -61,109 +65,67 @@ const buildCachedResponse = (project, cached) => ({
   aiExplanations: cached?.aiExplanations || null,
 });
 
-const runAnalysisAndSave = async (userId, project) => {
+const runAnalysisAndSave = async (userId, project, { progress, warn }) => {
   const extractDir = getExtractDir(userId, project._id);
-
-  // Step 1: Run static analysis (Feature 4) — pure rules, no AI
+  await progress('Analyzing source files', 30);
   const staticAnalysis = await runStaticAnalysis(extractDir);
+  if (!staticAnalysis.metrics.totalFiles) throw new Error('No source files remain. Upload the repository again.');
+  const learningResources = await generateLearningResources(staticAnalysis.techStack, project);
+  const metrics = { ...staticAnalysis.metrics, cyclomaticComplexity: {
+    average: staticAnalysis.metrics.avgCyclomaticComplexity,
+    max: staticAnalysis.metrics.maxCyclomaticComplexity,
+  } };
+  // Publish useful results before calling any optional external service.
+  await AnalysisResult.findOneAndUpdate({ projectId: project._id }, { $set: {
+    userId, staticAnalysis, learningResources, metrics,
+    knowledgeGraph: staticAnalysis.knowledgeGraph, generatedAt: new Date(),
+    explanations: {}, aiExplanations: {}, executiveSummary: '', difficultyAnalysis: null,
+  } }, { upsert: true });
+  await progress('Source report ready; generating explanations and preparing code chat', 65);
 
-  // Step 2: Generate learning resources from detected tech stack
-  const learningResources = await generateLearningResources(staticAnalysis.techStack, {
-    detectedTechStack: project.detectedTechStack,
-  });
-
-  // Step 3: Auto-generate interview questions from static analysis (no AI)
-  try {
-    await autoGenerateQuestions(userId, project._id, staticAnalysis);
-  } catch (err) {
-    console.warn('Interview question generation failed:', err.message);
-  }
-
-  // Step 4: Run difficulty prediction (Feature 3) — XGBoost
-  let difficultyAnalysis = null;
-  try {
-    difficultyAnalysis = await predictDifficulty(staticAnalysis.metrics);
-  } catch (err) {
-    console.warn('Difficulty prediction failed:', err.message);
-  }
-
-  // Step 5: Run AI analysis (Feature 5) — AI explains static results
-  // Gracefully handle AI failure so static analysis + questions + resources still load
-  let aiResult = null;
-  try {
-    const { runProjectWideAnalysis } = require('../services/analysis.service');
-    aiResult = await runProjectWideAnalysis(extractDir, {
-      projectName: project.projectName,
-      fileCount: project.fileCount,
-      totalLOC: project.totalLOC,
-      detectedTechStack: project.detectedTechStack,
-    });
-  } catch (err) {
-    console.warn('AI analysis failed, returning partial results:', err.message);
-  }
-
-  // Step 6: Save everything to AnalysisResult
-  const update = {
-    projectId: project._id,
-    userId,
-    staticAnalysis,
-    learningResources,
-    difficultyAnalysis,
-    aiExplanations: aiResult?.aiExplanations || {},
-    explanations: aiResult?.explanations || {},
-    metrics: aiResult?.metrics || staticAnalysis?.metrics || null,
-    executiveSummary: aiResult?.aiExplanations?.executiveSummary || aiResult?.explanations?.purpose?.whatItDoes || '',
-    knowledgeGraph: staticAnalysis?.knowledgeGraph || null,
-    generatedAt: new Date(),
+  const optional = async (type, task) => {
+    try { await task(); }
+    catch (error) {
+      console.warn(`${type} failed:`, error.message);
+      await warn(type, `${type} is unavailable for this run. The source report is still available.`);
+    }
   };
-
-  await AnalysisResult.findOneAndUpdate({ projectId: project._id }, update, { upsert: true });
-  await Project.findByIdAndUpdate(project._id, { lastAnalyzedAt: new Date() });
-
-  const saved = await AnalysisResult.findOne({ projectId: project._id }).lean();
-  return { ...buildCachedResponse(project, saved), cached: false };
+  await Promise.all([
+    optional('Interview questions', () => autoGenerateQuestions(userId, project._id, staticAnalysis)),
+    optional('Difficulty prediction', async () => {
+      const difficultyAnalysis = await predictDifficulty(staticAnalysis.metrics);
+      await AnalysisResult.updateOne({ projectId: project._id }, { $set: { difficultyAnalysis } });
+    }),
+    optional('AI explanations', async () => {
+      const { runProjectWideAnalysis } = require('../services/analysis.service');
+      const result = await runProjectWideAnalysis(extractDir, project, staticAnalysis);
+      await AnalysisResult.updateOne({ projectId: project._id }, { $set: {
+        aiExplanations: result.aiExplanations, explanations: result.explanations,
+        executiveSummary: result.aiExplanations?.executiveSummary || '',
+      } });
+      if (Object.values(result.aiExplanations || {}).filter(Boolean).length < 4) {
+        await warn('AI explanations', 'Some AI explanations could not be generated. Check the AI provider configuration or retry later.');
+      }
+    }),
+  ]);
 };
 
 const analyzeProject = async (req, res, next) => {
   try {
-    const project = req.project;
-    const userId = req.user._id;
-    const force = req.query.force === 'true';
-
+    const jobs = require('../services/projectJobs.service');
+    let project = await jobs.refreshProject(req.project._id);
     const cached = await AnalysisResult.findOne({ projectId: project._id }).lean();
-
-    // Normal request with cache: return cached data immediately
-    if (!force && cached) {
-      return res.status(200).json({
-        status: 'success',
-        data: { ...buildCachedResponse(project, cached), cached: true },
-      });
+    const force = req.query.force === 'true';
+    if (!jobs.isProcessing(project) && (force || (!cached?.generatedAt && project.status !== 'failed'))) {
+      if (project.status === 'failed' && !project.sourceReady && !project.fileCount) {
+        throw new AppError('Source extraction did not finish. Please upload the repository again.', 409, 'SOURCE_NOT_READY');
+      }
+      project = await jobs.startAnalysisJob(project);
     }
-
-    // Force re-analysis: run full analysis and save results
-    if (force || !cached) {
-      const data = await runAnalysisAndSave(userId, project);
-      return res.status(200).json({ status: 'success', data });
-    }
-
-    res.status(200).json({
-      status: 'success',
-      data: {
-        project: {
-          _id: project._id, projectName: project.projectName, fileCount: project.fileCount,
-          totalSizeKB: project.totalSizeKB, totalLOC: project.totalLOC,
-          detectedTechStack: project.detectedTechStack, status: project.status, createdAt: project.createdAt,
-        },
-        processing: false,
-        explanations: {},
-        staticAnalysis: null,
-        difficultyAnalysis: null,
-        aiExplanations: null,
-      },
+    res.status(jobs.isProcessing(project) ? 202 : 200).json({
+      status: 'success', data: { ...buildCachedResponse(project, cached), cached: !!cached?.generatedAt },
     });
-  } catch (error) {
-    next(error);
-  }
+  } catch (error) { next(error); }
 };
 
 const getNotes = async (req, res, next) => {
@@ -183,7 +145,7 @@ const saveNotes = async (req, res, next) => {
     const { notes } = req.body;
     await AnalysisResult.findOneAndUpdate(
       { projectId: req.project._id },
-      { notes },
+      { $set: { notes, userId: req.user._id } },
       { upsert: true }
     );
     res.status(200).json({
@@ -195,4 +157,4 @@ const saveNotes = async (req, res, next) => {
   }
 };
 
-module.exports = { analyzeProject, getNotes, saveNotes };
+module.exports = { analyzeProject, getNotes, saveNotes, runAnalysisAndSave };

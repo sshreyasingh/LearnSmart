@@ -435,6 +435,7 @@ const chunkAllFiles = async (files, onProgress) => {
     const chunks = chunkFile(files[i]);
     allChunks.push(...chunks);
     if (onProgress) onProgress({ processed: i + 1, total, chunksSoFar: allChunks.length });
+    if ((i + 1) % 10 === 0) await new Promise(resolve => setImmediate(resolve));
   }
 
   return allChunks;

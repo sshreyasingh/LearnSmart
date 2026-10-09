@@ -1,5 +1,5 @@
 import { useEffect } from 'react';
-import { useParams, Link, useSearchParams } from 'react-router-dom';
+import { useParams, Link } from 'react-router-dom';
 import { useAnalysis } from '../hooks/useAnalysis';
 import { ProjectOverview } from '../components/analysis/ProjectOverview';
 import { ArchitectureGraph } from '../components/analysis/ArchitectureGraph';
@@ -8,37 +8,36 @@ import { KnowledgeGraph } from '../components/analysis/KnowledgeGraph';
 import { InterviewQuestionsPanel } from '../components/analysis/InterviewQuestionsPanel';
 import { NotesButton } from '../components/analysis/NotesButton';
 import { SecurityReport } from '../components/analysis/SecurityReport';
-import ProgressLoader from '../components/common/ProgressLoader';
+import { MetricsPanel } from '../components/analysis/MetricsPanel';
+import SourceReport from '../components/analysis/SourceReport';
 import AIChat from '../components/analysis/AIChat';
 import { LearningResources } from '../components/analysis/LearningResources';
 import { DifficultyPanel } from '../components/analysis/DifficultyPanel';
 import { AnalysisSkeleton } from '../components/common/Skeleton';
 import { ErrorState } from '../components/common/Feedback';
 
-function ProcessingBanner() {
+function ProcessingBanner({ progress }) {
   return (
     <div className="flex items-center gap-3 bg-blue-50 border border-blue-200 px-4 py-3 rounded-xl mb-6 text-sm animate-fade-in">
       <svg className="animate-spin h-4 w-4 text-blue-600 shrink-0" viewBox="0 0 24 24">
         <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" fill="none" />
         <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z" />
       </svg>
-      <span className="text-blue-700 font-medium">Analysis is running in the background. Results will appear here once complete.</span>
+      <span className="text-blue-700 font-medium">{progress?.phase || 'Preparing analysis'} ({progress?.current || 0}%). Results appear as they become available.</span>
     </div>
   );
 }
 
 export default function AnalysisPage() {
   const { id } = useParams();
-  const [searchParams] = useSearchParams();
-  const forceAnalysis = searchParams.get('force') === 'true';
-  const { data, loading, error, refetch, reanalyzing, reanalyze, reanalyzeError, clearReanalyzeError } = useAnalysis(id, forceAnalysis);
+  const { data, loading, error, refetch, reanalyzing, reanalyze, reanalyzeError, clearReanalyzeError } = useAnalysis(id);
 
   useEffect(() => {
-    if (!loading && data) window.scrollTo(0, 0);
-  }, [loading, data]);
+    window.scrollTo(0, 0);
+  }, [id]);
 
-  if (loading) return <AnalysisSkeleton />;
-  if (error && !data) return <ErrorState message={error} onRetry={refetch} />;
+  if (loading && !data) return <AnalysisSkeleton />;
+  if (error && !data) return <ErrorState message={error} onRetry={() => refetch()} />;
   if (!data) return null;
 
   const { project, explanations, dependencyGraph, simplifiedGraph, partial } = data;
@@ -63,7 +62,7 @@ export default function AnalysisPage() {
         <div className="flex items-center gap-3">
           <button
             onClick={reanalyze}
-            disabled={reanalyzing}
+            disabled={reanalyzing || loading}
             className="btn-primary px-4 py-2 text-sm inline-flex items-center gap-2"
           >
             {reanalyzing ? (
@@ -94,11 +93,12 @@ export default function AnalysisPage() {
           <svg className="w-5 h-5 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-2.5L13.732 4.5c-.77-.833-2.694-.833-3.464 0L4.08 16.5c-.77.833.192 2.5 1.732 2.5z" />
           </svg>
-          Some analysis sections could not be generated. Results shown are partial.
+          Some sections could not be generated. Available results are shown below.
+          {data.errors?.length > 0 && <ul className="list-disc pl-5">{data.errors.map((item, index) => <li key={index}>{item.message}</li>)}</ul>}
         </div>
       )}
 
-      {(reanalyzing || data?.processing) && <ProcessingBanner />}
+      {(reanalyzing || data?.processing) && <ProcessingBanner progress={data.progress} />}
 
       {reanalyzeError && (
         <div className="flex items-center justify-between bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded-xl mb-6 text-sm">
@@ -106,7 +106,7 @@ export default function AnalysisPage() {
             <svg className="w-5 h-5 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
             </svg>
-            Re-analysis failed: {reanalyzeError}
+            {reanalyzeError}
           </div>
           <button onClick={clearReanalyzeError} className="ml-3 text-red-500 hover:text-red-700 font-medium">
             Dismiss
@@ -115,15 +115,19 @@ export default function AnalysisPage() {
       )}
 
       <div className="space-y-6">
-        <ProjectOverview project={project} purpose={explanations?.purpose} />
+        <ProjectOverview processing={data.processing} project={project} purpose={explanations?.purpose} />
+        <MetricsPanel metrics={data.metrics} />
+        {data.staticAnalysis && <SourceReport analysis={data.staticAnalysis} />}
+        {data.executiveSummary && <section className="section-card"><h2 className="text-xl font-bold mb-3">Project Summary</h2><p className="whitespace-pre-wrap">{data.executiveSummary}</p></section>}
+        {data.errorMessage && !data.staticAnalysis && <Link to="/upload" className="btn-secondary">Upload repository again</Link>}
         {data.difficulty && <DifficultyPanel difficulty={data.difficulty} />}
         <ArchitectureGraph dependencyGraph={dependencyGraph} simplifiedGraph={simplifiedGraph} />
         <ExplanationCards explanations={explanations} learningResources={data.learningResources} />
         <KnowledgeGraph knowledgeGraph={data.knowledgeGraph} />
         {data.security && <SecurityReport security={data.security} />}
         {data.learningResources && <LearningResources learningResources={data.learningResources} />}
-        <InterviewQuestionsPanel projectId={id} />
-        <AIChat projectId={id} />
+        {!data.processing && data.staticAnalysis && <InterviewQuestionsPanel key={data.generatedAt} projectId={id} />}
+        {!data.processing && data.staticAnalysis && <AIChat projectId={id} />}
       </div>
 
       <div className="fixed bottom-6 right-6 z-40">
